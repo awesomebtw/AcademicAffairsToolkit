@@ -31,7 +31,7 @@ namespace AcademicAffairsToolkit
             OpenFileDialog fileDialog = new OpenFileDialog()
             {
                 Filter = "XLSX files|*.xlsx|XLS files|*.xls|All Excel files|*.xlsx;*.xls",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer)
+                InitialDirectory = Environment.CurrentDirectory
             };
 
             if (fileDialog.ShowDialog(this) == true)
@@ -57,6 +57,21 @@ namespace AcademicAffairsToolkit
             if (MessageBox.Show("Are you sure you want to exit?", "Exit",
                 MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
                 Close();
+        }
+
+        private void backstageSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog fileDialog = new SaveFileDialog()
+            {
+                Filter = "JSON file|*.json",
+                InitialDirectory = Environment.CurrentDirectory
+            };
+
+            if (fileDialog.ShowDialog(this) == true)
+            {
+                // todo: save file
+                MessageBox.Show(fileDialog.FileName, "Saved (TODO)");
+            }
         }
     }
 }

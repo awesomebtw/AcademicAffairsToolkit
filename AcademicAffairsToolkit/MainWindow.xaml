@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:Fluent="urn:fluent-ribbon"
-        Title="Academic Affairs Toolkit" Height="450" Width="800" MinHeight="240" MinWidth="320"
+        Title="Academic Affairs Toolkit"
+        Height="450" Width="800" MinHeight="240" MinWidth="320"
         WindowStartupLocation="CenterScreen"
         DragEnter="RibbonWindow_DragEnter">
 
@@ -21,54 +22,91 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Fluent:Button Grid.Column="0" Name="backstageOpenButton" Visibility="Visible"
-                                               Header="Open..." VerticalAlignment="Top" Click="backstageOpenButton_Click"
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Fluent:Button Grid.Column="0"
+                                               Grid.Row="1"
+                                               Name="backstageOpenButton"
+                                               Visibility="Visible"
+                                               Header="Open..." 
+                                               VerticalAlignment="Top"
+                                               Click="backstageOpenButton_Click"
                                                Icon="{StaticResource OpenFileIcon}"
                                                LargeIcon="{StaticResource OpenFileIcon}"/>
-                                <Fluent:Gallery Grid.Column="1" Name="recentlyOpenedGallery" MaxItemsInRow="1" Margin="20,0">
-                                    <Fluent:GalleryItem>
-                                        <TextBlock>
-                                            <Run Text="TODO: " Foreground="GreenYellow"/>
-                                            recently-opened files will be here
-                                        </TextBlock>
-                                    </Fluent:GalleryItem>
-                                </Fluent:Gallery>
+                                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24">
+                                    Recent
+                                </TextBlock>
+                                <Fluent:Gallery Grid.Column="1"
+                                                Grid.Row="1"
+                                                Name="recentlyOpenedGallery"
+                                                MaxItemsInRow="1"
+                                                Margin="20,0"/>
                             </Grid>
                         </Fluent:BackstageTabItem>
-                        <Fluent:BackstageTabItem Header="Save">
-                            <TextBlock Margin="20">
-                                <Run Text="TODO: " Foreground="GreenYellow"/>
-                                add options to save arranged files as other formats
-                            </TextBlock>
-                        </Fluent:BackstageTabItem>
+
+                        <Fluent:Button Header="Save"
+                                       Name="backstageSaveButton"
+                                       Click="backstageSaveButton_Click"/>
+
                         <Fluent:BackstageTabItem Header="Settings">
-                            <WrapPanel Margin="20">
-                                <Fluent:ComboBox Header="Theme">
-                                    <ComboBoxItem Content="Operating System"/>
-                                    <ComboBoxItem Content="Light"/>
-                                    <ComboBoxItem Content="Dark"/>
-                                </Fluent:ComboBox>
-                                <TextBlock>TODO: settings will be here</TextBlock>
-                            </WrapPanel>
+                            <StackPanel Orientation="Horizontal" Margin="20">
+                                <GroupBox Header="Data range" Margin="5">
+                                    <ItemsControl>
+                                        <TextBlock>Note: negative number = from bottom</TextBlock>
+                                        <Fluent:ComboBox Header="Start Row" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Start column" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="End row" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="End column" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                    </ItemsControl>
+                                </GroupBox>
+                                <GroupBox Header="Columns" Margin="5">
+                                    <ItemsControl>
+                                        <TextBlock>Note: negative number = from right</TextBlock>
+                                        <Fluent:ComboBox Header="Course name" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Date" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Time" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Invigilator count" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Examinees count" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                        <Fluent:TextBox Header="Inviligators Regex" HorizontalContentAlignment="Right"/>
+                                    </ItemsControl>
+                                </GroupBox>
+                                <GroupBox Header="Appearance" Margin="5">
+                                    <ItemsControl>
+                                        <Fluent:RadioButton Header="Automatic" GroupName="appearance"/>
+                                        <Fluent:RadioButton Header="Light" GroupName="appearance"/>
+                                        <Fluent:RadioButton Header="Dark" GroupName="appearance"/>
+                                    </ItemsControl>
+                                </GroupBox>
+                            </StackPanel>
                         </Fluent:BackstageTabItem>
+
                         <Fluent:BackstageTabItem Header="About">
-                            <TextBlock Margin="20">
+                            <TextBlock Margin="20" LineHeight="1.5">
                                 <Run FontSize="36">Academic Affairs Toolkit</Run><LineBreak/>
                                 Version 0.0.0.1<LineBreak/>
                                 Third-party libraries: Fluent.Ribbon, npoi<LineBreak/>
                                 Icons: Visual Studio 2019 Icons Library
                             </TextBlock>
                         </Fluent:BackstageTabItem>
+
                         <Fluent:SeparatorTabItem/>
-                        <Fluent:Button Name="backStageExitButton" Header="Exit" Click="backStageExitButton_Click"/>
+
+                        <Fluent:Button Name="backStageExitButton"
+                                       Header="Exit"
+                                       Click="backStageExitButton_Click"/>
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
 
             <!--quick access bar-->
             <Fluent:Ribbon.QuickAccessItems>
-                <Fluent:QuickAccessMenuItem Header="Open" ToolTip="Open" Click="backstageOpenButton_Click"
-                                            Icon="{StaticResource OpenFileIcon}" Visibility="Visible"/>
+                <Fluent:QuickAccessMenuItem Header="Open"
+                                            ToolTip="Open"
+                                            Click="backstageOpenButton_Click"
+                                            Icon="{StaticResource OpenFileIcon}"
+                                            Visibility="Visible"/>
             </Fluent:Ribbon.QuickAccessItems>
 
             <!--home tab-->
@@ -108,7 +146,9 @@
                         <Fluent:MenuItem Header="Manage constraints"
                                          Icon="{StaticResource RuleIcon}"/>
                     </Fluent:SplitButton>
-                    <Fluent:Button Header="Person setting"/>
+                    <Fluent:Button Header="Person setting"
+                                   Icon="{StaticResource Fluent.Ribbon.Images.Cut}"
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Cut}"/>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Name="viewGroup" Header="View">
@@ -143,28 +183,6 @@
                 </Fluent:RibbonGroupBox>
 
             </Fluent:RibbonTabItem>
-
-            <!--tab for data preprocessing-->
-            <Fluent:RibbonTabItem Header="Data Preprocessing" Group="{Binding Source={x:Reference toolsGroup}}">
-                <Fluent:RibbonGroupBox Header="Data Range">
-                    <Fluent:ComboBox Header="Start Row" InputWidth="60"/>
-                    <Fluent:ComboBox Header="Start column" InputWidth="60"/>
-                    <Separator HorizontalAlignment="Left"/>
-                    <Fluent:ComboBox Header="End row" InputWidth="60"/>
-                    <Fluent:ComboBox Header="End column" InputWidth="60"/>
-                </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Columns">
-                    <Fluent:ComboBox Header="Course name" InputWidth="60" HorizontalContentAlignment="Right"/>
-                    <Fluent:ComboBox Header="Date" InputWidth="60" HorizontalContentAlignment="Right"/>
-                    <Fluent:ComboBox Header="Time" InputWidth="60"/>
-                    <Fluent:ComboBox Header="Personnel requirement" InputWidth="60"/>
-                </Fluent:RibbonGroupBox>
-            </Fluent:RibbonTabItem>
-
-            <Fluent:Ribbon.ContextualGroups>
-                <Fluent:RibbonContextualTabGroup x:Name="toolsGroup" Header="File tools" Visibility="Visible"
-                                                 Background="Green" BorderBrush="Green"/>
-            </Fluent:Ribbon.ContextualGroups>
         </Fluent:Ribbon>
 
         <!--status bar-->
@@ -175,11 +193,8 @@
                     Click File > "Open..." and select a file(or drag and drop a file).
                 </TextBlock>
             </Fluent:StatusBarItem>
-            <Fluent:StatusBarItem HorizontalAlignment="Right" MinWidth="50">
-                <ProgressBar Value="20" Minimum="0" Maximum="100" Visibility="Visible" Height="12"/>
-            </Fluent:StatusBarItem>
         </Fluent:StatusBar>
-        
+
         <!--window content-->
         <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
             <TextBlock><Run Foreground="GreenYellow" Text="TODO: "/>add views for main window</TextBlock>

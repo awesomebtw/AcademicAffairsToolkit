@@ -2,6 +2,9 @@
 This project is a course design for "C# programming language", Jilin University.
 The project is still in early stage of development.
 **Do not use for actual work.**
+## Prereq
+- .NET Core 3.1
+- C# 8.0
 ## Course design requirements
 根据安排好时间地点的监考信息表（监考.xlsx），将监考任务分配给每个教研室，每个教研室承担监考任务量应根据教研室人数确定，根据每个考场考生人数可以计算出监考所需老师总人次，从而可得到学院监考老师平均监考次数，最终得到某个教研室需要监考总人次，据此进行分配。具体要求如下。
 - 具有简洁美观的UI，选择监考信息表，支持xls和xlsx两种格式；
