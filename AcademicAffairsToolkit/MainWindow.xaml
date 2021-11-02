@@ -35,7 +35,7 @@
                                                Click="backstageOpenButton_Click"
                                                Icon="{StaticResource OpenFileIcon}"
                                                LargeIcon="{StaticResource OpenFileIcon}"/>
-                                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24">
+                                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24" Margin="20">
                                     Recent
                                 </TextBlock>
                                 <Fluent:Gallery Grid.Column="1"
@@ -46,23 +46,23 @@
                             </Grid>
                         </Fluent:BackstageTabItem>
 
-                        <Fluent:Button Header="Save"
+                        <Fluent:Button Header="Save As"
                                        Name="backstageSaveButton"
                                        Click="backstageSaveButton_Click"/>
 
                         <Fluent:BackstageTabItem Header="Settings">
                             <StackPanel Orientation="Horizontal" Margin="20">
                                 <GroupBox Header="Data range" Margin="5">
-                                    <ItemsControl>
+                                    <StackPanel Orientation="Vertical">
                                         <TextBlock>Note: negative number = from bottom</TextBlock>
                                         <Fluent:ComboBox Header="Start Row" InputWidth="50" HorizontalContentAlignment="Right"/>
                                         <Fluent:ComboBox Header="Start column" InputWidth="50" HorizontalContentAlignment="Right"/>
                                         <Fluent:ComboBox Header="End row" InputWidth="50" HorizontalContentAlignment="Right"/>
                                         <Fluent:ComboBox Header="End column" InputWidth="50" HorizontalContentAlignment="Right"/>
-                                    </ItemsControl>
+                                    </StackPanel>
                                 </GroupBox>
                                 <GroupBox Header="Columns" Margin="5">
-                                    <ItemsControl>
+                                    <StackPanel Orientation="Vertical">
                                         <TextBlock>Note: negative number = from right</TextBlock>
                                         <Fluent:ComboBox Header="Course name" InputWidth="50" HorizontalContentAlignment="Right"/>
                                         <Fluent:ComboBox Header="Date" InputWidth="50" HorizontalContentAlignment="Right"/>
@@ -70,11 +70,11 @@
                                         <Fluent:ComboBox Header="Invigilator count" InputWidth="50" HorizontalContentAlignment="Right"/>
                                         <Fluent:ComboBox Header="Examinees count" InputWidth="50" HorizontalContentAlignment="Right"/>
                                         <Fluent:TextBox Header="Inviligators Regex" HorizontalContentAlignment="Right"/>
-                                    </ItemsControl>
+                                    </StackPanel>
                                 </GroupBox>
                                 <GroupBox Header="Appearance" Margin="5">
                                     <ItemsControl>
-                                        <Fluent:RadioButton Header="Automatic" GroupName="appearance"/>
+                                        <Fluent:RadioButton Header="Automatic" GroupName="appearance" IsChecked="True"/>
                                         <Fluent:RadioButton Header="Light" GroupName="appearance"/>
                                         <Fluent:RadioButton Header="Dark" GroupName="appearance"/>
                                     </ItemsControl>
@@ -139,29 +139,28 @@
                     <Fluent:SplitButton Header="Manage..."
                                         Icon="{StaticResource RuleIcon}"
                                         LargeIcon="{StaticResource RuleIcon}">
-                        <Fluent:MenuItem Header="Add time constraint"
-                                         Icon="{StaticResource NewRuleIcon}"/>
-                        <Fluent:MenuItem Header="Add personnel constraint"
+                        <Fluent:MenuItem Header="Add exclude rule"
                                          Icon="{StaticResource NewRuleIcon}"/>
                         <Fluent:MenuItem Header="Manage constraints"
                                          Icon="{StaticResource RuleIcon}"/>
                     </Fluent:SplitButton>
-                    <Fluent:Button Header="Person setting"
-                                   Icon="{StaticResource Fluent.Ribbon.Images.Cut}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Cut}"/>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Name="viewGroup" Header="View">
                     <Fluent:ToggleButton Header="Original file"
+                                         GroupName="viewGroup"
                                          Icon="{StaticResource RawFileIcon}"
                                          LargeIcon="{StaticResource RawFileIcon}"/>
                     <Fluent:ToggleButton Header="Plain table"
+                                         GroupName="viewGroup"
                                          Icon="{StaticResource TableIcon}"
                                          LargeIcon="{StaticResource TableIcon}"/>
                     <Fluent:ToggleButton Header="Gantt"
+                                         GroupName="viewGroup"
                                          Icon="{StaticResource GanttIcon}"
                                          LargeIcon="{StaticResource GanttIcon}"/>
                     <Fluent:ToggleButton Header="Calendar"
+                                         GroupName="viewGroup"
                                          Icon="{StaticResource CalendarIccon}"
                                          LargeIcon="{StaticResource CalendarIccon}"/>
                 </Fluent:RibbonGroupBox>
