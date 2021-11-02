@@ -60,27 +60,27 @@
 
                         <Fluent:BackstageTabItem Header="Settings">
                             <StackPanel Orientation="Horizontal" Margin="20">
-                                <GroupBox Header="Data range" Margin="5">
+                                <GroupBox Header="Data range" Margin="5" BorderThickness="0">
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock>Note: negative number = from bottom</TextBlock>
-                                        <Fluent:ComboBox Header="Start Row" InputWidth="50" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Start column" InputWidth="50" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="End row" InputWidth="50" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="End column" InputWidth="50" HorizontalContentAlignment="Right"/>
+                                        <TextBlock Margin="5,5">Note: negative number = from bottom</TextBlock>
+                                        <Fluent:ComboBox Header="Start Row" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Start column" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="End row" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="End column" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
                                     </StackPanel>
                                 </GroupBox>
-                                <GroupBox Header="Columns" Margin="5">
+                                <GroupBox Header="Columns" Margin="5" BorderThickness="0">
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock>Note: negative number = from right</TextBlock>
-                                        <Fluent:ComboBox Header="Course name" InputWidth="50" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Date" InputWidth="50" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Time" InputWidth="50" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Invigilator count" InputWidth="50" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Examinees count" InputWidth="50" HorizontalContentAlignment="Right"/>
-                                        <Fluent:TextBox Header="Inviligators Regex" HorizontalContentAlignment="Right"/>
+                                        <TextBlock Margin="5,5">Note: negative number = from right</TextBlock>
+                                        <Fluent:ComboBox Header="Course name" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Date" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Time" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Invigilator count" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                        <Fluent:ComboBox Header="Examinees count" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                        <Fluent:TextBox Header="Inviligators Regex" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
                                     </StackPanel>
                                 </GroupBox>
-                                <GroupBox Header="Appearance" Margin="5">
+                                <GroupBox Header="Appearance" Margin="5" BorderThickness="0">
                                     <ItemsControl>
                                         <Fluent:RadioButton Header="Automatic" GroupName="appearance" IsChecked="True"/>
                                         <Fluent:RadioButton Header="Light" GroupName="appearance"/>
@@ -177,7 +177,8 @@
                                          LargeIcon="{StaticResource GanttIcon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
-                    <Fluent:ToggleButton Header="Calendar"
+                    <Fluent:ToggleButton Name="calendarViewButton"
+                                         Header="Calendar"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource CalendarIccon}"
                                          LargeIcon="{StaticResource CalendarIccon}"

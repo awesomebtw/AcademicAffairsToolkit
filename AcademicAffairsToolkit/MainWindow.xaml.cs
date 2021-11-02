@@ -106,6 +106,9 @@ namespace AcademicAffairsToolkit
                 case nameof(ganttViewButton):
                     mainViewFrame.Navigate(new Uri("pack://application:,,,/GanttViewPage.xaml"));
                     break;
+                case nameof(calendarViewButton):
+                    mainViewFrame.Navigate(new Uri("pack://application:,,,/CalendarViewPage.xaml"));
+                    break;
                 default:
                     break;
             }
