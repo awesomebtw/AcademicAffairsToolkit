@@ -177,7 +177,8 @@
                                          LargeIcon="{StaticResource GanttIcon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
-                    <Fluent:ToggleButton Header="Calendar"
+                    <Fluent:ToggleButton Name="calendarViewButton"
+                                         Header="Calendar"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource CalendarIccon}"
                                          LargeIcon="{StaticResource CalendarIccon}"
