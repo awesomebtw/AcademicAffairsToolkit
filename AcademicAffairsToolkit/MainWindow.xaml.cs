@@ -21,12 +21,28 @@ namespace AcademicAffairsToolkit
     /// </summary>
     public partial class MainWindow
     {
+        public static RoutedUICommand ToggleView = new RoutedUICommand();
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void backstageOpenButton_Click(object sender, RoutedEventArgs e)
+        private void RibbonWindow_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetData(DataFormats.FileDrop) is string[] path)
+            {
+                recentlyOpenedGallery.Items.Add(path.First());
+                // todo: start parsing excel file
+            }
+        }
+
+        private void OpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void OpenCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog()
             {
@@ -36,30 +52,27 @@ namespace AcademicAffairsToolkit
 
             if (fileDialog.ShowDialog(this) == true)
             {
-                MessageBox.Show(fileDialog.FileName, "Selected file",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
                 recentlyOpenedGallery.Items.Add(fileDialog.FileName);
-            }
-            else
-            {
-                MessageBox.Show("You clicked cancel");
+                // todo: start parsing excel file
             }
         }
 
-        private void RibbonWindow_DragEnter(object sender, DragEventArgs e)
+        private void CloseCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            // todo: process drag and drop event
-            e.Handled = true;
+            e.CanExecute = true;
         }
 
-        private void backStageExitButton_Click(object sender, RoutedEventArgs e)
+        private void CloseCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to exit?", "Exit",
-                MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
-                Close();
+            Close();
         }
 
-        private void backstageSaveButton_Click(object sender, RoutedEventArgs e)
+        private void SaveCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void SaveCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             SaveFileDialog fileDialog = new SaveFileDialog()
             {
@@ -71,6 +84,30 @@ namespace AcademicAffairsToolkit
             {
                 // todo: save file
                 MessageBox.Show(fileDialog.FileName, "Saved (TODO)");
+            }
+        }
+
+        private void ToggleViewCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // todo: can execute if auto arrangement finished
+            e.CanExecute = true;
+        }
+
+        private void ToggleViewCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            switch (e.Parameter)
+            {
+                case nameof(fileViewButton):
+                    mainViewFrame.Navigate(new Uri("pack://application:,,,/OriginalFileViewPage.xaml"));
+                    break;
+                case nameof(tableViewButton):
+                    mainViewFrame.Navigate(new Uri("pack://application:,,,/TableViewPage.xaml"));
+                    break;
+                case nameof(ganttViewButton):
+                    mainViewFrame.Navigate(new Uri("pack://application:,,,/GanttViewPage.xaml"));
+                    break;
+                default:
+                    break;
             }
         }
     }

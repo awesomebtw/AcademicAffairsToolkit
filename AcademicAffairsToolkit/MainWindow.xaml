@@ -3,12 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AcademicAffairsToolkit"
         mc:Ignorable="d"
         xmlns:Fluent="urn:fluent-ribbon"
         Title="Academic Affairs Toolkit"
         Height="450" Width="800" MinHeight="240" MinWidth="320"
         WindowStartupLocation="CenterScreen"
+        AllowDrop="True"
         DragEnter="RibbonWindow_DragEnter">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="Open" CanExecute="OpenCommandCanExecute" Executed="OpenCommandExecuted"/>
+        <CommandBinding Command="Save" CanExecute="SaveCommandCanExecute" Executed="SaveCommandExecuted"/>
+        <CommandBinding Command="Close" CanExecute="CloseCommandCanExecute" Executed="CloseCommandExecuted"/>
+        <CommandBinding Command="{x:Static local:MainWindow.ToggleView}" CanExecute="ToggleViewCommandCanExecute" Executed="ToggleViewCommandExecuted"/>
+    </Window.CommandBindings>
 
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top">
@@ -32,7 +41,7 @@
                                                Visibility="Visible"
                                                Header="Open..." 
                                                VerticalAlignment="Top"
-                                               Click="backstageOpenButton_Click"
+                                               Command="Open"
                                                Icon="{StaticResource OpenFileIcon}"
                                                LargeIcon="{StaticResource OpenFileIcon}"/>
                                 <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24" Margin="20">
@@ -47,8 +56,7 @@
                         </Fluent:BackstageTabItem>
 
                         <Fluent:Button Header="Save As"
-                                       Name="backstageSaveButton"
-                                       Click="backstageSaveButton_Click"/>
+                                       Command="Save"/>
 
                         <Fluent:BackstageTabItem Header="Settings">
                             <StackPanel Orientation="Horizontal" Margin="20">
@@ -93,9 +101,8 @@
 
                         <Fluent:SeparatorTabItem/>
 
-                        <Fluent:Button Name="backStageExitButton"
-                                       Header="Exit"
-                                       Click="backStageExitButton_Click"/>
+                        <Fluent:Button Header="Close"
+                                       Command="Close"/>
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
@@ -104,9 +111,8 @@
             <Fluent:Ribbon.QuickAccessItems>
                 <Fluent:QuickAccessMenuItem Header="Open"
                                             ToolTip="Open"
-                                            Click="backstageOpenButton_Click"
-                                            Icon="{StaticResource OpenFileIcon}"
-                                            Visibility="Visible"/>
+                                            Command="Open"
+                                            Icon="{StaticResource OpenFileIcon}"/>
             </Fluent:Ribbon.QuickAccessItems>
 
             <!--home tab-->
@@ -114,13 +120,16 @@
                 <Fluent:RibbonGroupBox Name="clipboardGroup" Header="Clipboard">
                     <Fluent:Button Header="Paste"
                                    Icon="{StaticResource Fluent.Ribbon.Images.Paste}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Paste}"/>
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Paste}"
+                                   Command="Paste"/>
                     <Fluent:Button Header="Copy"
                                    Icon="{StaticResource Fluent.Ribbon.Images.Copy}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Copy}"/>
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Copy}"
+                                   Command="Copy"/>
                     <Fluent:Button Header="Cut"
                                    Icon="{StaticResource Fluent.Ribbon.Images.Cut}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Cut}"/>
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Cut}"
+                                   Command="Cut"/>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Header="Arrange">
@@ -147,22 +156,33 @@
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Name="viewGroup" Header="View">
-                    <Fluent:ToggleButton Header="Original file"
+                    <Fluent:ToggleButton Name="fileViewButton"
+                                         Header="Original file"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource RawFileIcon}"
-                                         LargeIcon="{StaticResource RawFileIcon}"/>
-                    <Fluent:ToggleButton Header="Plain table"
+                                         LargeIcon="{StaticResource RawFileIcon}"
+                                         Command="{x:Static local:MainWindow.ToggleView}"
+                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
+                    <Fluent:ToggleButton Name="tableViewButton"
+                                         Header="Plain table"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource TableIcon}"
-                                         LargeIcon="{StaticResource TableIcon}"/>
-                    <Fluent:ToggleButton Header="Gantt"
+                                         LargeIcon="{StaticResource TableIcon}"
+                                         Command="{x:Static local:MainWindow.ToggleView}"
+                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
+                    <Fluent:ToggleButton Name="ganttViewButton"
+                                         Header="Gantt"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource GanttIcon}"
-                                         LargeIcon="{StaticResource GanttIcon}"/>
+                                         LargeIcon="{StaticResource GanttIcon}"
+                                         Command="{x:Static local:MainWindow.ToggleView}"
+                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
                     <Fluent:ToggleButton Header="Calendar"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource CalendarIccon}"
-                                         LargeIcon="{StaticResource CalendarIccon}"/>
+                                         LargeIcon="{StaticResource CalendarIccon}"
+                                         Command="{x:Static local:MainWindow.ToggleView}"
+                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Name="sortByGroup" Header="Sort by">
@@ -195,8 +215,6 @@
         </Fluent:StatusBar>
 
         <!--window content-->
-        <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
-            <TextBlock><Run Foreground="GreenYellow" Text="TODO: "/>add views for main window</TextBlock>
-        </WrapPanel>
+        <Frame Name="mainViewFrame" NavigationUIVisibility="Hidden"/>
     </DockPanel>
 </Fluent:RibbonWindow>
