@@ -95,22 +95,10 @@ namespace AcademicAffairsToolkit
 
         private void ToggleViewCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            switch (e.Parameter)
+            if (e.Parameter is string uriString &&
+                Uri.TryCreate(uriString, UriKind.RelativeOrAbsolute, out Uri uri))
             {
-                case nameof(fileViewButton):
-                    mainViewFrame.Navigate(new Uri("pack://application:,,,/OriginalFileViewPage.xaml"));
-                    break;
-                case nameof(tableViewButton):
-                    mainViewFrame.Navigate(new Uri("pack://application:,,,/TableViewPage.xaml"));
-                    break;
-                case nameof(ganttViewButton):
-                    mainViewFrame.Navigate(new Uri("pack://application:,,,/GanttViewPage.xaml"));
-                    break;
-                case nameof(calendarViewButton):
-                    mainViewFrame.Navigate(new Uri("pack://application:,,,/CalendarViewPage.xaml"));
-                    break;
-                default:
-                    break;
+                mainViewFrame.Navigate(uri);
             }
         }
     }

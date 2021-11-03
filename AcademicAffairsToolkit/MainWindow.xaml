@@ -162,28 +162,28 @@
                                          Icon="{StaticResource RawFileIcon}"
                                          LargeIcon="{StaticResource RawFileIcon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
-                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
+                                         CommandParameter="/OriginalFileViewPage.xaml"/>
                     <Fluent:ToggleButton Name="tableViewButton"
                                          Header="Plain table"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource TableIcon}"
                                          LargeIcon="{StaticResource TableIcon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
-                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
+                                         CommandParameter="/TableViewPage.xaml"/>
                     <Fluent:ToggleButton Name="ganttViewButton"
                                          Header="Gantt"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource GanttIcon}"
                                          LargeIcon="{StaticResource GanttIcon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
-                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
+                                         CommandParameter="/GanttViewPage.xaml"/>
                     <Fluent:ToggleButton Name="calendarViewButton"
                                          Header="Calendar"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource CalendarIccon}"
                                          LargeIcon="{StaticResource CalendarIccon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
-                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Name, Mode=OneTime}"/>
+                                         CommandParameter="/CalendarViewPage.xaml"/>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Name="sortByGroup" Header="Sort by">
