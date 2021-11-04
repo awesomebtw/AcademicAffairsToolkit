@@ -51,12 +51,23 @@ namespace AcademicAffairsToolkit
 
         private void OpenCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            if (OpenExcelDialog.ShowDialog(this) == true)
+            if (OpenExcelDialog.ShowDialog(this) == true && e.Parameter is string s)
             {
                 recentlyOpenedGallery.Items.Add(OpenExcelDialog.FileName);
-                var entries = ExcelProcessor.ReadInvigilateTable(OpenExcelDialog.FileName, "", Session.InvigilateFilePolicy);
-                Session.InvigilateRecords = new ObservableCollection<InvigilateRecordEntry>(entries);
-                ToggleView.Execute("/OriginalFileViewPage.xaml", this);
+                if (s == "invigilate")
+                {
+                    var entries = ExcelProcessor.ReadInvigilateTable(OpenExcelDialog.FileName, "", Session.InvigilateFilePolicy);
+                    Session.InvigilateRecords = new ObservableCollection<InvigilateRecordEntry>(entries);
+                    ToggleView.Execute("/OriginalFileViewPage.xaml", this);
+                    invigilateFileViewButton.IsChecked = true;
+                }
+                else if (s == "tr")
+                {
+                    var entries = ExcelProcessor.ReadTROfficeTable(OpenExcelDialog.FileName, "", Session.TROfficeFilePolicy);
+                    Session.TROffices = new ObservableCollection<TROfficeRecordEntry>(entries);
+                    ToggleView.Execute("/TRFileViewPage.xaml", this);
+                    trOfficeFileViewButton.IsChecked = true;
+                }
             }
         }
 
@@ -93,7 +104,7 @@ namespace AcademicAffairsToolkit
         private void ToggleViewCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             // todo: can execute if auto arrangement finished
-            e.CanExecute = Session.InvigilateRecords != null && Session.InvigilateRecords.Count() != 0;
+            e.CanExecute = Session.AnyFileLoaded();
         }
 
         private void ToggleViewCommandExecuted(object sender, ExecutedRoutedEventArgs e)

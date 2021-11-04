@@ -35,15 +35,20 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <Fluent:Button Grid.Column="0"
-                                               Grid.Row="1"
-                                               Name="backstageOpenButton"
-                                               Visibility="Visible"
-                                               Header="Open..." 
-                                               VerticalAlignment="Top"
-                                               Command="Open"
-                                               Icon="{StaticResource OpenFileIcon}"
-                                               LargeIcon="{StaticResource OpenFileIcon}"/>
+                                <StackPanel Grid.Row="1" Grid.Column="0">
+                                    <Fluent:Button Height="Auto"
+                                                   Header="Open invigilate file..."
+                                                   Command="Open"
+                                                   Icon="{StaticResource OpenFileIcon}"
+                                                   LargeIcon="{StaticResource OpenFileIcon}"
+                                                   CommandParameter="invigilate"/>
+                                    <Fluent:Button Height="Auto"
+                                                   Header="Open TR office file..."
+                                                   Command="Open"
+                                                   Icon="{StaticResource OpenFileIcon}"
+                                                   LargeIcon="{StaticResource OpenFileIcon}"
+                                                   CommandParameter="tr"/>
+                                </StackPanel>
                                 <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24" Margin="20">
                                     Recent
                                 </TextBlock>
@@ -107,14 +112,6 @@
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
 
-            <!--quick access bar-->
-            <Fluent:Ribbon.QuickAccessItems>
-                <Fluent:QuickAccessMenuItem Header="Open"
-                                            ToolTip="Open"
-                                            Command="Open"
-                                            Icon="{StaticResource OpenFileIcon}"/>
-            </Fluent:Ribbon.QuickAccessItems>
-
             <!--home tab-->
             <Fluent:RibbonTabItem Header="Home" ReduceOrder="viewGroup,sortByGroup,clipboardGroup,constraintGroup">
                 <Fluent:RibbonGroupBox Name="clipboardGroup" Header="Clipboard">
@@ -155,14 +152,43 @@
                     </Fluent:SplitButton>
                 </Fluent:RibbonGroupBox>
 
-                <Fluent:RibbonGroupBox Name="viewGroup" Header="View">
-                    <Fluent:ToggleButton Name="fileViewButton"
-                                         Header="Original file"
+                <Fluent:RibbonGroupBox Name="sortByGroup" Header="Sort by">
+                    <Fluent:InRibbonGallery ItemWidth="60">
+                        <Fluent:GalleryItem>
+                            <TextBlock>Name</TextBlock>
+                        </Fluent:GalleryItem>
+                        <Fluent:GalleryItem>
+                            <TextBlock>Person</TextBlock>
+                        </Fluent:GalleryItem>
+                        <Fluent:InRibbonGallery.Menu>
+                            <Fluent:RibbonMenu>
+                                Invert order
+                            </Fluent:RibbonMenu>
+                        </Fluent:InRibbonGallery.Menu>
+                    </Fluent:InRibbonGallery>
+                </Fluent:RibbonGroupBox>
+
+            </Fluent:RibbonTabItem>
+
+            <Fluent:RibbonTabItem Header="View">
+                <Fluent:RibbonGroupBox Header="Original File Views">
+                    <Fluent:ToggleButton x:Name="invigilateFileViewButton"
+                                         Header="Invigilate file"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource RawFileIcon}"
                                          LargeIcon="{StaticResource RawFileIcon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/OriginalFileViewPage.xaml"/>
+                    <Fluent:ToggleButton Name="trOfficeFileViewButton"
+                                         Header="TR office file"
+                                         GroupName="viewGroup"
+                                         Icon="{StaticResource RawFileIcon}"
+                                         LargeIcon="{StaticResource RawFileIcon}"
+                                         Command="{x:Static local:MainWindow.ToggleView}"
+                                         CommandParameter="/TRFileViewPage.xaml"/>
+                </Fluent:RibbonGroupBox>
+                
+                <Fluent:RibbonGroupBox Name="viewGroup" Header="Result View">
                     <Fluent:ToggleButton Name="tableViewButton"
                                          Header="Plain table"
                                          GroupName="viewGroup"
@@ -185,23 +211,6 @@
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/CalendarViewPage.xaml"/>
                 </Fluent:RibbonGroupBox>
-
-                <Fluent:RibbonGroupBox Name="sortByGroup" Header="Sort by">
-                    <Fluent:InRibbonGallery ItemWidth="60">
-                        <Fluent:GalleryItem>
-                            <TextBlock>Name</TextBlock>
-                        </Fluent:GalleryItem>
-                        <Fluent:GalleryItem>
-                            <TextBlock>Person</TextBlock>
-                        </Fluent:GalleryItem>
-                        <Fluent:InRibbonGallery.Menu>
-                            <Fluent:RibbonMenu>
-                                Invert order
-                            </Fluent:RibbonMenu>
-                        </Fluent:InRibbonGallery.Menu>
-                    </Fluent:InRibbonGallery>
-                </Fluent:RibbonGroupBox>
-
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
 

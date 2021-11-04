@@ -17,6 +17,9 @@ namespace AcademicAffairsToolkit
         // todo: store arrangement data
         public static IEnumerable<object> Arrangements;
 
+        public static bool AnyFileLoaded() =>
+            InvigilateRecords != null || TROffices != null;
+
         public static bool CanStartArrange() =>
             InvigilateRecords != null && InvigilateRecords.Count != 0 &&
             TROffices != null && TROffices.Count != 0;
