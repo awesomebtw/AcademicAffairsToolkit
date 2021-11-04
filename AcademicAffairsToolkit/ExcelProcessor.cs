@@ -20,11 +20,26 @@ namespace AcademicAffairsToolkit
     {
         public int Sheet { get; set; }
         public int DateColumn { get; set; }
-        public int TimeColumn { get; set; }
-        public int DepartmentColumn { get; set; }
+        public int TimeIntervalColumn { get; set; }
         public int SubjectColumn { get; set; }
+        public int DepartmentColumn { get; set; }
+        public int GradeColumn { get; set; }
+        public int SpecialityColumn { get; set; }
         public int ExamineeCountColumn { get; set; }
         public int LocationColumn { get; set; }
+
+        public static readonly InvigilateFileParsePolicy DefaultPolicy = new InvigilateFileParsePolicy
+        {
+            Sheet = 0,
+            DateColumn = 0,
+            TimeIntervalColumn = 1,
+            SubjectColumn = 2,
+            DepartmentColumn = 3,
+            GradeColumn = 4,
+            SpecialityColumn = 5,
+            ExamineeCountColumn = 6,
+            LocationColumn = 7
+        };
     }
 
     static class ExcelProcessor
@@ -36,18 +51,17 @@ namespace AcademicAffairsToolkit
 
             foreach (IRow row in sheet)
             {
-                // todo: complete row-wise parsing
                 string dateString = row.GetCell(policy.DateColumn).StringCellValue;
-                string startTimeString = row.GetCell(policy.TimeColumn).StringCellValue;
-                string endTimeString = row.GetCell(policy.TimeColumn).StringCellValue;
-                _ = int.TryParse(row.GetCell(policy.ExamineeCountColumn).StringCellValue, out int examineeCount);
+                string[] timeStrings = row.GetCell(policy.TimeIntervalColumn).StringCellValue.Split('-');
+
+                int.TryParse(row.GetCell(policy.ExamineeCountColumn).StringCellValue, out int examineeCount);
 
                 yield return new InvigilateRecordEntry
                 {
                     Department = row.GetCell(policy.DepartmentColumn).StringCellValue,
                     Subject = row.GetCell(policy.SubjectColumn).StringCellValue,
-                    StartTime = DateTime.Parse($"{dateString} {startTimeString}"),
-                    EndTime = DateTime.Parse($"{dateString} {endTimeString}"),
+                    StartTime = DateTime.Parse($"{dateString} {timeStrings[0]}"),
+                    EndTime = DateTime.Parse($"{dateString} {timeStrings[1]}"),
                     Location = row.GetCell(policy.LocationColumn).StringCellValue,
                     ExamineeCount = examineeCount
                 };

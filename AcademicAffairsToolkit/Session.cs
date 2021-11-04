@@ -1,18 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace AcademicAffairsToolkit
 {
-    enum SessionStatus
+    static class Session
     {
-        FileNotOpen,
-        FileOpened,
-        Evaluated,
-        Invalid
-    }
+        public static ObservableCollection<InvigilateRecordEntry> InvigilateRecords;
 
-    class Session
-    {
-        public SessionStatus Status { get; set; }
-        public IEnumerable<InvigilateRecordEntry> InvigilateRecords { get; set; }
+        // todo: store arrangement data
+        public static IEnumerable<object> Arrangements;
     }
 }
