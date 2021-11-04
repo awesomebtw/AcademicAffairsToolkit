@@ -6,16 +6,11 @@
         xmlns:local="clr-namespace:AcademicAffairsToolkit"
         mc:Ignorable="d"
         xmlns:Fluent="urn:fluent-ribbon"
-        xmlns:c="clr-namespace:AcademicAffairsToolkit"
         Title="Academic Affairs Toolkit"
         Height="450" Width="800" MinHeight="240" MinWidth="320"
         WindowStartupLocation="CenterScreen"
         AllowDrop="True"
         DragEnter="RibbonWindow_DragEnter">
-
-    <Window.Resources>
-        <c:
-    </Window.Resources>
 
     <Window.CommandBindings>
         <CommandBinding Command="Open" CanExecute="OpenCommandCanExecute" Executed="OpenCommandExecuted"/>

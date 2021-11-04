@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text.RegularExpressions;
 using NPOI.SS.UserModel;
 
 namespace AcademicAffairsToolkit
@@ -27,6 +27,7 @@ namespace AcademicAffairsToolkit
         public int SpecialityColumn { get; set; }
         public int ExamineeCountColumn { get; set; }
         public int LocationColumn { get; set; }
+        public int StartRow { get; set; }
 
         public static readonly InvigilateFileParsePolicy DefaultPolicy = new InvigilateFileParsePolicy
         {
@@ -38,30 +39,42 @@ namespace AcademicAffairsToolkit
             GradeColumn = 4,
             SpecialityColumn = 5,
             ExamineeCountColumn = 6,
-            LocationColumn = 7
+            LocationColumn = 7,
+            StartRow = 2
         };
     }
 
     static class ExcelProcessor
     {
-        static IEnumerable<InvigilateRecordEntry> Read(string path, string password, InvigilateFileParsePolicy policy)
+        public static IEnumerable<InvigilateRecordEntry> Read(string path, string password, InvigilateFileParsePolicy policy)
         {
             var workbook = WorkbookFactory.Create(path, password, true);
             var sheet = workbook.GetSheetAt(policy.Sheet);
 
-            foreach (IRow row in sheet)
+            for (int i = policy.StartRow; i < sheet.LastRowNum; i++)
             {
-                string dateString = row.GetCell(policy.DateColumn).StringCellValue;
-                string[] timeStrings = row.GetCell(policy.TimeIntervalColumn).StringCellValue.Split('-');
+                var row = sheet.GetRow(i);
 
-                int.TryParse(row.GetCell(policy.ExamineeCountColumn).StringCellValue, out int examineeCount);
+                // working with date and time
+                ICell dateCell = row.GetCell(policy.DateColumn);
+                DateTime date = dateCell.CellType == CellType.Numeric ? dateCell.DateCellValue : DateTime.Parse(dateCell.StringCellValue);
+                string timeString = row.GetCell(policy.TimeIntervalColumn).StringCellValue;
+                var timeMatch = Regex.Match(timeString, @"(\d+:\d+)-(\d+:\d+)");
+
+                // working with examinee count
+                var examineeCountCell = row.GetCell(policy.ExamineeCountColumn);
+                int examineeCount;
+                if (examineeCountCell.CellType == CellType.Numeric)
+                    examineeCount = (int)examineeCountCell.NumericCellValue;
+                else
+                    int.TryParse(examineeCountCell.StringCellValue, out examineeCount);
 
                 yield return new InvigilateRecordEntry
                 {
                     Department = row.GetCell(policy.DepartmentColumn).StringCellValue,
                     Subject = row.GetCell(policy.SubjectColumn).StringCellValue,
-                    StartTime = DateTime.Parse($"{dateString} {timeStrings[0]}"),
-                    EndTime = DateTime.Parse($"{dateString} {timeStrings[1]}"),
+                    StartTime = date.Add(TimeSpan.Parse(timeMatch.Groups[1].Value)),
+                    EndTime = date.Add(TimeSpan.Parse(timeMatch.Groups[2].Value)),
                     Location = row.GetCell(policy.LocationColumn).StringCellValue,
                     ExamineeCount = examineeCount
                 };

@@ -21,6 +21,7 @@ namespace AcademicAffairsToolkit
         public OriginalFilePage()
         {
             InitializeComponent();
+            originalViewGrid.ItemsSource = Session.InvigilateRecords;
         }
     }
 }

@@ -9,11 +9,6 @@
       Title="OriginalFilePage">
 
     <Grid>
-        <DataGrid>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="aaa"></DataGridTextColumn>
-                <DataGridCheckBoxColumn Header="bbb"></DataGridCheckBoxColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <DataGrid Name="originalViewGrid"/>
     </Grid>
 </Page>

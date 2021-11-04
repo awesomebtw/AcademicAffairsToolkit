@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,7 +54,9 @@ namespace AcademicAffairsToolkit
             if (fileDialog.ShowDialog(this) == true)
             {
                 recentlyOpenedGallery.Items.Add(fileDialog.FileName);
-                // todo: start parsing excel file
+                var entries = ExcelProcessor.Read(fileDialog.FileName, "", Session.FileParsePolicy);
+                Session.InvigilateRecords = new ObservableCollection<InvigilateRecordEntry>(entries);
+                ToggleView.Execute("/OriginalFileViewPage.xaml", this);
             }
         }
 
@@ -90,7 +93,7 @@ namespace AcademicAffairsToolkit
         private void ToggleViewCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             // todo: can execute if auto arrangement finished
-            e.CanExecute = true;
+            e.CanExecute = Session.InvigilateRecords != null && Session.InvigilateRecords.Count() != 0;
         }
 
         private void ToggleViewCommandExecuted(object sender, ExecutedRoutedEventArgs e)
