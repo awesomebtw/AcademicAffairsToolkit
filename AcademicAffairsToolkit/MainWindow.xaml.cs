@@ -24,6 +24,12 @@ namespace AcademicAffairsToolkit
     {
         public static RoutedUICommand ToggleView = new RoutedUICommand();
 
+        public static OpenFileDialog OpenExcelDialog = new OpenFileDialog()
+            {
+                Filter = "XLSX files|*.xlsx|XLS files|*.xls|All Excel files|*.xlsx;*.xls",
+                InitialDirectory = Environment.CurrentDirectory
+            };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -45,16 +51,10 @@ namespace AcademicAffairsToolkit
 
         private void OpenCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            OpenFileDialog fileDialog = new OpenFileDialog()
+            if (OpenExcelDialog.ShowDialog(this) == true)
             {
-                Filter = "XLSX files|*.xlsx|XLS files|*.xls|All Excel files|*.xlsx;*.xls",
-                InitialDirectory = Environment.CurrentDirectory
-            };
-
-            if (fileDialog.ShowDialog(this) == true)
-            {
-                recentlyOpenedGallery.Items.Add(fileDialog.FileName);
-                var entries = ExcelProcessor.Read(fileDialog.FileName, "", Session.FileParsePolicy);
+                recentlyOpenedGallery.Items.Add(OpenExcelDialog.FileName);
+                var entries = ExcelProcessor.ReadInvigilateTable(OpenExcelDialog.FileName, "", Session.InvigilateFilePolicy);
                 Session.InvigilateRecords = new ObservableCollection<InvigilateRecordEntry>(entries);
                 ToggleView.Execute("/OriginalFileViewPage.xaml", this);
             }
