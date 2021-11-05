@@ -17,6 +17,7 @@
         <CommandBinding Command="Save" CanExecute="SaveCommandCanExecute" Executed="SaveCommandExecuted"/>
         <CommandBinding Command="Close" CanExecute="CloseCommandCanExecute" Executed="CloseCommandExecuted"/>
         <CommandBinding Command="{x:Static local:MainWindow.ToggleView}" CanExecute="ToggleViewCommandCanExecute" Executed="ToggleViewCommandExecuted"/>
+        <CommandBinding Command="{x:Static local:MainWindow.StartArrangement}" CanExecute="StartArrangementCanExecute" Executed="StartArrangementExecuted"/>
     </Window.CommandBindings>
 
     <DockPanel>
@@ -56,7 +57,14 @@
                                                 Grid.Row="1"
                                                 Name="recentlyOpenedGallery"
                                                 MaxItemsInRow="1"
-                                                Margin="20,0"/>
+                                                Margin="20,0">
+                                    <Fluent:Gallery.ContextMenu>
+                                        <Fluent:ContextMenu>
+                                            <Fluent:MenuItem Header="Open as invigilate file"/>
+                                            <Fluent:MenuItem Header="Open as TR file"/>
+                                        </Fluent:ContextMenu>
+                                    </Fluent:Gallery.ContextMenu>
+                                </Fluent:Gallery>
                             </Grid>
                         </Fluent:BackstageTabItem>
 
@@ -132,7 +140,8 @@
                 <Fluent:RibbonGroupBox Header="Arrange">
                     <Fluent:Button Header="Start auto arrange"
                                    Icon="{StaticResource StartIcon}"
-                                   LargeIcon="{StaticResource StartIcon}"/>
+                                   LargeIcon="{StaticResource StartIcon}"
+                                   Command="StartArrangement"/>
                     <Fluent:Button Header="Arrangement Policy"
                                    Icon="{StaticResource PolicyIcon}"
                                    LargeIcon="{StaticResource PolicyIcon}"/>

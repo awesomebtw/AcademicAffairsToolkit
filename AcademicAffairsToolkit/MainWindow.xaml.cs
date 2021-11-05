@@ -24,11 +24,13 @@ namespace AcademicAffairsToolkit
     {
         public static RoutedUICommand ToggleView = new RoutedUICommand();
 
+        public static RoutedUICommand StartArrangement = new RoutedUICommand();
+
         public static OpenFileDialog OpenExcelDialog = new OpenFileDialog()
-            {
-                Filter = "XLSX files|*.xlsx|XLS files|*.xls|All Excel files|*.xlsx;*.xls",
-                InitialDirectory = Environment.CurrentDirectory
-            };
+        {
+            Filter = "XLSX files|*.xlsx|XLS files|*.xls|All Excel files|*.xlsx;*.xls",
+            InitialDirectory = Environment.CurrentDirectory
+        };
 
         public MainWindow()
         {
@@ -114,6 +116,16 @@ namespace AcademicAffairsToolkit
             {
                 mainViewFrame.Navigate(uri);
             }
+        }
+
+        private void StartArrangementCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = Session.CanStartArrange();
+        }
+
+        private void StartArrangementExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            // todo: invoke start arrangement function
         }
     }
 }
