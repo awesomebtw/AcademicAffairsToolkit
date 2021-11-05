@@ -58,7 +58,7 @@ namespace AcademicAffairsToolkit
                 {
                     var entries = ExcelProcessor.ReadInvigilateTable(OpenExcelDialog.FileName, "", Session.InvigilateFilePolicy);
                     Session.InvigilateRecords = new ObservableCollection<InvigilateRecordEntry>(entries);
-                    ToggleView.Execute("/OriginalFileViewPage.xaml", this);
+                    ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
                     invigilateFileViewButton.IsChecked = true;
                 }
                 else if (s == "tr")

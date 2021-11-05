@@ -178,7 +178,7 @@
                                          Icon="{StaticResource RawFileIcon}"
                                          LargeIcon="{StaticResource RawFileIcon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
-                                         CommandParameter="/OriginalFileViewPage.xaml"/>
+                                         CommandParameter="/InvigilateFileViewPage.xaml"/>
                     <Fluent:ToggleButton Name="trOfficeFileViewButton"
                                          Header="TR office file"
                                          GroupName="viewGroup"
