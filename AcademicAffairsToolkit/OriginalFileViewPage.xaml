@@ -9,6 +9,6 @@
       Title="OriginalFilePage">
 
     <Grid>
-        <DataGrid Name="originalViewGrid"/>
+        <DataGrid Name="originalViewGrid" ItemsSource="{Binding Path=(local:Session.InvigilateRecords)}"/>
     </Grid>
 </Page>

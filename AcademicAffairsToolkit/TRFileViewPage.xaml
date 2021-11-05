@@ -9,6 +9,6 @@
       Title="TRFileViewPage">
 
     <Grid>
-        <DataGrid Name="trFileViewGrid"/>
+        <DataGrid Name="trFileViewGrid" ItemsSource="{Binding Path=(local:Session.TROffices)}"/>
     </Grid>
 </Page>
