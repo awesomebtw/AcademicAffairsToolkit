@@ -141,7 +141,7 @@
                     <Fluent:Button Header="Start auto arrange"
                                    Icon="{StaticResource StartIcon}"
                                    LargeIcon="{StaticResource StartIcon}"
-                                   Command="StartArrangement"/>
+                                   Command="{x:Static local:MainWindow.StartArrangement}"/>
                     <Fluent:Button Header="Arrangement Policy"
                                    Icon="{StaticResource PolicyIcon}"
                                    LargeIcon="{StaticResource PolicyIcon}"/>
