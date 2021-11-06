@@ -37,15 +37,6 @@ namespace AcademicAffairsToolkit
             InitializeComponent();
         }
 
-        private void RibbonWindow_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetData(DataFormats.FileDrop) is string[] path)
-            {
-                recentlyOpenedGallery.Items.Add(path.First());
-                // todo: start parsing excel file
-            }
-        }
-
         private void OpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;

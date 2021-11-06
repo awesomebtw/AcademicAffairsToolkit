@@ -8,9 +8,7 @@
         xmlns:Fluent="urn:fluent-ribbon"
         Title="Academic Affairs Toolkit"
         Height="450" Width="800" MinHeight="240" MinWidth="320"
-        WindowStartupLocation="CenterScreen"
-        AllowDrop="True"
-        DragEnter="RibbonWindow_DragEnter">
+        WindowStartupLocation="CenterScreen">
 
     <Window.CommandBindings>
         <CommandBinding Command="Open" CanExecute="OpenCommandCanExecute" Executed="OpenCommandExecuted"/>
@@ -73,24 +71,25 @@
 
                         <Fluent:BackstageTabItem Header="Settings">
                             <StackPanel Orientation="Horizontal" Margin="20">
-                                <GroupBox Header="Data range" Margin="5" BorderThickness="0">
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock Margin="5,5">Note: negative number = from bottom</TextBlock>
-                                        <Fluent:ComboBox Header="Start Row" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Start column" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="End row" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="End column" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                <GroupBox Header="Invigilate file parsing settings" Margin="5" BorderThickness="0">
+                                    <StackPanel Orientation="Vertical" DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}">
+                                        <Fluent:Spinner Header="Sheet" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding Sheet}"/>
+                                        <Fluent:Spinner Header="Start Row" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0"  Value="{Binding StartRow}"/>
+                                        <Fluent:Spinner Header="Date column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding DateColumn}"/>
+                                        <Fluent:Spinner Header="Time interval column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding TimeIntervalColumn}"/>
+                                        <Fluent:Spinner Header="Subject column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding SubjectColumn}"/>
+                                        <Fluent:Spinner Header="Department column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding DepartmentColumn}"/>
+                                        <Fluent:Spinner Header="Examinee count column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding ExamineeCountColumn}"/>
+                                        <Fluent:Spinner Header="Location column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding LocationColumn}"/>
                                     </StackPanel>
                                 </GroupBox>
-                                <GroupBox Header="Columns" Margin="5" BorderThickness="0">
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock Margin="5,5">Note: negative number = from right</TextBlock>
-                                        <Fluent:ComboBox Header="Course name" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Date" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Time" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Invigilator count" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
-                                        <Fluent:ComboBox Header="Examinees count" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
-                                        <Fluent:TextBox Header="Inviligators Regex" InputWidth="100" Height="24" HorizontalContentAlignment="Right"/>
+                                <GroupBox Header="TR office file parsing settings" Margin="5" BorderThickness="0">
+                                    <StackPanel Orientation="Vertical" DataContext="{Binding Path=(local:Session.TROfficeFilePolicy)}">
+                                        <Fluent:Spinner Header="Sheet" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding Sheet}"/>
+                                        <Fluent:Spinner Header="Start row" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding StartRow}"/>
+                                        <Fluent:Spinner Header="Name column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding NameColumn}"/>
+                                        <Fluent:Spinner Header="People count column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding PeopleCountColumn}"/>
+                                        <Fluent:Spinner Header="Dirctor column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding DirectorColumn}"/>
                                     </StackPanel>
                                 </GroupBox>
                                 <GroupBox Header="Appearance" Margin="5" BorderThickness="0">
