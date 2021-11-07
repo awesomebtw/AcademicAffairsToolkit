@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AcademicAffairsToolkit
 {
@@ -10,9 +9,9 @@ namespace AcademicAffairsToolkit
 
         public static TROfficeFileParsePolicy TROfficeFilePolicy { get; set; } = TROfficeFileParsePolicy.DefaultPolicy;
 
-        public static ObservableCollection<InvigilateRecordEntry> InvigilateRecords { get; set; }
+        public static IEnumerable<InvigilateRecordEntry> InvigilateRecords { get; set; }
 
-        public static ObservableCollection<TROfficeRecordEntry> TROffices { get; set; }
+        public static IEnumerable<TROfficeRecordEntry> TROffices { get; set; }
 
         // todo: store arrangement data
         public static IEnumerable<object> Arrangements { get; set; }
@@ -21,7 +20,10 @@ namespace AcademicAffairsToolkit
             InvigilateRecords != null || TROffices != null;
 
         public static bool CanStartArrange() =>
-            InvigilateRecords != null && InvigilateRecords.Count != 0 &&
-            TROffices != null && TROffices.Count != 0;
+            InvigilateRecords != null && InvigilateRecords.Count() != 0 &&
+            TROffices != null && TROffices.Count() != 0;
+
+        public static bool AutoArrangementFinished() =>
+            Arrangements != null && Arrangements.Count() != 0;
     }
 }

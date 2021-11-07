@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         xmlns:Fluent="urn:fluent-ribbon"
         Title="Academic Affairs Toolkit"
-        Height="450" Width="800" MinHeight="240" MinWidth="320"
+        Height="450" Width="800" MinHeight="300" MinWidth="400"
         WindowStartupLocation="CenterScreen">
-
+    
     <Window.CommandBindings>
         <CommandBinding Command="Open" CanExecute="OpenCommandCanExecute" Executed="OpenCommandExecuted"/>
         <CommandBinding Command="Save" CanExecute="SaveCommandCanExecute" Executed="SaveCommandExecuted"/>
@@ -36,17 +36,10 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel Grid.Row="1" Grid.Column="0">
                                     <Fluent:Button Height="Auto"
-                                                   Header="Open invigilate file..."
+                                                   Header="Open..."
                                                    Command="Open"
                                                    Icon="{StaticResource OpenFileIcon}"
-                                                   LargeIcon="{StaticResource OpenFileIcon}"
-                                                   CommandParameter="invigilate"/>
-                                    <Fluent:Button Height="Auto"
-                                                   Header="Open TR office file..."
-                                                   Command="Open"
-                                                   Icon="{StaticResource OpenFileIcon}"
-                                                   LargeIcon="{StaticResource OpenFileIcon}"
-                                                   CommandParameter="tr"/>
+                                                   LargeIcon="{StaticResource OpenFileIcon}"/>
                                 </StackPanel>
                                 <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24" Margin="20">
                                     Recent
@@ -55,14 +48,8 @@
                                                 Grid.Row="1"
                                                 Name="recentlyOpenedGallery"
                                                 MaxItemsInRow="1"
-                                                Margin="20,0">
-                                    <Fluent:Gallery.ContextMenu>
-                                        <Fluent:ContextMenu>
-                                            <Fluent:MenuItem Header="Open as invigilate file"/>
-                                            <Fluent:MenuItem Header="Open as TR file"/>
-                                        </Fluent:ContextMenu>
-                                    </Fluent:Gallery.ContextMenu>
-                                </Fluent:Gallery>
+                                                Margin="20,0"
+                                                Padding="0,5"/>
                             </Grid>
                         </Fluent:BackstageTabItem>
 
@@ -71,27 +58,6 @@
 
                         <Fluent:BackstageTabItem Header="Settings">
                             <StackPanel Orientation="Horizontal" Margin="20">
-                                <GroupBox Header="Invigilate file parsing settings" Margin="5" BorderThickness="0">
-                                    <StackPanel Orientation="Vertical" DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}">
-                                        <Fluent:Spinner Header="Sheet" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding Sheet}"/>
-                                        <Fluent:Spinner Header="Start Row" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0"  Value="{Binding StartRow}"/>
-                                        <Fluent:Spinner Header="Date column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding DateColumn}"/>
-                                        <Fluent:Spinner Header="Time interval column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding TimeIntervalColumn}"/>
-                                        <Fluent:Spinner Header="Subject column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding SubjectColumn}"/>
-                                        <Fluent:Spinner Header="Department column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding DepartmentColumn}"/>
-                                        <Fluent:Spinner Header="Examinee count column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding ExamineeCountColumn}"/>
-                                        <Fluent:Spinner Header="Location column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding LocationColumn}"/>
-                                    </StackPanel>
-                                </GroupBox>
-                                <GroupBox Header="TR office file parsing settings" Margin="5" BorderThickness="0">
-                                    <StackPanel Orientation="Vertical" DataContext="{Binding Path=(local:Session.TROfficeFilePolicy)}">
-                                        <Fluent:Spinner Header="Sheet" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding Sheet}"/>
-                                        <Fluent:Spinner Header="Start row" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding StartRow}"/>
-                                        <Fluent:Spinner Header="Name column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding NameColumn}"/>
-                                        <Fluent:Spinner Header="People count column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding PeopleCountColumn}"/>
-                                        <Fluent:Spinner Header="Dirctor column" InputWidth="60" Height="24" HorizontalContentAlignment="Right" Format="N0" Value="{Binding DirectorColumn}"/>
-                                    </StackPanel>
-                                </GroupBox>
                                 <GroupBox Header="Appearance" Margin="5" BorderThickness="0">
                                     <ItemsControl>
                                         <Fluent:RadioButton Header="Automatic" GroupName="appearance" IsChecked="True"/>
@@ -105,7 +71,7 @@
                         <Fluent:BackstageTabItem Header="About">
                             <TextBlock Margin="20" LineHeight="1.5">
                                 <Run FontSize="36">Academic Affairs Toolkit</Run><LineBreak/>
-                                Version 0.0.0.1<LineBreak/>
+                                Version 0.0.0.2<LineBreak/>
                                 Third-party libraries: Fluent.Ribbon, npoi<LineBreak/>
                                 Icons: Visual Studio 2019 Icons Library
                             </TextBlock>
@@ -143,7 +109,8 @@
                                    Command="{x:Static local:MainWindow.StartArrangement}"/>
                     <Fluent:Button Header="Arrangement Policy"
                                    Icon="{StaticResource PolicyIcon}"
-                                   LargeIcon="{StaticResource PolicyIcon}"/>
+                                   LargeIcon="{StaticResource PolicyIcon}"
+                                   Click="ArrangementPolicyButtonClick"/>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Name="constraintGroup" Header="Constraints">
@@ -180,7 +147,7 @@
 
             <Fluent:RibbonTabItem Header="View">
                 <Fluent:RibbonGroupBox Header="Original File Views">
-                    <Fluent:ToggleButton x:Name="invigilateFileViewButton"
+                    <Fluent:ToggleButton Name="invigilateFileViewButton"
                                          Header="Invigilate file"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource RawFileIcon}"
@@ -196,23 +163,20 @@
                                          CommandParameter="/TRFileViewPage.xaml"/>
                 </Fluent:RibbonGroupBox>
                 
-                <Fluent:RibbonGroupBox Name="viewGroup" Header="Result View">
-                    <Fluent:ToggleButton Name="tableViewButton"
-                                         Header="Plain table"
+                <Fluent:RibbonGroupBox Header="Result View">
+                    <Fluent:ToggleButton Header="Plain table"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource TableIcon}"
                                          LargeIcon="{StaticResource TableIcon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/TableViewPage.xaml"/>
-                    <Fluent:ToggleButton Name="ganttViewButton"
-                                         Header="Gantt"
+                    <Fluent:ToggleButton Header="Gantt"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource GanttIcon}"
                                          LargeIcon="{StaticResource GanttIcon}"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/GanttViewPage.xaml"/>
-                    <Fluent:ToggleButton Name="calendarViewButton"
-                                         Header="Calendar"
+                    <Fluent:ToggleButton Header="Calendar"
                                          GroupName="viewGroup"
                                          Icon="{StaticResource CalendarIccon}"
                                          LargeIcon="{StaticResource CalendarIccon}"
@@ -223,7 +187,7 @@
         </Fluent:Ribbon>
 
         <!--status bar-->
-        <Fluent:StatusBar DockPanel.Dock="Bottom" ClipToBounds="False">
+        <Fluent:StatusBar DockPanel.Dock="Bottom">
             <Fluent:StatusBarItem HorizontalAlignment="Left">
                 <TextBlock TextTrimming="CharacterEllipsis" MinWidth="200">
                     To begin, please open an Excel file.

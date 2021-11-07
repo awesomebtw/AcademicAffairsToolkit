@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using NPOI.SS.UserModel;
 
 namespace AcademicAffairsToolkit
@@ -94,24 +95,31 @@ namespace AcademicAffairsToolkit
     {
         private static int ExtractIntFromDynamicTypedCell(ICell cell, int defaultValue = 0)
         {
-            if (cell.CellType == CellType.Numeric)
-                return (int)cell.NumericCellValue;
-            else if (cell.CellType == CellType.String &&
-                int.TryParse(cell.StringCellValue, out int result))
-                return result;
-            else
-                return defaultValue;
+            return cell.CellType switch
+            {
+                CellType.Numeric => (int)cell.NumericCellValue,
+                CellType.String when int.TryParse(cell.StringCellValue, out int result) => result,
+                _ => defaultValue
+            };
         }
 
         private static DateTime ExtractDateTimeFromDynamicTypedCell(ICell cell, DateTime defaultValue = default)
         {
-            if (cell.CellType == CellType.Numeric)
-                return cell.DateCellValue;
-            else if (cell.CellType == CellType.String &&
-                DateTime.TryParse(cell.StringCellValue, out DateTime result))
-                return result;
+            return cell.CellType switch
+            {
+                CellType.Numeric => cell.DateCellValue,
+                CellType.String when DateTime.TryParse(cell.StringCellValue, out DateTime result) => result,
+                _ => defaultValue
+            };
+        }
+
+        private static (TimeSpan, TimeSpan) ParseTimeIntervalString(string timeString)
+        {
+            var timeMatch = Regex.Match(timeString, @"(\d+:\d+)-(\d+:\d+)");
+            if (timeMatch.Groups.Count >= 2)
+                return (TimeSpan.Parse(timeMatch.Groups[1].Value), TimeSpan.Parse(timeMatch.Groups[2].Value));
             else
-                return defaultValue;
+                throw new FormatException(nameof(timeString));
         }
 
         public static IEnumerable<InvigilateRecordEntry> ReadInvigilateTable(string path, string password, InvigilateFileParsePolicy policy)
@@ -125,11 +133,9 @@ namespace AcademicAffairsToolkit
                 var row = sheet.GetRow(i);
 
                 // working with date and time
-                // todo: validate date and time
                 DateTime date = ExtractDateTimeFromDynamicTypedCell(row.GetCell(policy.DateColumn));
                 
-                string timeString = row.GetCell(policy.TimeIntervalColumn).StringCellValue;
-                var timeMatch = Regex.Match(timeString, @"(\d+:\d+)-(\d+:\d+)");
+                (var startTimeInterval, var endTimeInterval) = ParseTimeIntervalString(row.GetCell(policy.TimeIntervalColumn).StringCellValue);
 
                 // working with examinee count
                 int examineeCount = ExtractIntFromDynamicTypedCell(row.GetCell(policy.ExamineeCountColumn));
@@ -141,13 +147,18 @@ namespace AcademicAffairsToolkit
                 {
                     Department = row.GetCell(policy.DepartmentColumn).StringCellValue.Trim(),
                     Subject = row.GetCell(policy.SubjectColumn).StringCellValue.Trim(),
-                    StartTime = date.Add(TimeSpan.Parse(timeMatch.Groups[1].Value)),
-                    EndTime = date.Add(TimeSpan.Parse(timeMatch.Groups[2].Value)),
+                    StartTime = date.Add(startTimeInterval),
+                    EndTime = date.Add(endTimeInterval),
                     Grade = grade,
                     Location = row.GetCell(policy.LocationColumn).StringCellValue.Trim(),
                     ExamineeCount = examineeCount
                 };
             }
+        }
+
+        public static async Task<IEnumerable<InvigilateRecordEntry>> ReadInvigilateTableAsync(string path, string password, InvigilateFileParsePolicy policy)
+        {
+            return await Task.Run(() => ReadInvigilateTable(path, password, policy));
         }
 
         public static IEnumerable<TROfficeRecordEntry> ReadTROfficeTable(string path, string password, TROfficeFileParsePolicy policy)
@@ -160,7 +171,7 @@ namespace AcademicAffairsToolkit
             {
                 var row = sheet.GetRow(i);
 
-                // working with number of people
+                // working with people count
                 int peopleCount = ExtractIntFromDynamicTypedCell(row.GetCell(policy.PeopleCountColumn));
 
                 yield return new TROfficeRecordEntry
@@ -170,6 +181,11 @@ namespace AcademicAffairsToolkit
                     Director = row.GetCell(policy.DirectorColumn).StringCellValue
                 };
             }
+        }
+
+        public static async Task<IEnumerable<TROfficeRecordEntry>> ReadTROfficeTableAsync(string path, string password, TROfficeFileParsePolicy policy)
+        {
+            return await Task.Run(() => ReadTROfficeTable(path, password, policy));
         }
     }
 }

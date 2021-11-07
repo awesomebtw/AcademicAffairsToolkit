@@ -1,19 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AcademicAffairsToolkit
 {
@@ -22,11 +10,11 @@ namespace AcademicAffairsToolkit
     /// </summary>
     public partial class MainWindow
     {
-        public static RoutedUICommand ToggleView = new RoutedUICommand();
+        public static readonly RoutedUICommand ToggleView = new RoutedUICommand();
 
-        public static RoutedUICommand StartArrangement = new RoutedUICommand();
+        public static readonly RoutedUICommand StartArrangement = new RoutedUICommand();
 
-        public static OpenFileDialog OpenExcelDialog = new OpenFileDialog()
+        private static readonly OpenFileDialog openExcelDialog = new OpenFileDialog()
         {
             Filter = "XLSX files|*.xlsx|XLS files|*.xls|All Excel files|*.xlsx;*.xls",
             InitialDirectory = Environment.CurrentDirectory
@@ -44,22 +32,42 @@ namespace AcademicAffairsToolkit
 
         private void OpenCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            if (OpenExcelDialog.ShowDialog(this) == true && e.Parameter is string s)
+            // todo: coupling too much, needs refactoring
+
+            if (openExcelDialog.ShowDialog(this) == true)
             {
-                recentlyOpenedGallery.Items.Add(OpenExcelDialog.FileName);
-                if (s == "invigilate")
+                var openOptionsWindow = new OpenOptionsWindow
                 {
-                    var entries = ExcelProcessor.ReadInvigilateTable(OpenExcelDialog.FileName, "", Session.InvigilateFilePolicy);
-                    Session.InvigilateRecords = new ObservableCollection<InvigilateRecordEntry>(entries);
-                    ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
-                    invigilateFileViewButton.IsChecked = true;
-                }
-                else if (s == "tr")
+                    FileName = openExcelDialog.FileName
+                };
+
+                if (openOptionsWindow.ShowDialog(this) == true)
                 {
-                    var entries = ExcelProcessor.ReadTROfficeTable(OpenExcelDialog.FileName, "", Session.TROfficeFilePolicy);
-                    Session.TROffices = new ObservableCollection<TROfficeRecordEntry>(entries);
-                    ToggleView.Execute("/TRFileViewPage.xaml", this);
-                    trOfficeFileViewButton.IsChecked = true;
+                    recentlyOpenedGallery.Items.Add((openExcelDialog.FileName, openOptionsWindow.SelectedFileType));
+
+                    switch (openOptionsWindow.SelectedFileType)
+                    {
+                        case SelectedFileType.InvigilateFile:
+                            {
+                                Session.InvigilateRecords = ExcelProcessor.ReadInvigilateTable(openExcelDialog.FileName,
+                                    openOptionsWindow.Password, Session.InvigilateFilePolicy);
+                                ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
+                                invigilateFileViewButton.IsChecked = true;
+                            }
+                            break;
+                        case SelectedFileType.TROfficeFile:
+                            {
+                                Session.TROffices = ExcelProcessor.ReadTROfficeTable(openExcelDialog.FileName,
+                                    openOptionsWindow.Password, Session.TROfficeFilePolicy);
+                                ToggleView.Execute("/TRFileViewPage.xaml", this);
+                                trOfficeFileViewButton.IsChecked = true;
+                            }
+                            break;
+                        case SelectedFileType.Unknown:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
@@ -96,8 +104,7 @@ namespace AcademicAffairsToolkit
 
         private void ToggleViewCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            // todo: can execute if auto arrangement finished
-            e.CanExecute = Session.AnyFileLoaded();
+            e.CanExecute = Session.AutoArrangementFinished();
         }
 
         private void ToggleViewCommandExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -117,6 +124,11 @@ namespace AcademicAffairsToolkit
         private void StartArrangementExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             // todo: invoke start arrangement function
+        }
+
+        private void ArrangementPolicyButtonClick(object sender, RoutedEventArgs e)
+        {
+            new ArrangementPolicyWindow().Show();
         }
     }
 }
