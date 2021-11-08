@@ -30,7 +30,7 @@ namespace AcademicAffairsToolkit
             e.CanExecute = true;
         }
 
-        private void OpenCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        private async void OpenCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             // todo: coupling too much, needs refactoring
 
@@ -49,16 +49,20 @@ namespace AcademicAffairsToolkit
                     {
                         case SelectedFileType.InvigilateFile:
                             {
-                                Session.InvigilateRecords = ExcelProcessor.ReadInvigilateTable(openExcelDialog.FileName,
-                                    openOptionsWindow.Password, Session.InvigilateFilePolicy);
+                                Session.InvigilateRecords = await ExcelProcessor.ReadInvigilateTableAsync(
+                                    openExcelDialog.FileName,
+                                    openOptionsWindow.Password,
+                                    Session.InvigilateFilePolicy);
                                 ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
                                 invigilateFileViewButton.IsChecked = true;
                             }
                             break;
                         case SelectedFileType.TROfficeFile:
                             {
-                                Session.TROffices = ExcelProcessor.ReadTROfficeTable(openExcelDialog.FileName,
-                                    openOptionsWindow.Password, Session.TROfficeFilePolicy);
+                                Session.TROffices = await ExcelProcessor.ReadTROfficeTableAsync(
+                                    openExcelDialog.FileName,
+                                    openOptionsWindow.Password,
+                                    Session.TROfficeFilePolicy);
                                 ToggleView.Execute("/TRFileViewPage.xaml", this);
                                 trOfficeFileViewButton.IsChecked = true;
                             }
@@ -104,7 +108,7 @@ namespace AcademicAffairsToolkit
 
         private void ToggleViewCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = Session.AutoArrangementFinished();
+            e.CanExecute = Session.AnyFileLoaded();
         }
 
         private void ToggleViewCommandExecuted(object sender, ExecutedRoutedEventArgs e)
