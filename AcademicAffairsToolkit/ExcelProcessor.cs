@@ -134,7 +134,7 @@ namespace AcademicAffairsToolkit
 
                 // working with date and time
                 DateTime date = ExtractDateTimeFromDynamicTypedCell(row.GetCell(policy.DateColumn));
-                
+
                 (var startTimeInterval, var endTimeInterval) = ParseTimeIntervalString(row.GetCell(policy.TimeIntervalColumn).StringCellValue);
 
                 // working with examinee count
@@ -176,9 +176,9 @@ namespace AcademicAffairsToolkit
 
                 yield return new TROfficeRecordEntry
                 {
-                    Name = row.GetCell(policy.NameColumn).StringCellValue,
+                    Name = row.GetCell(policy.NameColumn).StringCellValue.Trim(),
                     PeopleCount = peopleCount,
-                    Director = row.GetCell(policy.DirectorColumn).StringCellValue
+                    Director = row.GetCell(policy.DirectorColumn).StringCellValue.Trim()
                 };
             }
         }
