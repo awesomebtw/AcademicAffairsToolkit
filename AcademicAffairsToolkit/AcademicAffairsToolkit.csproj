@@ -17,6 +17,7 @@
   <ItemGroup>
     <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
     <PackageReference Include="NPOI" Version="2.5.5" />
+    <PackageReference Include="RangeTree" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
