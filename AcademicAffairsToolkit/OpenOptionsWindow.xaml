@@ -46,7 +46,10 @@
             </ItemsControl>
         </GroupBox>
         
-        <Expander Header="Advanced" Padding="5">
+        <Expander Padding="5">
+            <Expander.Header>
+                <TextBlock Text="Advanced"/>
+            </Expander.Header>
             <ItemsControl>
                 <ItemsControl DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}"
                               Visibility="{Binding IsChecked, ElementName=invigilateRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -101,8 +104,8 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="OK" Click="ButtonClick"/>
-            <Button Grid.Column="1" Content="Cancel" Click="ButtonClick"/>
+            <Button Grid.Column="0" Content="OK" Click="ButtonClick" Margin="2,0"/>
+            <Button Grid.Column="1" Content="Cancel" Click="ButtonClick" Margin="2,0"/>
         </Grid>
     </ItemsControl>
 </Fluent:RibbonWindow>

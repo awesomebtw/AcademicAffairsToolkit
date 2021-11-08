@@ -50,7 +50,7 @@ namespace AcademicAffairsToolkit
 
             for (int i = 0; i < count; i++)
             {
-                List<(int, int, int)> initialChromosome = new List<(int, int, int)>();
+                var initialChromosome = new List<(int, int, int)>();
                 var invigilateRemaining = new Dictionary<int, int>(InvigilateRecords.Select((p, i) => new KeyValuePair<int, int>(GetInvigilatePersonCount(p.ExamineeCount), i)));
                 var trOfficeRemaining = TROfficeRecords.Select(p => p.PeopleCount).ToArray();
 
