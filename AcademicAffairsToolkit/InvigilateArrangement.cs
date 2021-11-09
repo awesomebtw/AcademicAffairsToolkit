@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntervalTree;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,11 @@ namespace AcademicAffairsToolkit
 
     class GeneticAlgorithmScheduler : InvigilateArrangement
     {
-        public IEnumerable<InvigilateRecordEntry> InvigilateRecords { get; private set; }
+        private static double CrossoverProbability = 0.75;
+
+        private static double MutationProbobility = 0.1;
+
+        public IntervalTree<DateTime, InvigilateRecordEntry> InvigilateRecords { get; private set; }
 
         public IEnumerable<TROfficeRecordEntry> TROfficeRecords { get; private set; }
 
@@ -23,9 +28,13 @@ namespace AcademicAffairsToolkit
 
         public GeneticAlgorithmScheduler(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, int iterations)
         {
-            InvigilateRecords = invigilateRecords;
             TROfficeRecords = trOfficeRecords;
             Iterations = iterations;
+
+            foreach (var record in invigilateRecords)
+            {
+                InvigilateRecords.Add(record.StartTime, record.EndTime, record);
+            }
         }
 
         private static int GetInvigilatePersonCount(int students)
@@ -51,8 +60,9 @@ namespace AcademicAffairsToolkit
             for (int i = 0; i < count; i++)
             {
                 var initialChromosome = new List<(int, int, int)>();
-                var invigilateRemaining = new Dictionary<int, int>(InvigilateRecords.Select((p, i) => new KeyValuePair<int, int>(GetInvigilatePersonCount(p.ExamineeCount), i)));
+                var invigilateRemaining = new Dictionary<int, int>(InvigilateRecords.Select((p, i) => new KeyValuePair<int, int>(GetInvigilatePersonCount(p.Value.ExamineeCount), i)));
                 var trOfficeRemaining = TROfficeRecords.Select(p => p.PeopleCount).ToArray();
+                var pairs = new IntervalTree<DateTime, int>();
 
                 for (int j = 0; j < InvigilateRecords.Count(); j++)
                 {
