@@ -36,16 +36,25 @@
                                     Click "Open..." to select two files.<LineBreak/>
                                     Click "Close start screen" when done.
                                 </TextBlock>
-                                <Fluent:Button
-                                       Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}">Open...</Fluent:Button>
-                                <Fluent:Button
-                                       Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}">Close start screen</Fluent:Button>
+                                <Fluent:Button Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}"
+                                               Header="Open..."
+                                               Command="Open"
+                                               IsDefinitive="False">
+                                    <Fluent:Button.LargeIcon>
+                                        <Rectangle Fill="{StaticResource OpenFileIcon}"/>
+                                    </Fluent:Button.LargeIcon>
+                                </Fluent:Button>
+                                <Fluent:Button Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}"
+                                               Header="Close start screen"
+                                               IsDefinitive="True"/>
                             </StackPanel>
                         </Fluent:StartScreenTabControl.LeftContent>
                         <Fluent:StartScreenTabControl.RightContent>
                             <StackPanel>
                                 <TextBlock>Invigilate file: </TextBlock>
                                 <TextBlock>TR office file: </TextBlock>
+                                <Fluent:Gallery>
+                                </Fluent:Gallery>
                             </StackPanel>
                         </Fluent:StartScreenTabControl.RightContent>
                     </Fluent:StartScreenTabControl>
@@ -204,7 +213,9 @@
                             <Rectangle Fill="{StaticResource RawFileIcon}"/>
                         </Fluent:SplitButton.LargeIcon>
                         <Fluent:SplitButton.ToolTip>
-                            <Fluent:ScreenTip Title="Original file view" Text="Views related to original files."/>
+                            <Fluent:ScreenTip Title="Original file view"
+                                              Text="Views related to original files.
+                                              Any invalid or empty line will show default values (e.g. 0)."/>
                         </Fluent:SplitButton.ToolTip>
                         <Fluent:MenuItem Name="invigilateFileViewButton"
                                          Header="Invigilate file"
@@ -217,8 +228,7 @@
                             </Fluent:MenuItem.Icon>
                             <Fluent:MenuItem.ToolTip>
                                 <Fluent:ScreenTip Title="Invigilate file view"
-                                              Text="See invigilate data loaded from file.
-                                              Any invalid or empty line will show default values (e.g. 0)."
+                                              Text="See invigilate data loaded from file."
                                               DisableReason="At least one of two required files wasn't loaded."/>
                             </Fluent:MenuItem.ToolTip>
                         </Fluent:MenuItem>
