@@ -37,45 +37,45 @@ namespace AcademicAffairsToolkit
         {
             // todo: coupling too much, needs refactoring
 
-            if (openExcelDialog.ShowDialog(this) == true)
+            if (openExcelDialog.ShowDialog(this) != true)
+                return;
+
+            var openOptionsWindow = new OpenOptionsWindow
             {
-                var openOptionsWindow = new OpenOptionsWindow
-                {
-                    FileName = openExcelDialog.FileName
-                };
+                FileName = openExcelDialog.FileName
+            };
 
-                if (openOptionsWindow.ShowDialog(this) == true)
-                {
-                    RecentlyOpenedFiles.Add(new Tuple<string, string>(openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
+            if (openOptionsWindow.ShowDialog(this) != true)
+                return;
 
-                    switch (openOptionsWindow.SelectedFileType)
+            RecentlyOpenedFiles.Add(new Tuple<string, string>(openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
+
+            switch (openOptionsWindow.SelectedFileType)
+            {
+                case SelectedFileType.InvigilateFile:
                     {
-                        case SelectedFileType.InvigilateFile:
-                            {
-                                Session.InvigilateRecords = await ExcelProcessor.ReadInvigilateTableAsync(
-                                    openExcelDialog.FileName,
-                                    openOptionsWindow.Password,
-                                    Session.InvigilateFilePolicy);
-                                ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
-                                invigilateFileViewButton.IsChecked = true;
-                            }
-                            break;
-                        case SelectedFileType.TROfficeFile:
-                            {
-                                Session.TROffices = await ExcelProcessor.ReadTROfficeTableAsync(
-                                    openExcelDialog.FileName,
-                                    openOptionsWindow.Password,
-                                    Session.TROfficeFilePolicy);
-                                ToggleView.Execute("/TRFileViewPage.xaml", this);
-                                trOfficeFileViewButton.IsChecked = true;
-                            }
-                            break;
-                        case SelectedFileType.Unknown:
-                            break;
-                        default:
-                            break;
+                        Session.InvigilateRecords = await ExcelProcessor.ReadInvigilateTableAsync(
+                            openExcelDialog.FileName,
+                            openOptionsWindow.Password,
+                            Session.InvigilateFilePolicy);
+                        ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
+                        invigilateFileViewButton.IsChecked = true;
                     }
-                }
+                    break;
+                case SelectedFileType.TROfficeFile:
+                    {
+                        Session.TROffices = await ExcelProcessor.ReadTROfficeTableAsync(
+                            openExcelDialog.FileName,
+                            openOptionsWindow.Password,
+                            Session.TROfficeFilePolicy);
+                        ToggleView.Execute("/TRFileViewPage.xaml", this);
+                        trOfficeFileViewButton.IsChecked = true;
+                    }
+                    break;
+                case SelectedFileType.Unknown:
+                    break;
+                default:
+                    break;
             }
         }
 
