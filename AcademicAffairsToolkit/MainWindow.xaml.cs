@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -14,11 +15,13 @@ namespace AcademicAffairsToolkit
 
         public static readonly RoutedUICommand StartArrangement = new RoutedUICommand();
 
-        private static readonly OpenFileDialog openExcelDialog = new OpenFileDialog()
+        private static readonly OpenFileDialog openExcelDialog = new OpenFileDialog
         {
             Filter = "XLSX files|*.xlsx|XLS files|*.xls|All Excel files|*.xlsx;*.xls",
             InitialDirectory = Environment.CurrentDirectory
         };
+
+        public ObservableCollection<Tuple<string, string>> RecentlyOpenedFiles { get; set; } = new ObservableCollection<Tuple<string, string>>();
 
         public MainWindow()
         {
@@ -43,7 +46,7 @@ namespace AcademicAffairsToolkit
 
                 if (openOptionsWindow.ShowDialog(this) == true)
                 {
-                    recentlyOpenedGallery.Items.Add((openExcelDialog.FileName, openOptionsWindow.SelectedFileType));
+                    RecentlyOpenedFiles.Add(new Tuple<string, string>(openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
 
                     switch (openOptionsWindow.SelectedFileType)
                     {

@@ -18,15 +18,52 @@
         <CommandBinding Command="{x:Static local:MainWindow.StartArrangement}" CanExecute="StartArrangementCanExecute" Executed="StartArrangementExecuted"/>
     </Window.CommandBindings>
 
+    <Fluent:RibbonWindow.Resources>
+        <Page x:Key="OpenFilePage">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1" Grid.Column="0">
+                    <Fluent:Button Height="Auto" Header="Open..." Command="Open" IsDefinitive="False">
+                        <Fluent:Button.LargeIcon>
+                            <Rectangle Fill="{StaticResource OpenFileIcon}"/>
+                        </Fluent:Button.LargeIcon>
+                        <Fluent:Button.ToolTip>
+                            <Fluent:ScreenTip Title="Open" Text="Choose files for arrangement."/>
+                        </Fluent:Button.ToolTip>
+                    </Fluent:Button>
+                </StackPanel>
+                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24" Margin="10" Text="Recent"/>
+                <Fluent:Gallery Grid.Row="1" Grid.Column="1" MaxItemsInRow="1" Margin="15" Padding="0,5"
+                                ItemsSource="{Binding RecentlyOpenedFiles, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
+                    <Fluent:Gallery.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical" ToolTip="{Binding Item1}" ClipToBounds="True">
+                                <TextBlock Text="{Binding Item1}" FontWeight="Bold" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding Item2}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </Fluent:Gallery.ItemTemplate>
+                </Fluent:Gallery>
+            </Grid>
+        </Page>
+    </Fluent:RibbonWindow.Resources>
+
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top">
             <!--start page-->
             <Fluent:Ribbon.StartScreen>
                 <Fluent:StartScreen IsOpen="True">
-                    <Fluent:StartScreenTabControl>
+                    <Fluent:StartScreenTabControl RightContent="{StaticResource OpenFilePage}">
                         <Fluent:StartScreenTabControl.LeftContent>
                             <StackPanel>
-                                <TextBlock Text="Start"
+                                <TextBlock Text="Welcome"
                                            Margin="5"
                                            FontSize="36"
                                            Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}"/>
@@ -36,27 +73,12 @@
                                     Click "Open..." to select two files.<LineBreak/>
                                     Click "Close start screen" when done.
                                 </TextBlock>
-                                <Fluent:Button Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}"
-                                               Header="Open..."
-                                               Command="Open"
-                                               IsDefinitive="False">
-                                    <Fluent:Button.LargeIcon>
-                                        <Rectangle Fill="{StaticResource OpenFileIcon}"/>
-                                    </Fluent:Button.LargeIcon>
-                                </Fluent:Button>
-                                <Fluent:Button Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}"
-                                               Header="Close start screen"
-                                               IsDefinitive="True"/>
+                                <Fluent:MenuItem Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}"
+                                                 Header="Close start screen"
+                                                 IsDefinitive="True"
+                                                 Margin="5"/>
                             </StackPanel>
                         </Fluent:StartScreenTabControl.LeftContent>
-                        <Fluent:StartScreenTabControl.RightContent>
-                            <StackPanel>
-                                <TextBlock>Invigilate file: </TextBlock>
-                                <TextBlock>TR office file: </TextBlock>
-                                <Fluent:Gallery>
-                                </Fluent:Gallery>
-                            </StackPanel>
-                        </Fluent:StartScreenTabControl.RightContent>
                     </Fluent:StartScreenTabControl>
                 </Fluent:StartScreen>
             </Fluent:Ribbon.StartScreen>
@@ -66,37 +88,7 @@
                 <Fluent:Backstage>
                     <Fluent:BackstageTabControl>
                         <Fluent:BackstageTabItem Header="Open">
-                            <Grid Margin="20">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="1" Grid.Column="0">
-                                    <Fluent:Button Height="Auto"
-                                                   Header="Open..."
-                                                   Command="Open">
-                                        <Fluent:Button.Icon>
-                                            <Rectangle Fill="{StaticResource OpenFileIcon}"/>
-                                        </Fluent:Button.Icon>
-                                        <Fluent:Button.LargeIcon>
-                                            <Rectangle Fill="{StaticResource OpenFileIcon}"/>
-                                        </Fluent:Button.LargeIcon>
-                                    </Fluent:Button>
-                                </StackPanel>
-                                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24" Margin="20">
-                                    Recent
-                                </TextBlock>
-                                <Fluent:Gallery Grid.Column="1"
-                                                Grid.Row="1"
-                                                Name="recentlyOpenedGallery"
-                                                MaxItemsInRow="1"
-                                                Margin="20,0"
-                                                Padding="0,5"/>
-                            </Grid>
+                            <Frame Content="{StaticResource OpenFilePage}" Margin="20"/>
                         </Fluent:BackstageTabItem>
 
                         <Fluent:Button Header="Save As"
@@ -113,7 +105,7 @@
 
                         <Fluent:SeparatorTabItem/>
 
-                        <Fluent:Button Header="Close"
+                        <Fluent:Button Header="Exit"
                                        Command="Close"/>
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
@@ -243,8 +235,7 @@
                             </Fluent:MenuItem.Icon>
                             <Fluent:MenuItem.ToolTip>
                                 <Fluent:ScreenTip Title="TR office file view"
-                                              Text="See teaching and researching office data loaded from file.
-                                              Any invalid or empty line will show default values (e.g. 0)."
+                                              Text="See teaching and researching office data loaded from file."
                                               DisableReason="At least one of two required files wasn't loaded."/>
                             </Fluent:MenuItem.ToolTip>
                         </Fluent:MenuItem>
