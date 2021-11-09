@@ -20,6 +20,38 @@
 
     <DockPanel>
         <Fluent:Ribbon DockPanel.Dock="Top">
+            <!--start page-->
+            <Fluent:Ribbon.StartScreen>
+                <Fluent:StartScreen IsOpen="True">
+                    <Fluent:StartScreenTabControl>
+                        <Fluent:StartScreenTabControl.LeftContent>
+                            <StackPanel>
+                                <TextBlock Text="Start"
+                                           Margin="5"
+                                           FontSize="36"
+                                           Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}"/>
+                                <TextBlock Margin="5"
+                                           Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}">
+                                    To begin, select invigilate file and TR office file.<LineBreak/>
+                                    Click "Open..." to select two files.<LineBreak/>
+                                    Click "Close start screen" when done.
+                                </TextBlock>
+                                <Fluent:Button
+                                       Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}">Open...</Fluent:Button>
+                                <Fluent:Button
+                                       Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}">Close start screen</Fluent:Button>
+                            </StackPanel>
+                        </Fluent:StartScreenTabControl.LeftContent>
+                        <Fluent:StartScreenTabControl.RightContent>
+                            <StackPanel>
+                                <TextBlock>Invigilate file: </TextBlock>
+                                <TextBlock>TR office file: </TextBlock>
+                            </StackPanel>
+                        </Fluent:StartScreenTabControl.RightContent>
+                    </Fluent:StartScreenTabControl>
+                </Fluent:StartScreen>
+            </Fluent:Ribbon.StartScreen>
+            
             <!--file menu-->
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
@@ -61,23 +93,11 @@
                         <Fluent:Button Header="Save As"
                                        Command="Save"/>
 
-                        <Fluent:BackstageTabItem Header="Settings">
-                            <StackPanel Orientation="Horizontal" Margin="20">
-                                <GroupBox Header="Appearance" Margin="5" BorderThickness="0">
-                                    <ItemsControl>
-                                        <Fluent:RadioButton Header="Automatic" GroupName="appearance" IsChecked="True"/>
-                                        <Fluent:RadioButton Header="Light" GroupName="appearance"/>
-                                        <Fluent:RadioButton Header="Dark" GroupName="appearance"/>
-                                    </ItemsControl>
-                                </GroupBox>
-                            </StackPanel>
-                        </Fluent:BackstageTabItem>
-
                         <Fluent:BackstageTabItem Header="About">
                             <TextBlock Margin="20" Padding="5">
                                 <Run FontSize="36">Academic Affairs Toolkit</Run><LineBreak/>
-                                Version 0.0.0.2<LineBreak/>
-                                Third-party libraries: Fluent.Ribbon, npoi<LineBreak/>
+                                Version 0.0.0.3<LineBreak/>
+                                Third-party libraries: Fluent.Ribbon, npoi, RangeTree<LineBreak/>
                                 Icons: Visual Studio 2019 Icons Library
                             </TextBlock>
                         </Fluent:BackstageTabItem>
@@ -91,7 +111,7 @@
             </Fluent:Ribbon.Menu>
 
             <!--home tab-->
-            <Fluent:RibbonTabItem Header="Home" ReduceOrder="viewGroup,sortByGroup,clipboardGroup,constraintGroup">
+            <Fluent:RibbonTabItem Header="Home" ReduceOrder="clipboardGroup,constraintGroup,arrangementGroup">
                 <Fluent:RibbonGroupBox Name="clipboardGroup" Header="Clipboard">
                     <Fluent:Button Header="Paste"
                                    Icon="{StaticResource Fluent.Ribbon.Images.Paste}"
@@ -107,7 +127,7 @@
                                    Command="Cut"/>
                 </Fluent:RibbonGroupBox>
 
-                <Fluent:RibbonGroupBox Header="Arrange">
+                <Fluent:RibbonGroupBox Name="arrangementGroup" Header="Arrange">
                     <Fluent:Button Header="Start auto arrange"
                                    Command="{x:Static local:MainWindow.StartArrangement}">
                         <Fluent:Button.Icon>
@@ -150,137 +170,119 @@
                                               Text="Arrangement algorithm will consider constraints if enabled."/>
                         </Fluent:ToggleButton.ToolTip>
                     </Fluent:ToggleButton>
-                    <Fluent:SplitButton Header="Manage...">
-                        <Fluent:SplitButton.Icon>
-                            <Rectangle Fill="{StaticResource RuleIcon}"/>
-                        </Fluent:SplitButton.Icon>
-                        <Fluent:SplitButton.LargeIcon>
-                            <Rectangle Fill="{StaticResource RuleIcon}"/>
-                        </Fluent:SplitButton.LargeIcon>
-                        <Fluent:SplitButton.ToolTip>
-                            <Fluent:ScreenTip Title="Manage constraints"
-                                              Text="Add, modify or delete constraints for arrangement."/>
-                        </Fluent:SplitButton.ToolTip>
-                        <Fluent:MenuItem Header="Add exclude rule">
-                            <Fluent:MenuItem.Icon>
-                                <Rectangle Fill="{StaticResource NewRuleIcon}"/>
-                            </Fluent:MenuItem.Icon>
-                        </Fluent:MenuItem>
-                        <Fluent:MenuItem Header="Manage constraints">
-                            <Fluent:MenuItem.Icon>
-                                <Rectangle Fill="{StaticResource RuleIcon}"/>
-                            </Fluent:MenuItem.Icon>
-                        </Fluent:MenuItem>
-                    </Fluent:SplitButton>
-                </Fluent:RibbonGroupBox>
 
-                <Fluent:RibbonGroupBox Name="sortByGroup" Header="Sort by">
-                    <Fluent:InRibbonGallery ItemWidth="60">
-                        <Fluent:GalleryItem>
-                            <TextBlock>Name</TextBlock>
-                        </Fluent:GalleryItem>
-                        <Fluent:GalleryItem>
-                            <TextBlock>Person</TextBlock>
-                        </Fluent:GalleryItem>
+                    <Separator/>
+
+                    <Fluent:InRibbonGallery ItemWidth="60" MinWidth="125">
                         <Fluent:InRibbonGallery.Menu>
                             <Fluent:RibbonMenu>
-                                Invert order
+                                <Fluent:MenuItem Header="Add constraints">
+                                    <Fluent:MenuItem.Icon>
+                                        <Rectangle Fill="{StaticResource NewRuleIcon}"/>
+                                    </Fluent:MenuItem.Icon>
+                                </Fluent:MenuItem>
+                                <Fluent:MenuItem Header="Manage...">
+                                    <Fluent:MenuItem.Icon>
+                                        <Rectangle Fill="{StaticResource RuleIcon}"/>
+                                    </Fluent:MenuItem.Icon>
+                                </Fluent:MenuItem>
                             </Fluent:RibbonMenu>
                         </Fluent:InRibbonGallery.Menu>
+                        <Fluent:InRibbonGallery.ToolTip>
+                            <Fluent:ScreenTip Title="Manage constraints"
+                                              Text="Add, modify or delete constraints for arrangement."/>
+                        </Fluent:InRibbonGallery.ToolTip>
                     </Fluent:InRibbonGallery>
                 </Fluent:RibbonGroupBox>
 
-            </Fluent:RibbonTabItem>
-
-            <Fluent:RibbonTabItem Header="View">
-                <Fluent:RibbonGroupBox Header="Original File Views">
-                    <Fluent:ToggleButton Name="invigilateFileViewButton"
+                <Fluent:RibbonGroupBox Header="View">
+                    <Fluent:SplitButton Header="Original file views">
+                        <Fluent:SplitButton.Icon>
+                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
+                        </Fluent:SplitButton.Icon>
+                        <Fluent:SplitButton.LargeIcon>
+                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
+                        </Fluent:SplitButton.LargeIcon>
+                        <Fluent:SplitButton.ToolTip>
+                            <Fluent:ScreenTip Title="Original file view" Text="Views related to original files."/>
+                        </Fluent:SplitButton.ToolTip>
+                        <Fluent:MenuItem Name="invigilateFileViewButton"
                                          Header="Invigilate file"
                                          GroupName="viewGroup"
+                                         IsCheckable="True"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/InvigilateFileViewPage.xaml">
-                        <Fluent:ToggleButton.Icon>
-                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
-                        </Fluent:ToggleButton.Icon>
-                        <Fluent:ToggleButton.LargeIcon>
-                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
-                        </Fluent:ToggleButton.LargeIcon>
-                        <Fluent:ToggleButton.ToolTip>
-                            <Fluent:ScreenTip Title="Invigilate file view"
+                            <Fluent:MenuItem.Icon>
+                                <Rectangle Fill="{StaticResource RawFileIcon}"/>
+                            </Fluent:MenuItem.Icon>
+                            <Fluent:MenuItem.ToolTip>
+                                <Fluent:ScreenTip Title="Invigilate file view"
                                               Text="See invigilate data loaded from file.
                                               Any invalid or empty line will show default values (e.g. 0)."
                                               DisableReason="At least one of two required files wasn't loaded."/>
-                        </Fluent:ToggleButton.ToolTip>
-                    </Fluent:ToggleButton>
-                    <Fluent:ToggleButton Name="trOfficeFileViewButton"
+                            </Fluent:MenuItem.ToolTip>
+                        </Fluent:MenuItem>
+                        <Fluent:MenuItem Name="trOfficeFileViewButton"
                                          Header="TR office file"
                                          GroupName="viewGroup"
+                                         IsCheckable="True"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/TRFileViewPage.xaml">
-                        <Fluent:ToggleButton.Icon>
-                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
-                        </Fluent:ToggleButton.Icon>
-                        <Fluent:ToggleButton.LargeIcon>
-                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
-                        </Fluent:ToggleButton.LargeIcon>
-                        <Fluent:ToggleButton.ToolTip>
-                            <Fluent:ScreenTip Title="TR office file view"
+                            <Fluent:MenuItem.Icon>
+                                <Rectangle Fill="{StaticResource RawFileIcon}"/>
+                            </Fluent:MenuItem.Icon>
+                            <Fluent:MenuItem.ToolTip>
+                                <Fluent:ScreenTip Title="TR office file view"
                                               Text="See teaching and researching office data loaded from file.
                                               Any invalid or empty line will show default values (e.g. 0)."
                                               DisableReason="At least one of two required files wasn't loaded."/>
-                        </Fluent:ToggleButton.ToolTip>
-                    </Fluent:ToggleButton>
-                </Fluent:RibbonGroupBox>
-                
-                <Fluent:RibbonGroupBox Header="Result View">
-                    <Fluent:ToggleButton Header="Plain table"
+                            </Fluent:MenuItem.ToolTip>
+                        </Fluent:MenuItem>
+                    </Fluent:SplitButton>
+                    <Fluent:SplitButton Header="Results view">
+                        <Fluent:MenuItem Header="Plain table"
                                          GroupName="viewGroup"
+                                         IsCheckable="True"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/TableViewPage.xaml">
-                        <Fluent:ToggleButton.Icon>
-                            <Rectangle Fill="{StaticResource TableIcon}"/>
-                        </Fluent:ToggleButton.Icon>
-                        <Fluent:ToggleButton.LargeIcon>
-                            <Rectangle Fill="{StaticResource TableIcon}"/>
-                        </Fluent:ToggleButton.LargeIcon>
-                        <Fluent:ToggleButton.ToolTip>
-                            <Fluent:ScreenTip Title="Table view"
+                            <Fluent:MenuItem.Icon>
+                                <Rectangle Fill="{StaticResource TableIcon}"/>
+                            </Fluent:MenuItem.Icon>
+                            <Fluent:MenuItem.ToolTip>
+                                <Fluent:ScreenTip Title="Table view"
                                               Text="See result in table view."
                                               DisableReason="At least one of two required files wasn't loaded."/>
-                        </Fluent:ToggleButton.ToolTip>
-                    </Fluent:ToggleButton>
-                    <Fluent:ToggleButton Header="Gantt"
+                            </Fluent:MenuItem.ToolTip>
+                        </Fluent:MenuItem>
+                        <Fluent:MenuItem Header="Gantt"
                                          GroupName="viewGroup"
+                                         IsCheckable="True"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/GanttViewPage.xaml">
-                        <Fluent:ToggleButton.Icon>
-                            <Rectangle Fill="{StaticResource GanttIcon}"/>
-                        </Fluent:ToggleButton.Icon>
-                        <Fluent:ToggleButton.LargeIcon>
-                            <Rectangle Fill="{StaticResource GanttIcon}"/>
-                        </Fluent:ToggleButton.LargeIcon>
-                        <Fluent:ToggleButton.ToolTip>
-                            <Fluent:ScreenTip Title="Gantt view"
+                            <Fluent:MenuItem.Icon>
+                                <Rectangle Fill="{StaticResource GanttIcon}"/>
+                            </Fluent:MenuItem.Icon>
+                            <Fluent:MenuItem.ToolTip>
+                                <Fluent:ScreenTip Title="Gantt view"
                                               Text="See result in gantt view."
                                               DisableReason="At least one of two required files wasn't loaded."/>
-                        </Fluent:ToggleButton.ToolTip>
-                    </Fluent:ToggleButton>
-                    <Fluent:ToggleButton Header="Calendar"
+                            </Fluent:MenuItem.ToolTip>
+                        </Fluent:MenuItem>
+                        <Fluent:MenuItem Header="Calendar"
                                          GroupName="viewGroup"
+                                         IsCheckable="True"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/CalendarViewPage.xaml">
-                        <Fluent:ToggleButton.Icon>
-                            <Rectangle Fill="{StaticResource CalendarIcon}"/>
-                        </Fluent:ToggleButton.Icon>
-                        <Fluent:ToggleButton.LargeIcon>
-                            <Rectangle Fill="{StaticResource CalendarIcon}"/>
-                        </Fluent:ToggleButton.LargeIcon>
-                        <Fluent:ToggleButton.ToolTip>
-                            <Fluent:ScreenTip Title="Calendar view"
+                            <Fluent:MenuItem.Icon>
+                                <Rectangle Fill="{StaticResource CalendarIcon}"/>
+                            </Fluent:MenuItem.Icon>
+                            <Fluent:MenuItem.ToolTip>
+                                <Fluent:ScreenTip Title="Calendar view"
                                               Text="See result in calendar view."
                                               DisableReason="At least one of two required files wasn't loaded."/>
-                        </Fluent:ToggleButton.ToolTip>
-                    </Fluent:ToggleButton>
+                            </Fluent:MenuItem.ToolTip>
+                        </Fluent:MenuItem>
+                    </Fluent:SplitButton>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
