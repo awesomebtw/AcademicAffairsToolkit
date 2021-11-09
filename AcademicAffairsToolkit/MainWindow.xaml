@@ -35,15 +35,16 @@
                             <Rectangle Fill="{StaticResource OpenFileIcon}"/>
                         </Fluent:Button.LargeIcon>
                         <Fluent:Button.ToolTip>
-                            <Fluent:ScreenTip Title="Open" Text="Choose files for arrangement."/>
+                            <Fluent:ScreenTip Title="Open" Text="Open files for arrangement."/>
                         </Fluent:Button.ToolTip>
                     </Fluent:Button>
                 </StackPanel>
                 <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24" Margin="10" Text="Recent"/>
-                <Fluent:Gallery Grid.Row="1" Grid.Column="1" MaxItemsInRow="1" Margin="15" Padding="0,5"
+                <Fluent:Gallery Grid.Row="1" Grid.Column="1" MaxItemsInRow="1" Margin="10,0" Padding="0,5" BorderThickness="1"
                                 ItemsSource="{Binding RecentlyOpenedFiles, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
                     <Fluent:Gallery.ItemTemplate>
                         <DataTemplate>
+                            <!--binding to a tuple-->
                             <StackPanel Orientation="Vertical" ToolTip="{Binding Item1}" ClipToBounds="True">
                                 <TextBlock Text="{Binding Item1}" FontWeight="Bold" TextWrapping="Wrap"/>
                                 <TextBlock Text="{Binding Item2}"/>
