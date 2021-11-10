@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -17,15 +18,28 @@ namespace AcademicAffairsToolkit
 
         private static readonly OpenFileDialog openExcelDialog = new OpenFileDialog
         {
+            DereferenceLinks = true,
             Filter = "XLSX files|*.xlsx|XLS files|*.xls|All Excel files|*.xlsx;*.xls",
             InitialDirectory = Environment.CurrentDirectory
         };
+
+        private static readonly OpenOptionsWindow openOptionsWindow = new OpenOptionsWindow();
 
         public ObservableCollection<Tuple<string, string>> RecentlyOpenedFiles { get; set; } = new ObservableCollection<Tuple<string, string>>();
 
         public MainWindow()
         {
             InitializeComponent();
+            openExcelDialog.FileOk += OpenExcelDialogFileOk;
+        }
+
+        private void OpenExcelDialogFileOk(object sender, CancelEventArgs e)
+        {
+            if (openOptionsWindow.ShowDialog(this) != true)
+            {
+                e.Cancel = true;
+                return;
+            }
         }
 
         private void OpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -38,14 +52,6 @@ namespace AcademicAffairsToolkit
             // todo: coupling too much, needs refactoring
 
             if (openExcelDialog.ShowDialog(this) != true)
-                return;
-
-            var openOptionsWindow = new OpenOptionsWindow
-            {
-                FileName = openExcelDialog.FileName
-            };
-
-            if (openOptionsWindow.ShowDialog(this) != true)
                 return;
 
             RecentlyOpenedFiles.Add(new Tuple<string, string>(openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
