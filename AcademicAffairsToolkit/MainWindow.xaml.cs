@@ -38,7 +38,6 @@ namespace AcademicAffairsToolkit
             if (openOptionsWindow.ShowDialog(this) != true)
             {
                 e.Cancel = true;
-                return;
             }
         }
 
