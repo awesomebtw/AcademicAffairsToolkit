@@ -23,8 +23,10 @@ namespace AcademicAffairsToolkit
 
         public int Iterations { get; private set; }
 
+        public int Population { get; set; }
+
         // todo: result type
-        public List<(int trOfficeId, int invigilateId, int personCount)> Result { get; private set; }
+        public List<(TROfficeRecordEntry, InvigilateRecordEntry, int personCount)> Result { get; private set; }
 
         public GeneticAlgorithmScheduler(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, int iterations)
         {
@@ -53,30 +55,61 @@ namespace AcademicAffairsToolkit
                 return 6;
         }
 
-        private IEnumerable<List<(int, int, int)>> GenerateInitialPopulation(int count)
+        private static void Shuffle<T>(ref List<T> list)
         {
             Random random = new Random();
-
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                var initialChromosome = new List<(int, int, int)>();
-                var invigilateRemaining = new Dictionary<int, int>(InvigilateRecords.Select((p, i) => new KeyValuePair<int, int>(GetInvigilatePersonCount(p.Value.ExamineeCount), i)));
-                var trOfficeRemaining = TROfficeRecords.Select(p => p.PeopleCount).ToArray();
-                var pairs = new IntervalTree<DateTime, int>();
-
-                for (int j = 0; j < InvigilateRecords.Count(); j++)
-                {
-                    int selected = random.Next(0, trOfficeRemaining.Count() - 1);
-                    initialChromosome.Add((selected, 0, 0));
-                    trOfficeRemaining[selected] -= invigilateRemaining[selected];
-                    invigilateRemaining.Remove(selected);
-                }
-
-                yield return initialChromosome;
+                int selected = random.Next(i, list.Count);
+                T temp = list[selected];
+                list[selected] = list[i];
+                list[i] = temp;
             }
         }
 
-        private int GetFitness()
+        /// <summary>
+        /// generate a random permutation of arrangement
+        /// </summary>
+        /// <returns>a tuple with office, invigilate task and people needed</returns>
+        private IEnumerable<Tuple<TROfficeRecordEntry, InvigilateRecordEntry, int>> GeneratePermutation()
+        {
+            var invigilateList = InvigilateRecords.Select(p => (record: p.Value, peopleNeeded: GetInvigilatePersonCount(p.Value.ExamineeCount))).ToList();
+            var trOfficeList = TROfficeRecords.Select(p => (record: p, peopleRemaining: p.PeopleCount)).ToList();
+
+            Shuffle(ref invigilateList);
+
+            Random random = new Random();
+
+            for (int i = 0; i < invigilateList.Count(); i++)
+            {
+                var (record, peopleNeeded) = invigilateList[i];
+
+                // ensure the selected office has enough people
+                // by picking a random index and check if people is enough
+                int j = random.Next(trOfficeList.Count);
+                int increment = random.Next(trOfficeList.Count);
+                while (trOfficeList[j].peopleRemaining < peopleNeeded)
+                    j = (j + increment) % trOfficeList.Count;
+
+                var t = trOfficeList[j];
+
+                yield return Tuple.Create(t.record, record, peopleNeeded);
+
+                t.peopleRemaining -= peopleNeeded; // subtract 
+                if (t.peopleRemaining == 0)
+                    trOfficeList.Remove(t);
+            }
+        }
+
+        private IEnumerable<IEnumerable<Tuple<TROfficeRecordEntry, InvigilateRecordEntry, int>>> GeneratePopulation(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                yield return GeneratePermutation();
+            }
+        }
+
+        private int GetFitness(IEnumerable<Tuple<TROfficeRecordEntry, InvigilateRecordEntry, int>> chromosome)
         {
             // todo: fitness funtion evaluation
             return 0;
@@ -95,12 +128,15 @@ namespace AcademicAffairsToolkit
         public void StartArrangement()
         {
             // todo: algorithm
-            GenerateInitialPopulation(1);
+            Random random = new Random();
+            var population = GeneratePopulation(Population);
             for (int i = 0; i < Iterations; i++)
             {
-                GetFitness();
-                ApplyCrossover();
-                Mutate();
+                var fitness = population.Select(p => GetFitness(p));
+                if (random.NextDouble() < CrossoverProbability)
+                    ApplyCrossover();
+                if (random.NextDouble() < MutationProbobility)
+                    Mutate();
                 // replace the old population with new one
             }
         }
