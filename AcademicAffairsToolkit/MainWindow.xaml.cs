@@ -23,8 +23,6 @@ namespace AcademicAffairsToolkit
             InitialDirectory = Environment.CurrentDirectory
         };
 
-        private static readonly OpenOptionsWindow openOptionsWindow = new OpenOptionsWindow();
-
         public ObservableCollection<Tuple<string, string>> RecentlyOpenedFiles { get; set; } = new ObservableCollection<Tuple<string, string>>();
 
         public MainWindow()
@@ -33,25 +31,14 @@ namespace AcademicAffairsToolkit
             openExcelDialog.FileOk += OpenExcelDialogFileOk;
         }
 
-        private void OpenExcelDialogFileOk(object sender, CancelEventArgs e)
+        private async void OpenExcelDialogFileOk(object sender, CancelEventArgs e)
         {
+            var openOptionsWindow = new OpenOptionsWindow();
             if (openOptionsWindow.ShowDialog(this) != true)
             {
                 e.Cancel = true;
-            }
-        }
-
-        private void OpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private async void OpenCommandExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            // todo: coupling too much, needs refactoring
-
-            if (openExcelDialog.ShowDialog(this) != true)
                 return;
+            }
 
             RecentlyOpenedFiles.Add(new Tuple<string, string>(openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
 
@@ -82,6 +69,16 @@ namespace AcademicAffairsToolkit
                 default:
                     break;
             }
+        }
+
+        private void OpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void OpenCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            openExcelDialog.ShowDialog(this);
         }
 
         private void CloseCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
