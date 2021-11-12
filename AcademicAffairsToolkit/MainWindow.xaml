@@ -179,11 +179,17 @@
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource NewRuleIcon}"/>
                         </Fluent:Button.Icon>
+                        <Fluent:Button.LargeIcon>
+                            <Rectangle Fill="{StaticResource NewRuleIcon}"/>
+                        </Fluent:Button.LargeIcon>
                     </Fluent:Button>
                     <Fluent:Button Header="Manage..." Click="ManageConstraintMenuClick">
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource RuleIcon}"/>
                         </Fluent:Button.Icon>
+                        <Fluent:Button.LargeIcon>
+                            <Rectangle Fill="{StaticResource RuleIcon}"/>
+                        </Fluent:Button.LargeIcon>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>
 

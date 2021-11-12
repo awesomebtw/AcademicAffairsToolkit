@@ -30,6 +30,11 @@ namespace AcademicAffairsToolkit
         public int PeopleCount { get; set; }
 
         public string Director { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name} ({Director}, {PeopleCount})";
+        }
     }
 
     class InvigilateFileParsePolicy

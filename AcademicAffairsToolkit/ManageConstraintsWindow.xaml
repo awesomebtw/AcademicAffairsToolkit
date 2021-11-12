@@ -43,7 +43,7 @@
             <DatePicker SelectedDate="{Binding Path=/From}"/>
             <TextBlock Text="To: "/>
             <DatePicker SelectedDate="{Binding Path=/To}"/>
-            <Fluent:ComboBox Header="TR Office: " IsEditable="False" ItemsSource="{Binding Path=(local:Session.TROffices)}"/>
+            <Fluent:ComboBox Header="TR Office: " IsEditable="False" SelectedItem="{Binding Path=/TROffice}" ItemsSource="{Binding Path=(local:Session.TROffices)}"/>
             <Button Content="Add..."/>
             <Button Content="Remove"/>
         </WrapPanel>
