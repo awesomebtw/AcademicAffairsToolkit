@@ -45,7 +45,7 @@
                     <Fluent:Gallery.ItemTemplate>
                         <DataTemplate>
                             <!--binding to a tuple-->
-                            <StackPanel Orientation="Vertical" ToolTip="{Binding Item1}" ClipToBounds="True">
+                            <StackPanel Orientation="Vertical" ToolTip="{Binding Item1}" Margin="5">
                                 <TextBlock Text="{Binding Item1}" FontWeight="Bold" TextWrapping="Wrap"/>
                                 <TextBlock Text="{Binding Item2}"/>
                             </StackPanel>
@@ -179,11 +179,17 @@
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource NewRuleIcon}"/>
                         </Fluent:Button.Icon>
+                        <Fluent:Button.LargeIcon>
+                            <Rectangle Fill="{StaticResource NewRuleIcon}"/>
+                        </Fluent:Button.LargeIcon>
                     </Fluent:Button>
                     <Fluent:Button Header="Manage..." Click="ManageConstraintMenuClick">
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource RuleIcon}"/>
                         </Fluent:Button.Icon>
+                        <Fluent:Button.LargeIcon>
+                            <Rectangle Fill="{StaticResource RuleIcon}"/>
+                        </Fluent:Button.LargeIcon>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>
 
