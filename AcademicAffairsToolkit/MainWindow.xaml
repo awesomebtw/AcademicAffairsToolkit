@@ -175,26 +175,16 @@
 
                     <Separator/>
 
-                    <Fluent:InRibbonGallery ItemWidth="60" MinWidth="125">
-                        <Fluent:InRibbonGallery.Menu>
-                            <Fluent:RibbonMenu>
-                                <Fluent:MenuItem Header="Add constraints">
-                                    <Fluent:MenuItem.Icon>
-                                        <Rectangle Fill="{StaticResource NewRuleIcon}"/>
-                                    </Fluent:MenuItem.Icon>
-                                </Fluent:MenuItem>
-                                <Fluent:MenuItem Header="Manage...">
-                                    <Fluent:MenuItem.Icon>
-                                        <Rectangle Fill="{StaticResource RuleIcon}"/>
-                                    </Fluent:MenuItem.Icon>
-                                </Fluent:MenuItem>
-                            </Fluent:RibbonMenu>
-                        </Fluent:InRibbonGallery.Menu>
-                        <Fluent:InRibbonGallery.ToolTip>
-                            <Fluent:ScreenTip Title="Manage constraints"
-                                              Text="Add, modify or delete constraints for arrangement."/>
-                        </Fluent:InRibbonGallery.ToolTip>
-                    </Fluent:InRibbonGallery>
+                    <Fluent:Button Header="Add constraints">
+                        <Fluent:Button.Icon>
+                            <Rectangle Fill="{StaticResource NewRuleIcon}"/>
+                        </Fluent:Button.Icon>
+                    </Fluent:Button>
+                    <Fluent:Button Header="Manage..." Click="ManageConstraintMenuClick">
+                        <Fluent:Button.Icon>
+                            <Rectangle Fill="{StaticResource RuleIcon}"/>
+                        </Fluent:Button.Icon>
+                    </Fluent:Button>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Header="View">

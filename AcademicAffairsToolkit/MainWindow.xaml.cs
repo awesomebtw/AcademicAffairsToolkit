@@ -139,5 +139,10 @@ namespace AcademicAffairsToolkit
         {
             new ArrangementPolicyWindow().Show();
         }
+
+        private void ManageConstraintMenuClick(object sender, RoutedEventArgs e)
+        {
+            new ManageConstraintsWindow() { Owner = this }.ShowDialog();
+        }
     }
 }

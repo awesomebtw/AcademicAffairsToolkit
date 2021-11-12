@@ -6,13 +6,55 @@
         xmlns:local="clr-namespace:AcademicAffairsToolkit"
         xmlns:Fluent="urn:fluent-ribbon"
         mc:Ignorable="d"
-        Title="ManageConstraintsWindow" Height="450" Width="800">
-    <DockPanel>
-        <Grid>
-            <Fluent:Gallery>
-                <Fluent:GalleryItem></Fluent:GalleryItem>
-            </Fluent:Gallery>
-        </Grid>
-        <Fluent:StatusBar DockPanel.Dock="Bottom"></Fluent:StatusBar>
-    </DockPanel>
+        Title="Manage Constraints" WindowStartupLocation="CenterOwner"
+        Height="400" Width="400">
+    
+    <Grid DataContext="{Binding Path=(local:Session.Constraints)}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <Fluent:Gallery Grid.Row="0" Padding="10" MaxItemsInRow="1" ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" HorizontalContentAlignment="Stretch">
+            <Fluent:Gallery.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" FontWeight="Bold" Text="{Binding TROffice.Name, StringFormat=Office name: \{0\}}"/>
+                        <TextBlock Grid.Row="1" Text="{Binding TROffice.Director, StringFormat=Director: \{0\}}"/>
+                        <TextBlock Grid.Row="2">
+                            <Run Text="Interval: "/>
+                            <Run Text="{Binding From, StringFormat=\{0:G\}}"/>
+                            <Run Text=" ~ "/>
+                            <Run Text="{Binding To, StringFormat=\{0:G\}}"/>
+                        </TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </Fluent:Gallery.ItemTemplate>
+        </Fluent:Gallery>
+        
+        <WrapPanel Grid.Row="1">
+            <TextBlock Text="From: "/>
+            <DatePicker SelectedDate="{Binding Path=/From}"/>
+            <TextBlock Text="To: "/>
+            <DatePicker SelectedDate="{Binding Path=/To}"/>
+            <Fluent:ComboBox Header="TR Office: " IsEditable="False" ItemsSource="{Binding Path=(local:Session.TROffices)}"/>
+            <Button Content="Add..."/>
+            <Button Content="Remove"/>
+        </WrapPanel>
+        
+        <Fluent:StatusBar Grid.Row="2">
+            <Fluent:StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Count}"/>
+                    <TextBlock Text=" items"/>
+                </StackPanel>
+            </Fluent:StatusBarItem>
+        </Fluent:StatusBar>
+    </Grid>
 </Fluent:RibbonWindow>
