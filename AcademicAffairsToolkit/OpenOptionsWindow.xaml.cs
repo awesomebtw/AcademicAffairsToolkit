@@ -34,7 +34,7 @@ namespace AcademicAffairsToolkit
 
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            DialogResult = sender is Button b && b.Content.ToString() == "OK";
+            DialogResult = sender is Fluent.Button b && b.Header.ToString() == "OK";
             Close();
         }
 
