@@ -29,7 +29,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="1" Grid.Column="0">
+                <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
                     <Fluent:Button Height="Auto" Header="Open..." Command="Open" IsDefinitive="False">
                         <Fluent:Button.LargeIcon>
                             <Rectangle Fill="{StaticResource OpenFileIcon}"/>
@@ -38,14 +38,22 @@
                             <Fluent:ScreenTip Title="Open" Text="Open files for arrangement."/>
                         </Fluent:Button.ToolTip>
                     </Fluent:Button>
+                    <Fluent:Button Margin="0,5" Height="Auto" Header="Open then close this page..." Command="Open" IsDefinitive="True">
+                        <Fluent:Button.LargeIcon>
+                            <Rectangle Fill="{StaticResource OpenFileIcon}"/>
+                        </Fluent:Button.LargeIcon>
+                        <Fluent:Button.ToolTip>
+                            <Fluent:ScreenTip Title="Open and close this page" Text="Open files for arrangement; close the file open page."/>
+                        </Fluent:Button.ToolTip>
+                    </Fluent:Button>
                 </StackPanel>
                 <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24" Margin="10" Text="Recent"/>
-                <Fluent:Gallery Grid.Row="1" Grid.Column="1" MaxItemsInRow="1" Margin="10,0" Padding="0,5" BorderThickness="1"
+                <Fluent:Gallery Grid.Row="1" Grid.Column="1" MaxItemsInRow="1" Margin="10,0" Padding="0,5" BorderThickness="1" HorizontalContentAlignment="Stretch"
                                 ItemsSource="{Binding RecentlyOpenedFiles, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
                     <Fluent:Gallery.ItemTemplate>
                         <DataTemplate>
                             <!--binding to a tuple-->
-                            <StackPanel Orientation="Vertical" ToolTip="{Binding Item1}" ClipToBounds="True">
+                            <StackPanel Orientation="Vertical" ToolTip="{Binding Item1}" Margin="5">
                                 <TextBlock Text="{Binding Item1}" FontWeight="Bold" TextWrapping="Wrap"/>
                                 <TextBlock Text="{Binding Item2}"/>
                             </StackPanel>
@@ -76,8 +84,13 @@
                                 </TextBlock>
                                 <Fluent:MenuItem Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}"
                                                  Header="Close start screen"
+                                                 Height="32"
                                                  IsDefinitive="True"
-                                                 Margin="5"/>
+                                                 Margin="5">
+                                    <Fluent:MenuItem.Icon>
+                                        <Rectangle Fill="{StaticResource CancelIcon}"/>
+                                    </Fluent:MenuItem.Icon>
+                                </Fluent:MenuItem>
                             </StackPanel>
                         </Fluent:StartScreenTabControl.LeftContent>
                     </Fluent:StartScreenTabControl>
