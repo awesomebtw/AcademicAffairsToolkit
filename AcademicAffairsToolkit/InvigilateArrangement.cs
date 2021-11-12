@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AcademicAffairsToolkit
@@ -19,16 +18,18 @@ namespace AcademicAffairsToolkit
 
         public IntervalTree<DateTime, InvigilateRecordEntry> InvigilateRecords { get; private set; }
 
+        public IntervalTree<DateTime, TROfficeRecordEntry> Constraints { get; private set; }
+
         public IEnumerable<TROfficeRecordEntry> TROfficeRecords { get; private set; }
 
         public int Iterations { get; private set; }
 
-        public int Population { get; set; }
+        public int PopulationCount { get; set; }
 
         // todo: result type
         public List<(TROfficeRecordEntry, InvigilateRecordEntry, int personCount)> Result { get; private set; }
 
-        public GeneticAlgorithmScheduler(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, int iterations)
+        public GeneticAlgorithmScheduler(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, IEnumerable<InvigilateConstraint> constraints, int iterations)
         {
             TROfficeRecords = trOfficeRecords;
             Iterations = iterations;
@@ -36,6 +37,12 @@ namespace AcademicAffairsToolkit
             foreach (var record in invigilateRecords)
             {
                 InvigilateRecords.Add(record.StartTime, record.EndTime, record);
+            }
+
+            Constraints = new IntervalTree<DateTime, TROfficeRecordEntry>();
+            foreach (var constraint in constraints)
+            {
+                Constraints.Add(constraint.From, constraint.To, constraint.TROffice);
             }
         }
 
@@ -74,30 +81,32 @@ namespace AcademicAffairsToolkit
         private IEnumerable<Tuple<TROfficeRecordEntry, InvigilateRecordEntry, int>> GeneratePermutation()
         {
             var invigilateList = InvigilateRecords.Select(p => (record: p.Value, peopleNeeded: GetInvigilatePersonCount(p.Value.ExamineeCount))).ToList();
-            var trOfficeList = TROfficeRecords.Select(p => (record: p, peopleRemaining: p.PeopleCount)).ToList();
+            var trOfficeList = new List<TROfficeRecordEntry>(TROfficeRecords);
+            var trOfficeRemaining = TROfficeRecords.Select(p => p.PeopleCount).ToList();
 
             Shuffle(ref invigilateList);
 
             Random random = new Random();
 
+            // assign for each invigilate task
             for (int i = 0; i < invigilateList.Count(); i++)
             {
-                var (record, peopleNeeded) = invigilateList[i];
+                var (iRecord, peopleNeeded) = invigilateList[i];
 
                 // ensure the selected office has enough people
                 // by picking a random index and check if people is enough
                 int j = random.Next(trOfficeList.Count);
-                int increment = random.Next(trOfficeList.Count);
-                while (trOfficeList[j].peopleRemaining < peopleNeeded)
-                    j = (j + increment) % trOfficeList.Count;
+                while (trOfficeRemaining[j] < peopleNeeded)
+                    j = (j + 1) % trOfficeList.Count;
 
-                var t = trOfficeList[j];
+                yield return Tuple.Create(trOfficeList[j], iRecord, peopleNeeded);
 
-                yield return Tuple.Create(t.record, record, peopleNeeded);
-
-                t.peopleRemaining -= peopleNeeded; // subtract 
-                if (t.peopleRemaining == 0)
-                    trOfficeList.Remove(t);
+                trOfficeRemaining[j] -= peopleNeeded; // subtract 
+                if (trOfficeRemaining[j] == 0)
+                {
+                    trOfficeList.RemoveAt(j);
+                    trOfficeRemaining.RemoveAt(j);
+                }
             }
         }
 
@@ -129,7 +138,7 @@ namespace AcademicAffairsToolkit
         {
             // todo: algorithm
             Random random = new Random();
-            var population = GeneratePopulation(Population);
+            var population = GeneratePopulation(PopulationCount);
             for (int i = 0; i < Iterations; i++)
             {
                 var fitness = population.Select(p => GetFitness(p));
