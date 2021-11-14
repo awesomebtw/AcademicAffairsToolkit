@@ -7,7 +7,9 @@
         xmlns:Fluent="urn:fluent-ribbon"
         mc:Ignorable="d"
         Title="File open options"
-        Height="300" Width="300" ResizeMode="NoResize"
+        Width="300"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
         WindowStartupLocation="CenterOwner">
 
     <Fluent:RibbonWindow.Resources>
@@ -46,11 +48,17 @@
             </ItemsControl>
         </GroupBox>
 
-        <WrapPanel>
-            <Fluent:DropDownButton Header="Advanced..." Margin="5">
-                <Fluent:DropDownButton.LargeIcon>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <Fluent:DropDownButton Size="Middle" Header="Advanced..." Margin="5" Grid.Column="0">
+                <Fluent:DropDownButton.Icon>
                     <Rectangle Fill="{StaticResource AdvancedViewIcon}"/>
-                </Fluent:DropDownButton.LargeIcon>
+                </Fluent:DropDownButton.Icon>
                 <ItemsControl Padding="5" DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}"
                               Visibility="{Binding IsChecked, ElementName=invigilateRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Fluent:Spinner Header="Sheet"
@@ -98,16 +106,8 @@
                 </ItemsControl>
             </Fluent:DropDownButton>
 
-            <Fluent:Button Header="OK" Click="ButtonClick" Margin="5">
-                <Fluent:Button.LargeIcon>
-                    <Rectangle Fill="{StaticResource OKIcon}"/>
-                </Fluent:Button.LargeIcon>
-            </Fluent:Button>
-            <Fluent:Button Header="Cancel" Click="ButtonClick" Margin="5">
-                <Fluent:Button.LargeIcon>
-                    <Rectangle Fill="{StaticResource CancelIcon}"/>
-                </Fluent:Button.LargeIcon>
-            </Fluent:Button>
-        </WrapPanel>
+            <Button Content="OK" Click="ButtonClick" Margin="5" Grid.Column="1"/>
+            <Button Content="Cancel" Click="ButtonClick" Margin="5" Grid.Column="2"/>
+        </Grid>
     </ItemsControl>
 </Fluent:RibbonWindow>

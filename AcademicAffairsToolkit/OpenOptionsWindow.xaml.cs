@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace AcademicAffairsToolkit
 {
@@ -34,7 +34,7 @@ namespace AcademicAffairsToolkit
 
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            DialogResult = sender is Fluent.Button b && b.Header.ToString() == "OK";
+            DialogResult = sender is ButtonBase b && b.Content.ToString() == "OK";
             Close();
         }
 

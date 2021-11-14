@@ -33,7 +33,7 @@ namespace AcademicAffairsToolkit
 
         private async void OpenExcelDialogFileOk(object sender, CancelEventArgs e)
         {
-            var openOptionsWindow = new OpenOptionsWindow();
+            var openOptionsWindow = new OpenOptionsWindow { FileName = openExcelDialog.FileName };
             if (openOptionsWindow.ShowDialog(this) != true)
             {
                 e.Cancel = true;
