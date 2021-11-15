@@ -2,6 +2,9 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -31,6 +34,33 @@ namespace AcademicAffairsToolkit
             openExcelDialog.FileOk += OpenExcelDialogFileOk;
         }
 
+        private async Task OpenFileAsync(string fileName, string password, SelectedFileType selectedFileType)
+        {
+            switch (selectedFileType)
+            {
+                case SelectedFileType.InvigilateFile:
+                    {
+                        Session.InvigilateRecords = (await ExcelProcessor.ReadInvigilateTableAsync(
+                                fileName, password, Session.InvigilateFilePolicy)).ToArray();
+                        ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
+                        invigilateFileViewButton.IsChecked = true;
+                    }
+                    break;
+                case SelectedFileType.TROfficeFile:
+                    {
+                        Session.TROffices = (await ExcelProcessor.ReadTROfficeTableAsync(
+                                fileName, password, Session.TROfficeFilePolicy)).ToArray();
+                        ToggleView.Execute("/TRFileViewPage.xaml", this);
+                        trOfficeFileViewButton.IsChecked = true;
+                    }
+                    break;
+                case SelectedFileType.Unknown:
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private async void OpenExcelDialogFileOk(object sender, CancelEventArgs e)
         {
             var openOptionsWindow = new OpenOptionsWindow { FileName = openExcelDialog.FileName };
@@ -40,34 +70,42 @@ namespace AcademicAffairsToolkit
                 return;
             }
 
-            RecentlyOpenedFiles.Add(new Tuple<string, string>(openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
-
-            switch (openOptionsWindow.SelectedFileType)
+            var openFileTask = OpenFileAsync(
+                openExcelDialog.FileName, openOptionsWindow.Password, openOptionsWindow.SelectedFileType);
+            try
             {
-                case SelectedFileType.InvigilateFile:
-                    {
-                        Session.InvigilateRecords = await ExcelProcessor.ReadInvigilateTableAsync(
-                            openExcelDialog.FileName,
-                            openOptionsWindow.Password,
-                            Session.InvigilateFilePolicy);
-                        ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
-                        invigilateFileViewButton.IsChecked = true;
-                    }
-                    break;
-                case SelectedFileType.TROfficeFile:
-                    {
-                        Session.TROffices = await ExcelProcessor.ReadTROfficeTableAsync(
-                            openExcelDialog.FileName,
-                            openOptionsWindow.Password,
-                            Session.TROfficeFilePolicy);
-                        ToggleView.Execute("/TRFileViewPage.xaml", this);
-                        trOfficeFileViewButton.IsChecked = true;
-                    }
-                    break;
-                case SelectedFileType.Unknown:
-                    break;
-                default:
-                    break;
+                await openFileTask;
+                RecentlyOpenedFiles.Add(
+                    new Tuple<string, string>(
+                        openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(
+                    ex.Message + "\nCheck if file type and/or parse policies settings is incorrect.",
+                    "Unable to open file", MessageBoxButton.OK, MessageBoxImage.Error);
+                e.Cancel = true;
+                return;
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(
+                    ex.Message + "\nCheck if the file is being used or does not exist.",
+                    "Unable to open file", MessageBoxButton.OK, MessageBoxImage.Error);
+                e.Cancel = true;
+                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Unable to open file", MessageBoxButton.OK, MessageBoxImage.Error);
+                e.Cancel = true;
+                return;
+            }
+            if (openFileTask.Exception != null)
+            {
+                MessageBox.Show("exception");
+                e.Cancel = true;
+                return;
             }
         }
 
@@ -132,7 +170,12 @@ namespace AcademicAffairsToolkit
 
         private void StartArrangementExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // todo: invoke start arrangement function
+            var ga = new GeneticAlgorithmScheduler(
+                Session.InvigilateRecords, Session.TROffices, Session.Constraints, 1000);
+            ga.PopulationCount = 100;
+            ga.StartArrangement();
+            // todo: show result
+            MessageBox.Show(ga.Result.ToString());
         }
 
         private void ArrangementPolicyButtonClick(object sender, RoutedEventArgs e)

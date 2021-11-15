@@ -202,9 +202,9 @@ namespace AcademicAffairsToolkit
             var population = GenerateInitialPopulation(PopulationCount);
             for (int i = 0; i < Iterations; i++)
             {
-                var fitness = population.OrderByDescending(p => GetFitness(p));
-                if (random.NextDouble() < crossoverProbability)
-                    ApplyCrossover(population.ElementAt(0), population.ElementAt(1));
+                var fitness = population.Select(p => GetFitness(p));
+                //if (random.NextDouble() < crossoverProbability)
+                    //ApplyCrossover(population.ElementAt(0), population.ElementAt(1));
                 if (random.NextDouble() < mutationProbobility)
                     Mutate();
                 // replace the old population with new one

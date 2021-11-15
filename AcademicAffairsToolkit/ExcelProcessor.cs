@@ -124,7 +124,7 @@ namespace AcademicAffairsToolkit
             if (timeMatch.Groups.Count >= 2)
                 return (TimeSpan.Parse(timeMatch.Groups[1].Value), TimeSpan.Parse(timeMatch.Groups[2].Value));
             else
-                throw new FormatException(nameof(timeString));
+                throw new InvalidOperationException(nameof(timeString));
         }
 
         public static IEnumerable<InvigilateRecordEntry> ReadInvigilateTable(string path, string password, InvigilateFileParsePolicy policy)
