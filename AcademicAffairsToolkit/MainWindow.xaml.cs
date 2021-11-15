@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -31,24 +32,15 @@ namespace AcademicAffairsToolkit
             openExcelDialog.FileOk += OpenExcelDialogFileOk;
         }
 
-        private async void OpenExcelDialogFileOk(object sender, CancelEventArgs e)
+        private async void OpenFileAsync(string fileName, string password, SelectedFileType selectedFileType)
         {
-            var openOptionsWindow = new OpenOptionsWindow { FileName = openExcelDialog.FileName };
-            if (openOptionsWindow.ShowDialog(this) != true)
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            RecentlyOpenedFiles.Add(new Tuple<string, string>(openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
-
-            switch (openOptionsWindow.SelectedFileType)
+            switch (selectedFileType)
             {
                 case SelectedFileType.InvigilateFile:
                     {
                         Session.InvigilateRecords = await ExcelProcessor.ReadInvigilateTableAsync(
-                            openExcelDialog.FileName,
-                            openOptionsWindow.Password,
+                            fileName,
+                            password,
                             Session.InvigilateFilePolicy);
                         ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
                         invigilateFileViewButton.IsChecked = true;
@@ -57,8 +49,8 @@ namespace AcademicAffairsToolkit
                 case SelectedFileType.TROfficeFile:
                     {
                         Session.TROffices = await ExcelProcessor.ReadTROfficeTableAsync(
-                            openExcelDialog.FileName,
-                            openOptionsWindow.Password,
+                            fileName,
+                            password,
                             Session.TROfficeFilePolicy);
                         ToggleView.Execute("/TRFileViewPage.xaml", this);
                         trOfficeFileViewButton.IsChecked = true;
@@ -68,6 +60,44 @@ namespace AcademicAffairsToolkit
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void OpenExcelDialogFileOk(object sender, CancelEventArgs e)
+        {
+            var openOptionsWindow = new OpenOptionsWindow { FileName = openExcelDialog.FileName };
+            if (openOptionsWindow.ShowDialog(this) != true)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            try
+            {
+                RecentlyOpenedFiles.Add(new Tuple<string, string>(openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
+                OpenFileAsync(openExcelDialog.FileName, openOptionsWindow.Password, openOptionsWindow.SelectedFileType);
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show(
+                    "Check if there's inappropriate file type and/or parse policies settings.",
+                    "Unable to open file", MessageBoxButton.OK, MessageBoxImage.Error);
+                e.Cancel = true;
+                return;
+            }
+            catch (IOException)
+            {
+                MessageBox.Show(
+                    "Check if the file is being used or does not exist.",
+                    "Unable to open file", MessageBoxButton.OK, MessageBoxImage.Error);
+                e.Cancel = true;
+                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Unable to open file", MessageBoxButton.OK, MessageBoxImage.Error);
+                e.Cancel = true;
+                return;
             }
         }
 
@@ -132,7 +162,10 @@ namespace AcademicAffairsToolkit
 
         private void StartArrangementExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // todo: invoke start arrangement function
+            var ga = new GeneticAlgorithmScheduler(
+                Session.InvigilateRecords, Session.TROffices, Session.Constraints, 1000);
+            ga.PopulationCount = 100;
+            ga.StartArrangement();
         }
 
         private void ArrangementPolicyButtonClick(object sender, RoutedEventArgs e)
