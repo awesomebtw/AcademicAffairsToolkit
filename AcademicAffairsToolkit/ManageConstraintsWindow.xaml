@@ -40,7 +40,7 @@
                         <TextBlock Text="{Binding TROffice.Director, StringFormat=\{0\}}" TextWrapping="Wrap"/>
                         <TextBlock TextWrapping="Wrap">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="\{0} ~ {1}">
+                                <MultiBinding StringFormat=" {0} ~ {1}">
                                     <Binding Path="From" UpdateSourceTrigger="PropertyChanged"/>
                                     <Binding Path="To" UpdateSourceTrigger="PropertyChanged"/>
                                 </MultiBinding>
@@ -59,27 +59,22 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Margin="5" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-                <TextBlock Text="From: " VerticalAlignment="Center"/>
-                <xctk:DateTimePicker Name="fromDateTimePicker" MinWidth="200" Value="{Binding Path=/From}"/>
-            </StackPanel>
-            <StackPanel Margin="5" Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
-                <TextBlock Text="To: " VerticalAlignment="Center"/>
-                <xctk:DateTimePicker Name="toDateTimePicker" MinWidth="200" Value="{Binding Path=/To}"/>
-            </StackPanel>
+            <TextBlock Text="From: " Margin="5" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+            <xctk:DateTimePicker Name="fromDateTimePicker" Margin="5" Value="{Binding Path=/From}" Grid.Row="0" Grid.Column="1"/>
+            <TextBlock Text="To: " Margin="5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+            <xctk:DateTimePicker Name="toDateTimePicker" Margin="5" Value="{Binding Path=/To}" Grid.Row="1" Grid.Column="1"/>
             <Fluent:ComboBox Name="trOfficePicker"
                              Header="TR Office: "
                              IsEditable="False"
-                             Margin="5"
+                             Margin="0"
                              ItemsSource="{Binding Path=(local:Session.TROffices)}"
                              SelectedItem="{Binding Path=/TROffice}"
                              Grid.Row="2" Grid.ColumnSpan="2"/>
-            <Button Content="Add..." Margin="5" Click="AddButtonClick" Grid.Row="3" Grid.Column="0"/>
-            <Button Content="Remove" Margin="5" Click="RemoveButtonClick" Grid.Row="3" Grid.Column="1"/>
+            <Button Content="Remove selected" Margin="5" Click="RemoveButtonClick" Grid.Row="3" Grid.ColumnSpan="2"/>
         </Grid>
         
         <Fluent:StatusBar Grid.Row="2">

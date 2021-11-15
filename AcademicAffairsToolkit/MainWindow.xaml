@@ -109,12 +109,19 @@
                                        Command="Save"/>
 
                         <Fluent:BackstageTabItem Header="About">
-                            <TextBlock Margin="20" Padding="5">
-                                <Run FontSize="36">Academic Affairs Toolkit</Run><LineBreak/>
-                                Version 0.0.0.3<LineBreak/>
-                                Third-party libraries: Fluent.Ribbon, npoi, RangeTree<LineBreak/>
-                                Icons: Visual Studio 2019 Icons Library
-                            </TextBlock>
+                            <StackPanel Margin="20" Orientation="Vertical">
+                                <TextBlock FontSize="36" Margin="5">Academic Affairs Toolkit</TextBlock>
+                                <TextBlock Margin="5" Text="Version 0.0.0.4"/>
+                                <TextBlock Margin="5" Text="Third party project/resources: "/>
+                                <Fluent:Gallery BorderThickness="1" Margin="5" MaxItemsInRow="1">
+                                    <Fluent:GalleryItem>Extended WPF Toolkit</Fluent:GalleryItem>
+                                    <Fluent:GalleryItem>Fluent.Ribbon</Fluent:GalleryItem>
+                                    <Fluent:GalleryItem>npoi</Fluent:GalleryItem>
+                                    <Fluent:GalleryItem>RangeTree</Fluent:GalleryItem>
+                                    <Fluent:GalleryItem>Visual Studio 2019 Icons Library</Fluent:GalleryItem>
+                                </Fluent:Gallery>
+
+                            </StackPanel>
                         </Fluent:BackstageTabItem>
 
                         <Fluent:SeparatorTabItem/>
@@ -188,7 +195,7 @@
 
                     <Separator/>
 
-                    <Fluent:Button Header="Add constraints">
+                    <Fluent:Button Header="Add constraints" Click="AddConstraintButtonClick">
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource NewRuleIcon}"/>
                         </Fluent:Button.Icon>
@@ -196,7 +203,7 @@
                             <Rectangle Fill="{StaticResource NewRuleIcon}"/>
                         </Fluent:Button.LargeIcon>
                     </Fluent:Button>
-                    <Fluent:Button Header="Manage..." Click="ManageConstraintMenuClick">
+                    <Fluent:Button Header="Manage..." Click="ManageConstraintButtonClick">
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource RuleIcon}"/>
                         </Fluent:Button.Icon>
