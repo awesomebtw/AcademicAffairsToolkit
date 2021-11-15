@@ -1,7 +1,16 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace AcademicAffairsToolkit
 {
+    enum ChangedItem
+    {
+        FromHour,
+        FromMinute,
+        ToHour,
+        ToMinute
+    }
+
     /// <summary>
     /// ManageConstraintsWindow.xaml 的交互逻辑
     /// </summary>
@@ -14,27 +23,24 @@ namespace AcademicAffairsToolkit
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
         {
-            // properties in datetime are read-only and can't bind to datetime
-            // so we have to update it manually
-            if (trOfficePicker.SelectedIndex != -1)
+            if (trOfficePicker.SelectedIndex != -1
+                && fromDateTimePicker.Value is DateTime from
+                && toDateTimePicker.Value is DateTime to)
+            {
                 Session.Constraints.Add(new InvigilateConstraint(
-                    fromDatePicker.DisplayDate.Date.AddHours(fromHourPicker.Value).AddMinutes(fromMinutePicker.Value),
-                    toDatePicker.DisplayDate.Date.AddHours(toHourPicker.Value).AddMinutes(toMinutePicker.Value),
-                    trOfficePicker.SelectedItem as TROfficeRecordEntry));
+                    from, to, trOfficePicker.SelectedItem as TROfficeRecordEntry));
+                itemsGallery.SelectedIndex = Session.Constraints.Count - 1;
+            }
             else
-                MessageBox.Show("Please select an office before adding constraint.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            {
+                MessageBox.Show("Please fill in all fields.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void RemoveButtonClick(object sender, RoutedEventArgs e)
         {
             if (itemsGallery.SelectedIndex != -1)
                 Session.Constraints.RemoveAt(itemsGallery.SelectedIndex);
-        }
-
-        private void TimePickerValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            // properties in datetime are read-only and can't bind to datetime
-            // so we have to update it manually
         }
     }
 }

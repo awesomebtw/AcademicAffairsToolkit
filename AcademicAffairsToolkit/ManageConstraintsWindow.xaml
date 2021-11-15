@@ -5,42 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AcademicAffairsToolkit"
         xmlns:Fluent="urn:fluent-ribbon"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Manage Constraints" WindowStartupLocation="CenterOwner"
-        Height="400" Width="400">
+        Height="400" Width="400"
+        DataContext="{Binding Path=(local:Session.Constraints)}">
+    
     <Fluent:RibbonWindow.Resources>
         <Style x:Key="timePickerStyle" TargetType="Fluent:Spinner">
             <Setter Property="Format" Value="N0"/>
             <Setter Property="InputWidth" Value="40"/>
         </Style>
     </Fluent:RibbonWindow.Resources>
-    <Grid DataContext="{Binding Path=(local:Session.Constraints)}">
+    
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Fluent:Gallery Name="itemsGallery" Padding="10" MaxItemsInRow="1" ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" HorizontalContentAlignment="Stretch" Grid.Row="0" >
+        <Fluent:Gallery Name="itemsGallery"
+                        HorizontalContentAlignment="Stretch"
+                        IsSynchronizedWithCurrentItem="True"
+                        ItemsSource="{Binding}"
+                        MaxItemsInRow="1"
+                        Padding="10"
+                        SelectionMode="Single"
+                        Grid.Row="0">
             <Fluent:Gallery.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" FontWeight="Bold" Text="{Binding TROffice.Name, StringFormat=Office:&#x09;\{0\}}"/>
-                        <TextBlock Grid.Row="1" Text="{Binding TROffice.Director, StringFormat=Director:&#x09;\{0\}}"/>
-                        <TextBlock Grid.Row="2">
+                    <StackPanel Margin="5">
+                        <TextBlock FontWeight="Bold" Text="{Binding TROffice.Name, StringFormat=\{0\}}" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding TROffice.Director, StringFormat=\{0\}}" TextWrapping="Wrap"/>
+                        <TextBlock TextWrapping="Wrap">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="Interval:&#x09;{0} ~ {1}">
-                                    <Binding Path="From"/>
-                                    <Binding Path="To"/>
+                                <MultiBinding StringFormat="\{0} ~ {1}">
+                                    <Binding Path="From" UpdateSourceTrigger="PropertyChanged"/>
+                                    <Binding Path="To" UpdateSourceTrigger="PropertyChanged"/>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
-                    </Grid>
+                    </StackPanel>
                 </DataTemplate>
             </Fluent:Gallery.ItemTemplate>
         </Fluent:Gallery>
@@ -59,24 +65,26 @@
 
             <StackPanel Margin="5" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
                 <TextBlock Text="From: " VerticalAlignment="Center"/>
-                <DatePicker Name="fromDatePicker" MinWidth="100" SelectedDate="{Binding Path=/From}"/>
-                <Fluent:Spinner Name="fromHourPicker" Header="at" Style="{StaticResource timePickerStyle}" Value="{Binding Path=/From.Hour, Mode=OneWay}" Maximum="23" ValueChanged="TimePickerValueChanged"/>
-                <Fluent:Spinner Name="fromMinutePicker" Header=":" Style="{StaticResource timePickerStyle}" Value="{Binding Path=/From.Minute, Mode=OneWay}" Maximum="59" ValueChanged="TimePickerValueChanged"/>
+                <xctk:DateTimePicker Name="fromDateTimePicker" MinWidth="200" Value="{Binding Path=/From}"/>
             </StackPanel>
             <StackPanel Margin="5" Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
                 <TextBlock Text="To: " VerticalAlignment="Center"/>
-                <DatePicker Name="toDatePicker" MinWidth="100" SelectedDate="{Binding Path=/To}"/>
-                <Fluent:Spinner Name="toHourPicker" Header="at" Style="{StaticResource timePickerStyle}" Value="{Binding Path=/To.Hour, Mode=OneWay}" Maximum="23" ValueChanged="TimePickerValueChanged"/>
-                <Fluent:Spinner Name="toMinutePicker" Header=":" Style="{StaticResource timePickerStyle}" Value="{Binding Path=/To.Minute, Mode=OneWay}" Maximum="59" ValueChanged="TimePickerValueChanged"/>
+                <xctk:DateTimePicker Name="toDateTimePicker" MinWidth="200" Value="{Binding Path=/To}"/>
             </StackPanel>
-            <Fluent:ComboBox Margin="5" Name="trOfficePicker" Header="TR Office: " IsEditable="False" SelectedItem="{Binding Path=/TROffice}" ItemsSource="{Binding Path=(local:Session.TROffices)}" Grid.Row="2" Grid.ColumnSpan="2"/>
+            <Fluent:ComboBox Name="trOfficePicker"
+                             Header="TR Office: "
+                             IsEditable="False"
+                             Margin="5"
+                             ItemsSource="{Binding Path=(local:Session.TROffices)}"
+                             SelectedItem="{Binding Path=/TROffice}"
+                             Grid.Row="2" Grid.ColumnSpan="2"/>
             <Button Content="Add..." Margin="5" Click="AddButtonClick" Grid.Row="3" Grid.Column="0"/>
             <Button Content="Remove" Margin="5" Click="RemoveButtonClick" Grid.Row="3" Grid.Column="1"/>
         </Grid>
         
         <Fluent:StatusBar Grid.Row="2">
             <Fluent:StatusBarItem>
-                <TextBlock Text="{Binding Count, Mode=OneWay, StringFormat=\{0\} items}"/>
+                <TextBlock Text="{Binding ElementName=itemsGallery, Path=Items.Count, StringFormat=\{0\} items}"/>
             </Fluent:StatusBarItem>
         </Fluent:StatusBar>
     </Grid>
