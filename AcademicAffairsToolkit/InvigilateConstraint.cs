@@ -1,24 +1,61 @@
-﻿using IntervalTree;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Text;
-using System.Windows.Data;
+using System.Runtime.CompilerServices;
 
 namespace AcademicAffairsToolkit
 {
-    class InvigilateConstraint : IEquatable<InvigilateConstraint>
+    class InvigilateConstraint : IEquatable<InvigilateConstraint>, INotifyPropertyChanged
     {
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
-        public TROfficeRecordEntry TROffice { get; set; }
+        private DateTime from;
+        private DateTime to;
+        private TROfficeRecordEntry trOffice;
+
+        public DateTime From
+        {
+            get { return from; }
+            set
+            {
+                from = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTime To
+        {
+            get { return to; }
+            set
+            {
+                to = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public TROfficeRecordEntry TROffice
+        {
+            get { return trOffice; }
+            set
+            {
+                trOffice = value;
+                OnPropertyChanged();
+            }
+        }
 
         public InvigilateConstraint(DateTime from, DateTime to, TROfficeRecordEntry excludeTROffice)
         {
+            if (from > to)
+                throw new ArgumentOutOfRangeException("to", to.ToString());
             From = from;
             To = to;
             TROffice = excludeTROffice ?? throw new ArgumentNullException(nameof(excludeTROffice));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string name = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         public override bool Equals(object obj)

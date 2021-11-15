@@ -7,7 +7,9 @@
         xmlns:Fluent="urn:fluent-ribbon"
         mc:Ignorable="d"
         Title="File open options"
-        Height="Auto" Width="300" MinHeight="260"
+        Width="300"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
         WindowStartupLocation="CenterOwner">
 
     <Fluent:RibbonWindow.Resources>
@@ -15,7 +17,7 @@
             <Setter Property="Format" Value="N0"/>
             <Setter Property="InputWidth" Value="60"/>
             <Setter Property="HorizontalContentAlignment" Value="Right"/>
-            <Setter Property="Padding" Value="0,2"/>
+            <Setter Property="Padding" Value="0,3"/>
         </Style>
     </Fluent:RibbonWindow.Resources>
 
@@ -26,7 +28,7 @@
         </GroupBox>
         <GroupBox Header="File password" Padding="5">
             <ItemsControl>
-                <TextBlock Text="Leave empty if file has no password."/>
+                <TextBlock Margin="0,0,0,5" Text="Leave empty if selected file has no password."/>
                 <PasswordBox Name="filePasswordBox"/>
             </ItemsControl>
         </GroupBox>
@@ -45,13 +47,19 @@
                                     Tag="{x:Static local:SelectedFileType.TROfficeFile}"/>
             </ItemsControl>
         </GroupBox>
-        
-        <Expander Padding="5">
-            <Expander.Header>
-                <TextBlock Text="Advanced"/>
-            </Expander.Header>
-            <ItemsControl>
-                <ItemsControl DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}"
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <Fluent:DropDownButton Size="Middle" Header="Advanced..." Margin="5" Grid.Column="0">
+                <Fluent:DropDownButton.Icon>
+                    <Rectangle Fill="{StaticResource AdvancedViewIcon}"/>
+                </Fluent:DropDownButton.Icon>
+                <ItemsControl Padding="5" DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}"
                               Visibility="{Binding IsChecked, ElementName=invigilateRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Fluent:Spinner Header="Sheet"
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
@@ -78,7 +86,7 @@
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
                                     Value="{Binding LocationColumn}"/>
                 </ItemsControl>
-                <ItemsControl DataContext="{Binding Path=(local:Session.TROfficeFilePolicy)}"
+                <ItemsControl Padding="5" DataContext="{Binding Path=(local:Session.TROfficeFilePolicy)}"
                               Visibility="{Binding IsChecked, ElementName=trRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Fluent:Spinner Header="Sheet"
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
@@ -96,16 +104,10 @@
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
                                     Value="{Binding DirectorColumn}"/>
                 </ItemsControl>
-            </ItemsControl>
-        </Expander>
-        
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="OK" Click="ButtonClick" Margin="2,0"/>
-            <Button Grid.Column="1" Content="Cancel" Click="ButtonClick" Margin="2,0"/>
+            </Fluent:DropDownButton>
+
+            <Button Content="OK" Click="ButtonClick" Margin="5" Grid.Column="1"/>
+            <Button Content="Cancel" Click="ButtonClick" Margin="5" Grid.Column="2"/>
         </Grid>
     </ItemsControl>
 </Fluent:RibbonWindow>

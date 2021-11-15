@@ -5,55 +5,81 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AcademicAffairsToolkit"
         xmlns:Fluent="urn:fluent-ribbon"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Manage Constraints" WindowStartupLocation="CenterOwner"
-        Height="400" Width="400">
+        Height="400" Width="400"
+        DataContext="{Binding Path=(local:Session.Constraints)}">
     
-    <Grid DataContext="{Binding Path=(local:Session.Constraints)}">
+    <Fluent:RibbonWindow.Resources>
+        <Style x:Key="timePickerStyle" TargetType="Fluent:Spinner">
+            <Setter Property="Format" Value="N0"/>
+            <Setter Property="InputWidth" Value="40"/>
+        </Style>
+    </Fluent:RibbonWindow.Resources>
+    
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <Fluent:Gallery Grid.Row="0" Padding="10" MaxItemsInRow="1" ItemsSource="{Binding}" IsSynchronizedWithCurrentItem="True" HorizontalContentAlignment="Stretch">
+
+        <Fluent:Gallery Name="itemsGallery"
+                        HorizontalContentAlignment="Stretch"
+                        IsSynchronizedWithCurrentItem="True"
+                        ItemsSource="{Binding}"
+                        MaxItemsInRow="1"
+                        Padding="10"
+                        SelectionMode="Single"
+                        Grid.Row="0">
             <Fluent:Gallery.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" FontWeight="Bold" Text="{Binding TROffice.Name, StringFormat=Office name: \{0\}}"/>
-                        <TextBlock Grid.Row="1" Text="{Binding TROffice.Director, StringFormat=Director: \{0\}}"/>
-                        <TextBlock Grid.Row="2">
-                            <Run Text="Interval: "/>
-                            <Run Text="{Binding From, StringFormat=\{0:G\}}"/>
-                            <Run Text=" ~ "/>
-                            <Run Text="{Binding To, StringFormat=\{0:G\}}"/>
+                    <StackPanel Margin="5">
+                        <TextBlock FontWeight="Bold" Text="{Binding TROffice.Name, StringFormat=\{0\}}" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding TROffice.Director, StringFormat=\{0\}}" TextWrapping="Wrap"/>
+                        <TextBlock TextWrapping="Wrap">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat=" {0} ~ {1}">
+                                    <Binding Path="From" UpdateSourceTrigger="PropertyChanged"/>
+                                    <Binding Path="To" UpdateSourceTrigger="PropertyChanged"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
                         </TextBlock>
-                    </Grid>
+                    </StackPanel>
                 </DataTemplate>
             </Fluent:Gallery.ItemTemplate>
         </Fluent:Gallery>
-        
-        <WrapPanel Grid.Row="1">
-            <TextBlock Text="From: "/>
-            <DatePicker SelectedDate="{Binding Path=/From}"/>
-            <TextBlock Text="To: "/>
-            <DatePicker SelectedDate="{Binding Path=/To}"/>
-            <Fluent:ComboBox Header="TR Office: " IsEditable="False" SelectedItem="{Binding Path=/TROffice}" ItemsSource="{Binding Path=(local:Session.TROffices)}"/>
-            <Button Content="Add..."/>
-            <Button Content="Remove"/>
-        </WrapPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="From: " Margin="5" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+            <xctk:DateTimePicker Name="fromDateTimePicker" Margin="5" Value="{Binding Path=/From}" Grid.Row="0" Grid.Column="1"/>
+            <TextBlock Text="To: " Margin="5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+            <xctk:DateTimePicker Name="toDateTimePicker" Margin="5" Value="{Binding Path=/To}" Grid.Row="1" Grid.Column="1"/>
+            <Fluent:ComboBox Name="trOfficePicker"
+                             Header="TR Office: "
+                             IsEditable="False"
+                             Margin="0"
+                             ItemsSource="{Binding Path=(local:Session.TROffices)}"
+                             SelectedItem="{Binding Path=/TROffice}"
+                             Grid.Row="2" Grid.ColumnSpan="2"/>
+            <Button Content="Remove selected" Margin="5" Click="RemoveButtonClick" Grid.Row="3" Grid.ColumnSpan="2"/>
+        </Grid>
         
         <Fluent:StatusBar Grid.Row="2">
             <Fluent:StatusBarItem>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Count}"/>
-                    <TextBlock Text=" items"/>
-                </StackPanel>
+                <TextBlock Text="{Binding ElementName=itemsGallery, Path=Items.Count, StringFormat=\{0\} items}"/>
             </Fluent:StatusBarItem>
         </Fluent:StatusBar>
     </Grid>

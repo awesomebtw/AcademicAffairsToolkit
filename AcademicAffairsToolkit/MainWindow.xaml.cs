@@ -33,7 +33,7 @@ namespace AcademicAffairsToolkit
 
         private async void OpenExcelDialogFileOk(object sender, CancelEventArgs e)
         {
-            var openOptionsWindow = new OpenOptionsWindow();
+            var openOptionsWindow = new OpenOptionsWindow { FileName = openExcelDialog.FileName };
             if (openOptionsWindow.ShowDialog(this) != true)
             {
                 e.Cancel = true;
@@ -140,9 +140,18 @@ namespace AcademicAffairsToolkit
             new ArrangementPolicyWindow().Show();
         }
 
-        private void ManageConstraintMenuClick(object sender, RoutedEventArgs e)
+        private void AddConstraintButtonClick(object sender, RoutedEventArgs e)
         {
-            new ManageConstraintsWindow() { Owner = this }.ShowDialog();
+            new AddConstraintWindow() { Owner = this }.ShowDialog();
+        }
+
+        private void ManageConstraintButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (Session.Constraints.Count > 0)
+                new ManageConstraintsWindow() { Owner = this }.ShowDialog();
+            else
+                MessageBox.Show("There's no constraints added. To add one, use \"add constraint\".",
+                    "Constraint list empty", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
