@@ -6,37 +6,6 @@ using NPOI.SS.UserModel;
 
 namespace AcademicAffairsToolkit
 {
-    class InvigilateRecordEntry
-    {
-        public DateTime StartTime { get; set; }
-
-        public DateTime EndTime { get; set; }
-
-        public string Subject { get; set; }
-
-        public string Department { get; set; }
-
-        public int Grade { get; set; }
-
-        public int ExamineeCount { get; set; }
-
-        public string Location { get; set; }
-    }
-
-    class TROfficeRecordEntry
-    {
-        public string Name { get; set; }
-
-        public int PeopleCount { get; set; }
-
-        public string Director { get; set; }
-
-        public override string ToString()
-        {
-            return $"{Name} ({Director}, {PeopleCount})";
-        }
-    }
-
     class InvigilateFileParsePolicy
     {
         public int Sheet { get; set; }
