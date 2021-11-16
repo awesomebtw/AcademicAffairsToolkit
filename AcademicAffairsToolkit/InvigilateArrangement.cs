@@ -14,44 +14,57 @@ namespace AcademicAffairsToolkit
     {
         private static readonly double crossoverProbability = 0.75;
 
-        private static readonly double mutationProbobility = 0.1;
+        private static readonly double mutationProbability = 0.1;
 
-        public InvigilateRecordEntry[] InvigilateRecords { get; private set; }
+        private readonly TimeSpan longestExamTime = TimeSpan.Zero;
 
-        public int[] PeopleNeeded { get; set; }
+        private readonly InvigilateRecordEntry[] invigilateRecords;
 
-        public IntervalTree<DateTime, TROfficeRecordEntry> Constraints { get; private set; }
+        private readonly int[] peopleNeeded;
 
-        public IEnumerable<TROfficeRecordEntry> TROfficeRecords { get; private set; }
+        private readonly IntervalTree<DateTime, TROfficeRecordEntry> constraints;
 
-        public int Iterations { get; private set; }
+        private readonly TROfficeRecordEntry[] trOfficeRecords;
 
-        public int PopulationCount { get; set; }
+        private readonly int iterations;
 
-        public IEnumerable<(TROfficeRecordEntry, InvigilateRecordEntry, int personCount)> Result { get; private set; }
+        private readonly int populationSize;
+
+        private readonly int newOffspringForEachGeneration = 10;
+
+        private readonly int maxSizeOfResult = 10;
+
+        public IEnumerable<Tuple<TROfficeRecordEntry, int>[]> Result { get; private set; }
 
         /// <summary>
         /// construct a new object for invigilate arrangement
         /// </summary>
-        /// <param name="invigilateRecords"></param>
-        /// <param name="trOfficeRecords">teaching and researching offices to be assigned</param>
+        /// <param name="invigilateRecords">invigilate tasks to be assigned</param>
+        /// <param name="trOfficeRecords">teaching and researching offices which will be </param>
         /// <param name="constraints">time constraints to be applied when evaluating arrangement</param>
         /// <param name="iterations">maximum iteration for arrangement</param>
-        public GeneticAlgorithmScheduler(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, IEnumerable<InvigilateConstraint> constraints, int iterations)
+        /// <param name="populationSize">population size for each generation</param>
+        public GeneticAlgorithmScheduler(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, IEnumerable<InvigilateConstraint> constraints, int iterations, int populationSize = 100)
         {
-            TROfficeRecords = trOfficeRecords;
-            Iterations = iterations;
+            if (populationSize <= 1)
+                throw new ArgumentOutOfRangeException(nameof(populationSize), "population size must be greater than 1");
+
+            this.trOfficeRecords = trOfficeRecords.ToArray();
+            this.iterations = iterations;
+            this.populationSize = populationSize;
 
             // sort invigilate records by time for convenience
             // no need to use SortedList
-            InvigilateRecords = invigilateRecords.OrderBy(p => p.StartTime).ThenBy(p => p.EndTime).ToArray();
-            PeopleNeeded = invigilateRecords.Select(p => GetInvigilatePersonCount(p.ExamineeCount)).ToArray();
+            this.invigilateRecords = invigilateRecords.OrderBy(p => p.StartTime).ThenBy(p => p.EndTime).ToArray();
+            peopleNeeded = invigilateRecords.Select(p => GetInvigilatePersonCount(p.ExamineeCount)).ToArray();
+
+            longestExamTime = invigilateRecords.Max(p => p.EndTime - p.StartTime);
 
             // use interval tree for searching constraints to reduce time complexity
-            Constraints = new IntervalTree<DateTime, TROfficeRecordEntry>();
+            this.constraints = new IntervalTree<DateTime, TROfficeRecordEntry>();
             foreach (var constraint in constraints)
             {
-                Constraints.Add(constraint.From, constraint.To, constraint.TROffice);
+                this.constraints.Add(constraint.From, constraint.To, constraint.TROffice);
             }
         }
 
@@ -77,18 +90,6 @@ namespace AcademicAffairsToolkit
                 return 6;
         }
 
-        private static void Shuffle<T>(ref List<T> list)
-        {
-            Random random = new Random();
-            for (int i = 0; i < list.Count; i++)
-            {
-                int selected = random.Next(i, list.Count);
-                T temp = list[selected];
-                list[selected] = list[i];
-                list[i] = temp;
-            }
-        }
-
         /// <summary>
         /// generate a random permutation of arrangement regardless of user-defined constraints
         /// </summary>
@@ -97,13 +98,13 @@ namespace AcademicAffairsToolkit
         /// invigilate task at InvigilateRecords[i] is assigned to chromosome[i].</returns>
         private IEnumerable<Tuple<TROfficeRecordEntry, int>> GenerateChromosome()
         {
-            var trOfficeList = new List<TROfficeRecordEntry>(TROfficeRecords);
-            var trOfficeRemaining = TROfficeRecords.Select(p => p.PeopleCount).ToList();
+            var trOfficeList = new List<TROfficeRecordEntry>(trOfficeRecords);
+            var trOfficeRemaining = trOfficeRecords.Select(p => p.PeopleCount).ToList();
 
             Random random = new Random();
 
             // assign for each invigilate task
-            for (int i = 0; i < InvigilateRecords.Length; i++)
+            for (int i = 0; i < invigilateRecords.Length; i++)
             {
                 // ensure the selected office has enough people
                 // by picking a random index and check if people is enough
@@ -111,22 +112,14 @@ namespace AcademicAffairsToolkit
                 // a variable is added here to record the initial index
                 int j = random.Next(trOfficeList.Count);
                 int k = j;
-                while (trOfficeRemaining[j] < PeopleNeeded[i])
+                while (trOfficeRemaining[j] < peopleNeeded[i])
                 {
                     j = (j + 1) % trOfficeList.Count;
                     if (j == k)
                         throw new ApplicationException("available person is not sufficient for arrangement");
                 }
 
-                yield return Tuple.Create(trOfficeList[j], PeopleNeeded[i]);
-
-                // update remaining people list after assignment
-                trOfficeRemaining[j] -= PeopleNeeded[i];
-                if (trOfficeRemaining[j] < 2)
-                {
-                    trOfficeList.RemoveAt(j);
-                    trOfficeRemaining.RemoveAt(j);
-                }
+                yield return Tuple.Create(trOfficeList[j], peopleNeeded[i]);
             }
         }
 
@@ -150,33 +143,69 @@ namespace AcademicAffairsToolkit
         /// <returns>fitness of given chromosome</returns>
         private int GetFitness(in Tuple<TROfficeRecordEntry, int>[] chromosome)
         {
-            const int constarintViolationFactor = 150;
-            const int arrangeFactor = 200;
+            const int constraintViolationFactor = 150;
+            const int arrangeOverlapFactor = 200;
             const int distributionFactor = 100;
 
             int fitness = 0;
 
-            // see how many constraints are violated in population size times log(n)+m time
-            for (int i = 0; i < InvigilateRecords.Length; i++)
+            // see how many constraints are violated in chromosome.Length * log(n)+m time
+            for (int i = 0; i < invigilateRecords.Length; i++)
             {
-                var record = InvigilateRecords[i];
-                if (Constraints.Query(record.StartTime, record.EndTime).Contains(chromosome[i].Item1))
-                    fitness -= constarintViolationFactor;
+                var record = invigilateRecords[i];
+                if (constraints.Query(record.StartTime, record.EndTime).Contains(chromosome[i].Item1))
+                    fitness -= constraintViolationFactor;
             }
 
-            // check if people assigned is more than an office's people count
-            fitness -= arrangeFactor * chromosome.GroupBy(p => p.Item1, p => p.Item2)
-                .Count(p => p.Key.PeopleCount < p.Sum());
+            // check if there're too many invigilate tasks were assigned to an office at the same time
+            // using sliding window algorithm
+            var inWindow = new Dictionary<TROfficeRecordEntry, int>(chromosome.Length / 2);
+            int overlapCount = 0;
+            TimeSpan currentRange = TimeSpan.Zero;
+            TimeSpan longestRange = longestExamTime * 2;
 
-            // since the invigilate record is sorted by start and end time,
-            // we can check if the arrangement is evenly spaced by evaluating how many repetitions in the chromosome
+            for (int left = 0, right = 0; right < chromosome.Length; )
+            {
+                if (inWindow.ContainsKey(chromosome[right].Item1))
+                    inWindow[chromosome[right].Item1] += chromosome[right].Item2;
+                else
+                    inWindow.Add(chromosome[right].Item1, chromosome[right].Item2);
+
+                currentRange = invigilateRecords[right].EndTime - invigilateRecords[left].StartTime;
+                right++;
+
+                // there must be no overlaps when window range is twice as long as the longest exam time,
+                // therefore, we can shrink the window.
+                while (currentRange > longestRange)
+                {
+                    if (inWindow.Any(p => p.Key.PeopleCount < p.Value))
+                        overlapCount++;
+
+                    inWindow[chromosome[left].Item1] -= chromosome[left].Item2;
+                    if (inWindow[chromosome[left].Item1] == 0)
+                        inWindow.Remove(chromosome[left].Item1);
+
+                    left++;
+                    currentRange = invigilateRecords[right].EndTime - invigilateRecords[left].StartTime;
+                }
+            }
+            fitness -= arrangeOverlapFactor * overlapCount;
+
+            // check if the arrangement is evenly spaced by
+            // evaluating how many time was an office assigned at the same time interval.
+            // to simplify question, only start time is used here.
             List<int> repetitionItems = new List<int>(chromosome.Length);
             for (int i = 1; i < chromosome.Length; i++)
             {
-                if (chromosome[i - 1].Item1 == chromosome[i].Item1)
-                    repetitionItems[^1]++;
+                if (invigilateRecords[i - 1].StartTime == invigilateRecords[i].StartTime)
+                {
+                    if (chromosome[i].Item1 == chromosome[i - 1].Item1)
+                        repetitionItems[^1]++;
+                }
                 else
+                {
                     repetitionItems.Add(0);
+                }
             }
 
             fitness -= distributionFactor * repetitionItems.Sum();
@@ -184,31 +213,131 @@ namespace AcademicAffairsToolkit
             return fitness;
         }
 
-        private IEnumerable<Tuple<TROfficeRecordEntry, int>> ApplyCrossover(IEnumerable<Tuple<TROfficeRecordEntry, int>> left, IEnumerable<Tuple<TROfficeRecordEntry, int>> right)
+        /// <summary>
+        /// perform single-point crossover for the chromosome
+        /// </summary>
+        /// <param name="left">the first parent</param>
+        /// <param name="right">the second parent</param>
+        /// <returns>two new chromosomes (offspring) generated by crossing over two parent chromosomes</returns>
+        /// <exception cref="ArgumentException"></exception>
+        private void ApplyCrossover(Tuple<TROfficeRecordEntry, int>[] left, Tuple<TROfficeRecordEntry, int>[] right, out Tuple<TROfficeRecordEntry, int>[] child1, out Tuple<TROfficeRecordEntry, int>[] child2)
         {
-            // todo: do crossover
-            yield break;
+            if (left.Length != right.Length)
+                throw new ArgumentException("two parent chromosomes must have the same length");
+
+            child1 = new Tuple<TROfficeRecordEntry, int>[left.Length];
+            child2 = new Tuple<TROfficeRecordEntry, int>[right.Length];
+            Random random = new Random();
+            int flipPos = random.Next(1, left.Length - 1);
+            for (int i = 0; i < left.Length; i++)
+            {
+                if (i < flipPos)
+                {
+                    child1[i] = left[i];
+                    child2[i] = right[i];
+                }
+                else
+                {
+                    child1[i] = right[i];
+                    child2[i] = left[i];
+                }
+            }
         }
 
-        private void Mutate()
+        /// <summary>
+        /// do mutation by randomly picking a point 
+        /// </summary>
+        /// <param name="chromosome">chromosome to be mutated</param>
+        /// <returns>a new mutated chromosome</returns>
+        private Tuple<TROfficeRecordEntry, int>[] Mutate(Tuple<TROfficeRecordEntry, int>[] chromosome)
         {
-            // todo: mutation
+            Random random = new Random();
+            int pos = random.Next(chromosome.Length);
+            int selected = random.Next(trOfficeRecords.Count());
+
+            int k = pos;
+            while (trOfficeRecords[selected] == chromosome[pos].Item1)
+            {
+                pos = (pos + 1) % chromosome.Length;
+                if (k == pos)
+                    break;
+            }
+
+            chromosome[pos] = Tuple.Create(chromosome[selected].Item1, chromosome[pos].Item2);
+            return chromosome;
+        }
+
+        /// <summary>
+        /// select a pair of gene for crossover and mutation
+        /// </summary>
+        /// <param name="fitness">array of evaluated fitness</param>
+        /// <returns>a pair of integer representing selected indices of chromosome</returns>
+        private (int, int) PerformSelection(IEnumerable<int> fitness)
+        {
+            // normalize fitnesses
+            int max = fitness.Max();
+            int min = fitness.Min();
+            double[] normalizedFitness = fitness.Select(p => (double)(p + min) / (max - min)).ToArray();
+            double fitnessSum = normalizedFitness.Sum();
+            
+            int[] selectedIndices = new int[2];
+            Random random = new Random();
+            for (int i = 0; i < 2; i++)
+            {
+                double pos = random.NextDouble() * fitnessSum;
+                double current = 0;
+
+                for (int j = 0; j < normalizedFitness.Length; j++)
+                {
+                    current += normalizedFitness[j];
+                    if (current > pos)
+                    {
+                        selectedIndices[i] = j;
+                        break;
+                    }
+                }
+            }
+
+            return (selectedIndices[0], selectedIndices[1]);
         }
 
         public void StartArrangement()
         {
-            // todo: algorithm
             Random random = new Random();
-            var population = GenerateInitialPopulation(PopulationCount);
-            for (int i = 0; i < Iterations; i++)
+            var population = GenerateInitialPopulation(populationSize).ToList();
+            var fitness = population.Select(p => GetFitness(p)).ToArray();
+
+            for (int i = 0; i < iterations; i++)
             {
-                var fitness = population.Select(p => GetFitness(p));
-                //if (random.NextDouble() < crossoverProbability)
-                    //ApplyCrossover(population.ElementAt(0), population.ElementAt(1));
-                if (random.NextDouble() < mutationProbobility)
-                    Mutate();
-                // replace the old population with new one
+                for (int j = 0; j < newOffspringForEachGeneration; j++)
+                {
+                    (int index1, int index2) = PerformSelection(fitness);
+
+                    if (random.NextDouble() < crossoverProbability)
+                    {
+                        ApplyCrossover(population[index1], population[index2], out var child1, out var child2);
+                        population.Add(child1);
+                        population.Add(child2);
+                    }
+
+                    if (random.NextDouble() < mutationProbability)
+                    {
+                        population.Add(Mutate(population[index1]));
+                        population.Add(Mutate(population[index2]));
+                    }
+                }
+
+                // elinimate low-fitness population
+                var fitnessThreshold = fitness.OrderBy(p => p).Take(populationSize).Last();
+                population.RemoveAll(p => GetFitness(p) < fitnessThreshold);
+                if (population.Count > populationSize)
+                    population.RemoveRange(populationSize, population.Count - populationSize);
+                fitness = population.Select(p => GetFitness(p)).ToArray();
             }
+
+            // todo: eliminate redundant fitness evaluation
+            var maxFitness = population.Max(p => GetFitness(p));
+            Result = population.Where(p => GetFitness(p) == maxFitness).Distinct().Take(maxSizeOfResult);
         }
 
         public async Task StartArrangementAsync()

@@ -172,7 +172,6 @@ namespace AcademicAffairsToolkit
         {
             var ga = new GeneticAlgorithmScheduler(
                 Session.InvigilateRecords, Session.TROffices, Session.Constraints, 1000);
-            ga.PopulationCount = 100;
             ga.StartArrangement();
             // todo: show result
             MessageBox.Show(ga.Result.ToString());
