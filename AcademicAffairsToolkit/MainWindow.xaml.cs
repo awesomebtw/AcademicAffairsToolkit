@@ -26,6 +26,8 @@ namespace AcademicAffairsToolkit
             InitialDirectory = Environment.CurrentDirectory
         };
 
+        private IArrangementAlgorithm alg;
+
         public ObservableCollection<Tuple<string, string>> RecentlyOpenedFiles { get; set; } = new ObservableCollection<Tuple<string, string>>();
 
         public MainWindow()
@@ -101,12 +103,6 @@ namespace AcademicAffairsToolkit
                 e.Cancel = true;
                 return;
             }
-            if (openFileTask.Exception != null)
-            {
-                MessageBox.Show("exception");
-                e.Cancel = true;
-                return;
-            }
         }
 
         private void OpenCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -168,13 +164,29 @@ namespace AcademicAffairsToolkit
             e.CanExecute = Session.CanStartArrange();
         }
 
-        private void StartArrangementExecuted(object sender, ExecutedRoutedEventArgs e)
+        private async void StartArrangementExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var ga = new GeneticAlgorithmScheduler(
+            // todo: move to a page
+            alg = new GeneticAlgorithm(
                 Session.InvigilateRecords, Session.TROffices, Session.Constraints, 1000);
-            ga.StartArrangement();
-            // todo: show result
-            MessageBox.Show(ga.Result.ToString());
+            arrangementProgessBar.Minimum = 0;
+            arrangementProgessBar.Maximum = 1000;
+            alg.ArrangementStepForward += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke((Action)(() => arrangementProgessBar.Value = args.CurrentIteration));
+            };
+            alg.ArrangementTerminated += (s, e) =>
+            {
+                Dispatcher.BeginInvoke((Action)(() => arrangementProgessBar.Value = 0));
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                foreach (var item in e.Result.First())
+                {
+                    sb.Append(item.Item1.ToString());
+                    sb.Append(' ');
+                }
+                MessageBox.Show(sb.ToString());
+            };
+            await alg.StartArrangementAsync();
         }
 
         private void ArrangementPolicyButtonClick(object sender, RoutedEventArgs e)

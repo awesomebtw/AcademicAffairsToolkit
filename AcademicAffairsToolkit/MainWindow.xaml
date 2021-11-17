@@ -307,9 +307,12 @@
 
         <!--status bar-->
         <Fluent:StatusBar DockPanel.Dock="Bottom">
+            <Fluent:StatusBarItem HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                <ProgressBar Name="arrangementProgessBar" MinWidth="160"/>
+            </Fluent:StatusBarItem>
             <Fluent:StatusBarItem HorizontalAlignment="Left">
                 <TextBlock TextTrimming="CharacterEllipsis" MinWidth="200">
-                    <Run Text="TODO: " Foreground="GreenYellow"/>change status bar text here
+                    <Run Text="Arrangement in progress"/>
                 </TextBlock>
             </Fluent:StatusBarItem>
         </Fluent:StatusBar>

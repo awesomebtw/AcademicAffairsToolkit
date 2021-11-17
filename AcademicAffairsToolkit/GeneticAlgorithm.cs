@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace AcademicAffairsToolkit
 {
-    abstract class InvigilateArrangement
-    {
-    }
-
-    class GeneticAlgorithmScheduler : InvigilateArrangement
+    class GeneticAlgorithm : IArrangementAlgorithm
     {
         private static readonly double crossoverProbability = 0.75;
 
         private static readonly double mutationProbability = 0.1;
+
+        private static readonly int newOffspringForEachGeneration = 10;
+
+        private static readonly int maxSizeOfResult = 10;
 
         private readonly TimeSpan longestExamTime = TimeSpan.Zero;
 
@@ -30,11 +30,10 @@ namespace AcademicAffairsToolkit
 
         private readonly int populationSize;
 
-        private readonly int newOffspringForEachGeneration = 10;
+        public event EventHandler<ArrangementStepForwardEventArgs> ArrangementStepForward;
+        public event EventHandler<ArrangementTerminatedEventArgs> ArrangementTerminated;
 
-        private readonly int maxSizeOfResult = 10;
-
-        public IEnumerable<Tuple<TROfficeRecordEntry, int>[]> Result { get; private set; }
+        private IEnumerable<Tuple<TROfficeRecordEntry, int>[]> result;
 
         /// <summary>
         /// construct a new object for invigilate arrangement
@@ -44,7 +43,7 @@ namespace AcademicAffairsToolkit
         /// <param name="constraints">time constraints to be applied when evaluating arrangement</param>
         /// <param name="iterations">maximum iteration for arrangement</param>
         /// <param name="populationSize">population size for each generation</param>
-        public GeneticAlgorithmScheduler(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, IEnumerable<InvigilateConstraint> constraints, int iterations, int populationSize = 100)
+        public GeneticAlgorithm(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, IEnumerable<InvigilateConstraint> constraints, int iterations, int populationSize = 100)
         {
             if (populationSize <= 1)
                 throw new ArgumentOutOfRangeException(nameof(populationSize), "population size must be greater than 1");
@@ -333,11 +332,15 @@ namespace AcademicAffairsToolkit
                 if (population.Count > populationSize)
                     population.RemoveRange(populationSize, population.Count - populationSize);
                 fitness = population.Select(p => GetFitness(p)).ToArray();
+
+                ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i, iterations));
             }
 
             // todo: eliminate redundant fitness evaluation
             var maxFitness = population.Max(p => GetFitness(p));
-            Result = population.Where(p => GetFitness(p) == maxFitness).Distinct().Take(maxSizeOfResult);
+            result = population.Where(p => GetFitness(p) == maxFitness).Distinct().Take(maxSizeOfResult);
+
+            ArrangementTerminated?.Invoke(this, new ArrangementTerminatedEventArgs(false, result, invigilateRecords, peopleNeeded));
         }
 
         public async Task StartArrangementAsync()
