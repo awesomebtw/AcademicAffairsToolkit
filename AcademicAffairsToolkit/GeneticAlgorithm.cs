@@ -14,7 +14,7 @@ namespace AcademicAffairsToolkit
 
         private static readonly int newOffspringForEachGeneration = 10;
 
-        private static readonly int maxSizeOfResult = 10;
+        private readonly int resultSize = 10;
 
         private readonly TimeSpan longestExamTime = TimeSpan.Zero;
 
@@ -43,7 +43,7 @@ namespace AcademicAffairsToolkit
         /// <param name="constraints">time constraints to be applied when evaluating arrangement</param>
         /// <param name="iterations">maximum iteration for arrangement</param>
         /// <param name="populationSize">population size for each generation</param>
-        public GeneticAlgorithm(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, IEnumerable<InvigilateConstraint> constraints, int iterations, int populationSize = 100)
+        public GeneticAlgorithm(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, IEnumerable<InvigilateConstraint> constraints, int iterations, int populationSize = 100, int resultSize = 10)
         {
             if (populationSize <= 1)
                 throw new ArgumentOutOfRangeException(nameof(populationSize), "population size must be greater than 1");
@@ -51,6 +51,7 @@ namespace AcademicAffairsToolkit
             this.trOfficeRecords = trOfficeRecords.ToArray();
             this.iterations = iterations;
             this.populationSize = populationSize;
+            this.resultSize = resultSize;
 
             // sort invigilate records by time for convenience
             // no need to use SortedList
@@ -338,7 +339,7 @@ namespace AcademicAffairsToolkit
 
             // todo: eliminate redundant fitness evaluation
             var maxFitness = population.Max(p => GetFitness(p));
-            result = population.Where(p => GetFitness(p) == maxFitness).Distinct().Take(maxSizeOfResult);
+            result = population.Where(p => GetFitness(p) == maxFitness).Distinct().Take(resultSize);
 
             ArrangementTerminated?.Invoke(this, new ArrangementTerminatedEventArgs(false, result, invigilateRecords, peopleNeeded));
         }
