@@ -62,6 +62,12 @@
                 </Fluent:Gallery>
             </Grid>
         </Page>
+
+        <Style x:Key="PolicySpinnerStyle" TargetType="Fluent:Spinner">
+            <Setter Property="Format" Value="N0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="InputWidth" Value="60"/>
+        </Style>
     </Fluent:RibbonWindow.Resources>
 
     <DockPanel>
@@ -111,7 +117,7 @@
                         <Fluent:BackstageTabItem Header="About">
                             <StackPanel Margin="20" Orientation="Vertical">
                                 <TextBlock FontSize="36" Margin="5">Academic Affairs Toolkit</TextBlock>
-                                <TextBlock Margin="5" Text="Version 0.0.0.4"/>
+                                <TextBlock Margin="5" Text="Version 0.0.0.5"/>
                                 <TextBlock Margin="5" Text="Third party project/resources: "/>
                                 <Fluent:Gallery BorderThickness="1" Margin="5" MaxItemsInRow="1">
                                     <Fluent:GalleryItem>Extended WPF Toolkit</Fluent:GalleryItem>
@@ -126,8 +132,7 @@
 
                         <Fluent:SeparatorTabItem/>
 
-                        <Fluent:Button Header="Exit"
-                                       Command="Close"/>
+                        <Fluent:Button Header="Exit" Command="Close"/>
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
@@ -135,22 +140,14 @@
             <!--home tab-->
             <Fluent:RibbonTabItem Header="Home" ReduceOrder="clipboardGroup,constraintGroup,arrangementGroup">
                 <Fluent:RibbonGroupBox Name="clipboardGroup" Header="Clipboard">
-                    <Fluent:Button Header="Paste"
-                                   Icon="{StaticResource Fluent.Ribbon.Images.Paste}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Paste}"
-                                   Command="Paste"/>
                     <Fluent:Button Header="Copy"
                                    Icon="{StaticResource Fluent.Ribbon.Images.Copy}"
                                    LargeIcon="{StaticResource Fluent.Ribbon.Images.Copy}"
                                    Command="Copy"/>
-                    <Fluent:Button Header="Cut"
-                                   Icon="{StaticResource Fluent.Ribbon.Images.Cut}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.Cut}"
-                                   Command="Cut"/>
                 </Fluent:RibbonGroupBox>
 
-                <Fluent:RibbonGroupBox Name="arrangementGroup" Header="Arrange">
-                    <Fluent:Button Header="Start auto arrange"
+                <Fluent:RibbonGroupBox Name="arrangementGroup" Header="Arrangement">
+                    <Fluent:Button Header="Start auto arrangement"
                                    Command="{x:Static local:MainWindow.StartArrangement}">
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource StartIcon}"/>
@@ -164,38 +161,65 @@
                                               DisableReason="At least one of two required files wasn't loaded."/>
                         </Fluent:Button.ToolTip>
                     </Fluent:Button>
-                    <Fluent:Button Header="Arrangement Policy"
-                                   Click="ArrangementPolicyButtonClick">
+                    <Fluent:Button Header="Stop arrangement">
                         <Fluent:Button.Icon>
-                            <Rectangle Fill="{StaticResource PolicyIcon}"/>
+                            <Rectangle Fill="{StaticResource StopIcon}"/>
                         </Fluent:Button.Icon>
                         <Fluent:Button.LargeIcon>
-                            <Rectangle Fill="{StaticResource PolicyIcon}"/>
+                            <Rectangle Fill="{StaticResource StopIcon}"/>
                         </Fluent:Button.LargeIcon>
-                        <Fluent:Button.ToolTip>
-                            <Fluent:ScreenTip Title="Arrangement policy"
-                                              Text="Tune arrangement algorithm."/>
-                        </Fluent:Button.ToolTip>
                     </Fluent:Button>
-                </Fluent:RibbonGroupBox>
-
-                <Fluent:RibbonGroupBox Name="constraintGroup" Header="Constraints">
-                    <Fluent:ToggleButton Header="Enable constraints">
-                        <Fluent:ToggleButton.Icon>
-                            <Rectangle Fill="{StaticResource EnableRuleIcon}"/>
-                        </Fluent:ToggleButton.Icon>
-                        <Fluent:ToggleButton.LargeIcon>
-                            <Rectangle Fill="{StaticResource EnableRuleIcon}"/>
-                        </Fluent:ToggleButton.LargeIcon>
-                        <Fluent:ToggleButton.ToolTip>
-                            <Fluent:ScreenTip Title="Enable constraints"
-                                              Text="Arrangement algorithm will consider constraints if enabled."/>
-                        </Fluent:ToggleButton.ToolTip>
-                    </Fluent:ToggleButton>
 
                     <Separator/>
 
-                    <Fluent:Button Header="Add constraints" Click="AddConstraintButtonClick">
+                    <Fluent:Spinner Name="iterationsSpinner"
+                                    Style="{StaticResource PolicySpinnerStyle}" Header="Iterations: "
+                                    Maximum="1200" Minimum="60" Value="1000">
+                        <Fluent:Spinner.Icon>
+                            <Rectangle Fill="{StaticResource PolicyIcon}"/>
+                        </Fluent:Spinner.Icon>
+                        <Fluent:Spinner.ToolTip>
+                            <Fluent:ScreenTip Title="Iterations">
+                                <Fluent:ScreenTip.Text>
+                                    Set how many iterations does the algorithm take.
+                                    A larger number may be helpful for finding the optimal arrangement, while a smaller number can reduce execution time.
+                                </Fluent:ScreenTip.Text>
+                            </Fluent:ScreenTip>
+                        </Fluent:Spinner.ToolTip>
+                    </Fluent:Spinner>
+
+                    <Fluent:Spinner Name="populationSpinner"
+                                    Style="{StaticResource PolicySpinnerStyle}" Header="Population size: "
+                                    Maximum="200" Minimum="10" Value="100">
+                        <Fluent:Spinner.Icon>
+                            <Rectangle Fill="{StaticResource PolicyIcon}"/>
+                        </Fluent:Spinner.Icon>
+                        <Fluent:Spinner.ToolTip>
+                            <Fluent:ScreenTip Title="Population size"
+                                              Text="Set how large a population (set of intermediate solutions) is in the algorithm."/>
+                        </Fluent:Spinner.ToolTip>
+                    </Fluent:Spinner>
+
+                    <Fluent:Spinner Name="solutionsSpinner"
+                                    Style="{StaticResource PolicySpinnerStyle}" Header="Solution num: "
+                                    Maximum="{Binding Value, ElementName=populationSpinner}" Minimum="1" Value="10">
+                        <Fluent:Spinner.Icon>
+                            <Rectangle Fill="{StaticResource PolicyIcon}"/>
+                        </Fluent:Spinner.Icon>
+                        <Fluent:Spinner.ToolTip>
+                            <Fluent:ScreenTip Title="Number of solutions">
+                                <Fluent:ScreenTip.Text>
+                                    Set how many arrangement solutions will provide with.
+                                    The value must not be larger than "Population size".
+                                </Fluent:ScreenTip.Text>
+                            </Fluent:ScreenTip>
+                        </Fluent:Spinner.ToolTip>
+                    </Fluent:Spinner>
+
+                </Fluent:RibbonGroupBox>
+
+                <Fluent:RibbonGroupBox Name="constraintGroup" Header="Constraints">
+                    <Fluent:Button Header="New constraint" Click="AddConstraintButtonClick">
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource NewRuleIcon}"/>
                         </Fluent:Button.Icon>
@@ -214,93 +238,64 @@
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Header="View">
-                    <Fluent:SplitButton Header="Original file views">
-                        <Fluent:SplitButton.Icon>
-                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
-                        </Fluent:SplitButton.Icon>
-                        <Fluent:SplitButton.LargeIcon>
-                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
-                        </Fluent:SplitButton.LargeIcon>
-                        <Fluent:SplitButton.ToolTip>
-                            <Fluent:ScreenTip Title="Original file view"
-                                              Text="Views related to original files.
-                                              Any invalid or empty line will show default values (e.g. 0)."/>
-                        </Fluent:SplitButton.ToolTip>
-                        <Fluent:MenuItem Name="invigilateFileViewButton"
+                    <Fluent:ToggleButton Name="invigilateFileViewButton"
                                          Header="Invigilate file"
                                          GroupName="viewGroup"
-                                         IsCheckable="True"
+                                         Size="Middle"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/InvigilateFileViewPage.xaml">
-                            <Fluent:MenuItem.Icon>
-                                <Rectangle Fill="{StaticResource RawFileIcon}"/>
-                            </Fluent:MenuItem.Icon>
-                            <Fluent:MenuItem.ToolTip>
-                                <Fluent:ScreenTip Title="Invigilate file view"
+                        <Fluent:ToggleButton.Icon>
+                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
+                        </Fluent:ToggleButton.Icon>
+                        <Fluent:ToggleButton.ToolTip>
+                            <Fluent:ScreenTip Title="Invigilate file view"
                                               Text="See invigilate data loaded from file."
                                               DisableReason="At least one of two required files wasn't loaded."/>
-                            </Fluent:MenuItem.ToolTip>
-                        </Fluent:MenuItem>
-                        <Fluent:MenuItem Name="trOfficeFileViewButton"
+                        </Fluent:ToggleButton.ToolTip>
+                    </Fluent:ToggleButton>
+                    <Fluent:ToggleButton Name="trOfficeFileViewButton"
                                          Header="TR office file"
                                          GroupName="viewGroup"
-                                         IsCheckable="True"
+                                         Size="Middle"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/TRFileViewPage.xaml">
-                            <Fluent:MenuItem.Icon>
-                                <Rectangle Fill="{StaticResource RawFileIcon}"/>
-                            </Fluent:MenuItem.Icon>
-                            <Fluent:MenuItem.ToolTip>
-                                <Fluent:ScreenTip Title="TR office file view"
+                        <Fluent:ToggleButton.Icon>
+                            <Rectangle Fill="{StaticResource RawFileIcon}"/>
+                        </Fluent:ToggleButton.Icon>
+                        <Fluent:ToggleButton.ToolTip>
+                            <Fluent:ScreenTip Title="Teaching and researching office file view"
                                               Text="See teaching and researching office data loaded from file."
                                               DisableReason="At least one of two required files wasn't loaded."/>
-                            </Fluent:MenuItem.ToolTip>
-                        </Fluent:MenuItem>
-                    </Fluent:SplitButton>
-                    <Fluent:SplitButton Header="Results view">
-                        <Fluent:MenuItem Header="Plain table"
+                        </Fluent:ToggleButton.ToolTip>
+                    </Fluent:ToggleButton>
+                    <Fluent:ToggleButton Header="Plain table"
                                          GroupName="viewGroup"
-                                         IsCheckable="True"
+                                         Size="Middle"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/TableViewPage.xaml">
-                            <Fluent:MenuItem.Icon>
-                                <Rectangle Fill="{StaticResource TableIcon}"/>
-                            </Fluent:MenuItem.Icon>
-                            <Fluent:MenuItem.ToolTip>
-                                <Fluent:ScreenTip Title="Table view"
+                        <Fluent:ToggleButton.Icon>
+                            <Rectangle Fill="{StaticResource TableIcon}"/>
+                        </Fluent:ToggleButton.Icon>
+                        <Fluent:ToggleButton.ToolTip>
+                            <Fluent:ScreenTip Title="Table view"
                                               Text="See result in table view."
                                               DisableReason="At least one of two required files wasn't loaded."/>
-                            </Fluent:MenuItem.ToolTip>
-                        </Fluent:MenuItem>
-                        <Fluent:MenuItem Header="Gantt"
+                        </Fluent:ToggleButton.ToolTip>
+                    </Fluent:ToggleButton>
+                    <Fluent:ToggleButton Header="Calendar"
                                          GroupName="viewGroup"
-                                         IsCheckable="True"
-                                         Command="{x:Static local:MainWindow.ToggleView}"
-                                         CommandParameter="/GanttViewPage.xaml">
-                            <Fluent:MenuItem.Icon>
-                                <Rectangle Fill="{StaticResource GanttIcon}"/>
-                            </Fluent:MenuItem.Icon>
-                            <Fluent:MenuItem.ToolTip>
-                                <Fluent:ScreenTip Title="Gantt view"
-                                              Text="See result in gantt view."
-                                              DisableReason="At least one of two required files wasn't loaded."/>
-                            </Fluent:MenuItem.ToolTip>
-                        </Fluent:MenuItem>
-                        <Fluent:MenuItem Header="Calendar"
-                                         GroupName="viewGroup"
-                                         IsCheckable="True"
+                                         Size="Middle"
                                          Command="{x:Static local:MainWindow.ToggleView}"
                                          CommandParameter="/CalendarViewPage.xaml">
-                            <Fluent:MenuItem.Icon>
-                                <Rectangle Fill="{StaticResource CalendarIcon}"/>
-                            </Fluent:MenuItem.Icon>
-                            <Fluent:MenuItem.ToolTip>
-                                <Fluent:ScreenTip Title="Calendar view"
+                        <Fluent:ToggleButton.Icon>
+                            <Rectangle Fill="{StaticResource CalendarIcon}"/>
+                        </Fluent:ToggleButton.Icon>
+                        <Fluent:ToggleButton.ToolTip>
+                            <Fluent:ScreenTip Title="Calendar view"
                                               Text="See result in calendar view."
                                               DisableReason="At least one of two required files wasn't loaded."/>
-                            </Fluent:MenuItem.ToolTip>
-                        </Fluent:MenuItem>
-                    </Fluent:SplitButton>
+                        </Fluent:ToggleButton.ToolTip>
+                    </Fluent:ToggleButton>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
@@ -308,12 +303,10 @@
         <!--status bar-->
         <Fluent:StatusBar DockPanel.Dock="Bottom">
             <Fluent:StatusBarItem HorizontalAlignment="Right" VerticalAlignment="Stretch">
-                <ProgressBar Name="arrangementProgessBar" MinWidth="160"/>
+                <ProgressBar Name="arrangementProgessBar" MinWidth="160" Maximum="1" Visibility="Collapsed"/>
             </Fluent:StatusBarItem>
             <Fluent:StatusBarItem HorizontalAlignment="Left">
-                <TextBlock TextTrimming="CharacterEllipsis" MinWidth="200">
-                    <Run Text="Arrangement in progress"/>
-                </TextBlock>
+                <TextBlock Name="statusText" TextTrimming="CharacterEllipsis" Text="Arrangement is not started"/>
             </Fluent:StatusBarItem>
         </Fluent:StatusBar>
 
