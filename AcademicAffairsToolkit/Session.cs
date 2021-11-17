@@ -1,5 +1,4 @@
-﻿using IntervalTree;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,8 +17,7 @@ namespace AcademicAffairsToolkit
 
         public static ObservableCollection<InvigilateConstraint> Constraints { get; set; } = new ObservableCollection<InvigilateConstraint>();
 
-        // todo: store arrangement data
-        public static IEnumerable<object> Arrangements { get; set; }
+        public static ObservableCollection<Tuple<TROfficeRecordEntry, int>[]> Arrangements { get; set; }
 
         public static bool AnyFileLoaded() =>
             InvigilateRecords != null || TROffices != null;
