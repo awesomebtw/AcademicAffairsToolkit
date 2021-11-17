@@ -6,9 +6,7 @@
       xmlns:local="clr-namespace:AcademicAffairsToolkit"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="OriginalFilePage">
+      Title="InvigilateFilePage">
 
-    <Grid>
-        <DataGrid Name="originalViewGrid" ItemsSource="{Binding Path=(local:Session.InvigilateRecords)}" IsReadOnly="True"/>
-    </Grid>
+    <DataGrid Name="invigilateViewGrid" AlternatingRowBackground="LightYellow" ItemsSource="{Binding Path=(local:Session.InvigilateRecords)}" IsReadOnly="True"/>
 </Page>
