@@ -166,32 +166,45 @@ namespace AcademicAffairsToolkit
 
         private async void StartArrangementExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // todo: move to a page
             alg = new GeneticAlgorithm(
-                Session.InvigilateRecords, Session.TROffices, Session.Constraints, 1000);
-            arrangementProgessBar.Minimum = 0;
-            arrangementProgessBar.Maximum = 1000;
-            alg.ArrangementStepForward += (sender, args) =>
+                Session.InvigilateRecords, Session.TROffices, Session.Constraints,
+                (int)iterationsSpinner.Value, (int)populationSpinner.Value);
+            arrangementProgessBar.Visibility = Visibility.Visible;
+            statusText.Text = "Arrangement in progress..";
+
+            alg.ArrangementStepForward += AlgArrangementStepForward;
+            alg.ArrangementTerminated += AlgArrangementTerminated;
+
+            try
             {
-                Dispatcher.BeginInvoke((Action)(() => arrangementProgessBar.Value = args.CurrentIteration));
-            };
-            alg.ArrangementTerminated += (s, e) =>
+                await alg.StartArrangementAsync();
+            }
+            catch (Exception ex)
             {
-                Dispatcher.BeginInvoke((Action)(() => arrangementProgessBar.Value = 0));
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                foreach (var item in e.Result.First())
-                {
-                    sb.Append(item.Item1.ToString());
-                    sb.Append(' ');
-                }
-                MessageBox.Show(sb.ToString());
-            };
-            await alg.StartArrangementAsync();
+                arrangementProgessBar.Visibility= Visibility.Collapsed;
+                statusText.Text = "An error occurred during arrangeemnt. Please try again.";
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        private void ArrangementPolicyButtonClick(object sender, RoutedEventArgs e)
+        private void AlgArrangementStepForward(object sender, ArrangementStepForwardEventArgs e)
         {
-            new ArrangementPolicyWindow().Show();
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                arrangementProgessBar.Value = (double)e.CurrentIteration / e.TotalIterations;
+            }));
+        }
+
+        private void AlgArrangementTerminated(object sender, ArrangementTerminatedEventArgs e)
+        {
+            Session.Arrangements = new ObservableCollection<Tuple<TROfficeRecordEntry, int>[]>(e.Result);
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                arrangementProgessBar.Visibility = Visibility.Collapsed;
+                arrangementProgessBar.Value = 0;
+                ToggleView.Execute("/TableViewPage.xaml", this);
+                statusText.Text = "Arrangement finished";
+            }));
         }
 
         private void AddConstraintButtonClick(object sender, RoutedEventArgs e)
@@ -202,10 +215,16 @@ namespace AcademicAffairsToolkit
         private void ManageConstraintButtonClick(object sender, RoutedEventArgs e)
         {
             if (Session.Constraints.Count > 0)
+            {
                 new ManageConstraintsWindow() { Owner = this }.ShowDialog();
+            }
             else
-                MessageBox.Show("There's no constraints added. To add one, use \"add constraint\".",
-                    "Constraint list empty", MessageBoxButton.OK, MessageBoxImage.Information);
+            {
+                var result = MessageBox.Show("There's no constraints added. Add one?",
+                    "Constraint list empty", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                    new AddConstraintWindow() { Owner = this }.ShowDialog();
+            }
         }
     }
 }
