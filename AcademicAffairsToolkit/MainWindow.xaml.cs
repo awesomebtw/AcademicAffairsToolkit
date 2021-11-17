@@ -197,9 +197,16 @@ namespace AcademicAffairsToolkit
 
         private void AlgArrangementTerminated(object sender, ArrangementTerminatedEventArgs e)
         {
-            Session.Arrangements = new ObservableCollection<Tuple<TROfficeRecordEntry, int>[]>(e.Result);
             Dispatcher.BeginInvoke((Action)(() =>
             {
+                Session.Arrangements?.Clear();
+                foreach (var result in e.Result)
+                {
+                    Session.Arrangements?.Add(
+                        e.InvigilateRecords.Select(
+                            (p, i) => new ArrangementResultEntry(p, result[i].Item1, result[i].Item2)).ToArray());
+                }
+
                 arrangementProgessBar.Visibility = Visibility.Collapsed;
                 arrangementProgessBar.Value = 0;
                 ToggleView.Execute("/TableViewPage.xaml", this);

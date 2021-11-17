@@ -17,7 +17,7 @@ namespace AcademicAffairsToolkit
 
         public static ObservableCollection<InvigilateConstraint> Constraints { get; set; } = new ObservableCollection<InvigilateConstraint>();
 
-        public static ObservableCollection<Tuple<TROfficeRecordEntry, int>[]> Arrangements { get; set; }
+        public static ObservableCollection<ArrangementResultEntry[]> Arrangements { get; set; } = new ObservableCollection<ArrangementResultEntry[]>();
 
         public static bool AnyFileLoaded() =>
             InvigilateRecords != null || TROffices != null;

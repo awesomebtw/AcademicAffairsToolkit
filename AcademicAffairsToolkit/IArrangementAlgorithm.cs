@@ -47,7 +47,7 @@ namespace AcademicAffairsToolkit
 
         public IEnumerable<Tuple<TROfficeRecordEntry, int>[]> Result { get; private set; }
 
-        public InvigilateRecordEntry[] CorrespondingInvigilateRecords { get; private set; }
+        public InvigilateRecordEntry[] InvigilateRecords { get; private set; }
 
         public int[] PeopleNeeded { get; private set; }
 
@@ -55,7 +55,7 @@ namespace AcademicAffairsToolkit
         {
             HasFault = hasFault;
             Result = result;
-            CorrespondingInvigilateRecords = record;
+            InvigilateRecords = record;
             PeopleNeeded = peopleNeeded;
         }
     }

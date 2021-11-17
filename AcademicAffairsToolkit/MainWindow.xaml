@@ -298,6 +298,35 @@
                     </Fluent:ToggleButton>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
+
+            <Fluent:RibbonTabItem Header="Result view" Group="{Binding Source={x:Reference Name=resultGroup}}">
+                <Fluent:RibbonGroupBox Header="Selected">
+                    <Fluent:ComboBox Header="Selected solution: "
+                                     AlternationCount="{Binding Path=(local:Session.Arrangements).Count}"
+                                     ItemsSource="{Binding Path=(local:Session.Arrangements)}"
+                                     IsSynchronizedWithCurrentItem="True"
+                                     Width="200" IsEditable="False">
+                        <Fluent:ComboBox.ItemTemplate>
+                            <!--https://stackoverflow.com/questions/745568/numbered-listbox/748383-->
+                            <DataTemplate>
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                    Path=TemplatedParent.(ItemsControl.AlternationIndex)}"/>
+                            </DataTemplate>
+                        </Fluent:ComboBox.ItemTemplate>
+                        <Fluent:ComboBox.ToolTip>
+                            <Fluent:ScreenTip Title="Solution index: "
+                                              Text="Select a solution to see here if there're more than one."/>
+                        </Fluent:ComboBox.ToolTip>
+                    </Fluent:ComboBox>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Filter">
+                    
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+
+            <Fluent:Ribbon.ContextualGroups>
+                <Fluent:RibbonContextualTabGroup x:Name="resultGroup" Header="Result Tools" Visibility="Visible"/>
+            </Fluent:Ribbon.ContextualGroups>
         </Fluent:Ribbon>
 
         <!--status bar-->
