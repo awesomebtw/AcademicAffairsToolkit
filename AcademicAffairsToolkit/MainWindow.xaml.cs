@@ -28,7 +28,7 @@ namespace AcademicAffairsToolkit
 
         private IArrangementAlgorithm alg;
 
-        public ObservableCollection<Tuple<string, string>> RecentlyOpenedFiles { get; set; } = new ObservableCollection<Tuple<string, string>>();
+        public ObservableCollection<Tuple<string, SelectedFileType>> RecentlyOpenedFiles { get; set; } = new ObservableCollection<Tuple<string, SelectedFileType>>();
 
         public MainWindow()
         {
@@ -77,9 +77,7 @@ namespace AcademicAffairsToolkit
             try
             {
                 await openFileTask;
-                RecentlyOpenedFiles.Add(
-                    new Tuple<string, string>(
-                        openExcelDialog.FileName, openOptionsWindow.SelectedFileType.ToString()));
+                RecentlyOpenedFiles.Add(Tuple.Create(openExcelDialog.FileName, openOptionsWindow.SelectedFileType));
             }
             catch (InvalidOperationException ex)
             {
@@ -134,7 +132,7 @@ namespace AcademicAffairsToolkit
         {
             SaveFileDialog fileDialog = new SaveFileDialog()
             {
-                Filter = "JSON file|*.json",
+                Filter = "XLSX file|*.xlsx|XLS file|*.xls",
                 InitialDirectory = Environment.CurrentDirectory
             };
 
@@ -170,7 +168,7 @@ namespace AcademicAffairsToolkit
                 Session.InvigilateRecords, Session.TROffices, Session.Constraints,
                 (int)iterationsSpinner.Value, (int)populationSpinner.Value);
             arrangementProgessBar.Visibility = Visibility.Visible;
-            statusText.Text = "Arrangement in progress..";
+            statusText.Text = "Arrangement in progress...";
 
             alg.ArrangementStepForward += AlgArrangementStepForward;
             alg.ArrangementTerminated += AlgArrangementTerminated;
@@ -191,7 +189,7 @@ namespace AcademicAffairsToolkit
         {
             Dispatcher.BeginInvoke((Action)(() =>
             {
-                arrangementProgessBar.Value = (double)e.CurrentIteration / e.TotalIterations;
+                arrangementProgessBar.Value = e.CurrentIteration;
             }));
         }
 
@@ -211,6 +209,9 @@ namespace AcademicAffairsToolkit
                 arrangementProgessBar.Value = 0;
                 ToggleView.Execute("/TableViewPage.xaml", this);
                 statusText.Text = "Arrangement finished";
+
+                // todo: change visibility according to view
+                resultGroup.Visibility = Visibility.Visible;
             }));
         }
 
@@ -231,6 +232,14 @@ namespace AcademicAffairsToolkit
                     "Constraint list empty", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if (result == MessageBoxResult.Yes)
                     new AddConstraintWindow() { Owner = this }.ShowDialog();
+            }
+        }
+
+        private async void Gallery_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Fluent.Gallery gallery && gallery.SelectedItem is Tuple<string, SelectedFileType> tuple)
+            {
+                await OpenFileAsync(tuple.Item1, "", tuple.Item2);
             }
         }
     }

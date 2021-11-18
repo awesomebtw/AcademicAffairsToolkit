@@ -48,7 +48,7 @@
                     </Fluent:Button>
                 </StackPanel>
                 <TextBlock Grid.Row="0" Grid.Column="1" FontSize="24" Margin="10" Text="Recent"/>
-                <Fluent:Gallery Grid.Row="1" Grid.Column="1" MaxItemsInRow="1" Margin="10,0" Padding="0,5" BorderThickness="1" HorizontalContentAlignment="Stretch"
+                <Fluent:Gallery Grid.Row="1" Grid.Column="1" MaxItemsInRow="1" Margin="10,0" Padding="0,5" BorderThickness="1" HorizontalContentAlignment="Stretch" MouseDoubleClick="Gallery_MouseDoubleClick"
                                 ItemsSource="{Binding RecentlyOpenedFiles, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
                     <Fluent:Gallery.ItemTemplate>
                         <DataTemplate>
@@ -301,23 +301,24 @@
 
             <Fluent:RibbonTabItem Header="Result view" Group="{Binding Source={x:Reference Name=resultGroup}}">
                 <Fluent:RibbonGroupBox Header="Selected">
-                    <Fluent:ComboBox Header="Selected solution: "
-                                     AlternationCount="{Binding Path=(local:Session.Arrangements).Count}"
-                                     ItemsSource="{Binding Path=(local:Session.Arrangements)}"
-                                     IsSynchronizedWithCurrentItem="True"
-                                     Width="200" IsEditable="False">
-                        <Fluent:ComboBox.ItemTemplate>
+                    <Fluent:InRibbonGallery AlternationCount="{Binding Path=(local:Session.Arrangements).Count}"
+                                            ItemsSource="{Binding Path=(local:Session.Arrangements)}"
+                                            IsSynchronizedWithCurrentItem="True"
+                                            MaxItemsInRow="4"
+                                            MinWidth="160">
+                        <Fluent:InRibbonGallery.ItemTemplate>
                             <!--https://stackoverflow.com/questions/745568/numbered-listbox/748383-->
                             <DataTemplate>
-                                <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                <TextBlock MinWidth="40"
+                                           Text="{Binding RelativeSource={RelativeSource TemplatedParent},
                                     Path=TemplatedParent.(ItemsControl.AlternationIndex)}"/>
                             </DataTemplate>
-                        </Fluent:ComboBox.ItemTemplate>
-                        <Fluent:ComboBox.ToolTip>
+                        </Fluent:InRibbonGallery.ItemTemplate>
+                        <Fluent:InRibbonGallery.ToolTip>
                             <Fluent:ScreenTip Title="Solution index: "
                                               Text="Select a solution to see here if there're more than one."/>
-                        </Fluent:ComboBox.ToolTip>
-                    </Fluent:ComboBox>
+                        </Fluent:InRibbonGallery.ToolTip>
+                    </Fluent:InRibbonGallery>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Filter">
                     
@@ -325,14 +326,14 @@
             </Fluent:RibbonTabItem>
 
             <Fluent:Ribbon.ContextualGroups>
-                <Fluent:RibbonContextualTabGroup x:Name="resultGroup" Header="Result Tools" Visibility="Visible"/>
+                <Fluent:RibbonContextualTabGroup x:Name="resultGroup" Header="Result Tools" Background="Green" BorderBrush="Green"/>
             </Fluent:Ribbon.ContextualGroups>
         </Fluent:Ribbon>
 
         <!--status bar-->
         <Fluent:StatusBar DockPanel.Dock="Bottom">
             <Fluent:StatusBarItem HorizontalAlignment="Right" VerticalAlignment="Stretch">
-                <ProgressBar Name="arrangementProgessBar" MinWidth="160" Maximum="1" Visibility="Collapsed"/>
+                <ProgressBar Name="arrangementProgessBar" MinWidth="160" Maximum="{Binding Value, ElementName=iterationsSpinner}" Visibility="Collapsed"/>
             </Fluent:StatusBarItem>
             <Fluent:StatusBarItem HorizontalAlignment="Left">
                 <TextBlock Name="statusText" TextTrimming="CharacterEllipsis" Text="Arrangement is not started"/>
