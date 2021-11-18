@@ -9,6 +9,6 @@
       Title="TableViewPage"
       DataContext="{Binding Path=(local:Session.Arrangements)}">
 
-    <DataGrid Name="tableViewGrid" ItemsSource="{Binding Path=/}" AlternatingRowBackground="LightBlue"/>
+    <DataGrid Name="tableViewGrid" ItemsSource="{Binding Path=/}" AlternatingRowBackground="LightBlue" IsReadOnly="True"/>
 
 </Page>
