@@ -214,7 +214,7 @@ namespace AcademicAffairsToolkit
         }
 
         /// <summary>
-        /// perform single-point crossover for the chromosome
+        /// perform uniform crossover for the chromosome
         /// </summary>
         /// <param name="left">the first parent</param>
         /// <param name="right">the second parent</param>
@@ -228,10 +228,9 @@ namespace AcademicAffairsToolkit
             child1 = new Tuple<TROfficeRecordEntry, int>[left.Length];
             child2 = new Tuple<TROfficeRecordEntry, int>[right.Length];
             Random random = new Random();
-            int flipPos = random.Next(1, left.Length - 1);
             for (int i = 0; i < left.Length; i++)
             {
-                if (i < flipPos)
+                if (random.NextDouble() < 0.5)
                 {
                     child1[i] = left[i];
                     child2[i] = right[i];
@@ -252,23 +251,23 @@ namespace AcademicAffairsToolkit
         private Tuple<TROfficeRecordEntry, int>[] Mutate(Tuple<TROfficeRecordEntry, int>[] chromosome)
         {
             Random random = new Random();
-            int pos = random.Next(chromosome.Length);
-            int selected = random.Next(trOfficeRecords.Count());
+            int mutationPos = random.Next(chromosome.Length);
+            int newOfficePos = random.Next(trOfficeRecords.Length);
 
-            int k = pos;
-            while (trOfficeRecords[selected] == chromosome[pos].Item1)
+            int k = newOfficePos;
+            while (trOfficeRecords[newOfficePos] == chromosome[mutationPos].Item1)
             {
-                pos = (pos + 1) % chromosome.Length;
-                if (k == pos)
+                newOfficePos = (newOfficePos + 1) % trOfficeRecords.Length;
+                if (k == newOfficePos)
                     break;
             }
 
-            chromosome[pos] = Tuple.Create(chromosome[selected].Item1, chromosome[pos].Item2);
+            chromosome[mutationPos] = Tuple.Create(trOfficeRecords[newOfficePos], peopleNeeded[mutationPos]);
             return chromosome;
         }
 
         /// <summary>
-        /// select a pair of gene for crossover and mutation
+        /// select a pair of gene using roulette-wheel algorithm for crossover and mutation
         /// </summary>
         /// <param name="fitness">array of evaluated fitness</param>
         /// <returns>a pair of integer representing selected indices of chromosome</returns>
@@ -313,7 +312,7 @@ namespace AcademicAffairsToolkit
                 {
                     (int index1, int index2) = PerformSelection(fitness);
 
-                    if (random.NextDouble() < crossoverProbability)
+                    if (random.NextDouble() < crossoverProbability && index1 != index2)
                     {
                         ApplyCrossover(population[index1], population[index2], out var child1, out var child2);
                         population.Add(child1);
@@ -328,18 +327,19 @@ namespace AcademicAffairsToolkit
                 }
 
                 // elinimate low-fitness population
-                var fitnessThreshold = fitness.OrderBy(p => p).Take(populationSize).Last();
-                population.RemoveAll(p => GetFitness(p) < fitnessThreshold);
+                // use dictionary here to avoid repeated fitness evaluations
+                var fitnessDict = population.Distinct().ToDictionary(p => p, p => GetFitness(p));
+                var fitnessThreshold = fitnessDict.Values.OrderByDescending(p => p).Take(populationSize).Last();
+                population.RemoveAll(p => fitnessDict[p] < fitnessThreshold);
                 if (population.Count > populationSize)
                     population.RemoveRange(populationSize, population.Count - populationSize);
-                fitness = population.Select(p => GetFitness(p)).ToArray();
+                fitness = population.Select(p => fitnessDict[p]).ToArray();
 
                 ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i, iterations));
             }
 
-            // todo: eliminate redundant fitness evaluation
-            var maxFitness = population.Max(p => GetFitness(p));
-            result = population.Where(p => GetFitness(p) == maxFitness).Distinct().Take(resultSize);
+            var maxFitness = fitness.Max();
+            result = population.Where((p, i) => fitness[i] == maxFitness).Distinct().Take(resultSize);
 
             ArrangementTerminated?.Invoke(this, new ArrangementTerminatedEventArgs(false, result, invigilateRecords, peopleNeeded));
         }
@@ -347,7 +347,44 @@ namespace AcademicAffairsToolkit
         public async Task StartArrangementAsync()
         {
             // todo: concurrent version of the algorithm
-            await Task.Run(StartArrangement);
+
+            //foreach node do in parallel
+            //generate an individual randomly
+            //end parallel do
+            //    while not stop_criterion_satisfied do
+            //    foreach node do in parallel
+            //        evaluate the fitness of the individual
+            //        get the fitness values of four neighbouring individuals
+            //        find out the optimum fitness value
+            //        get the neighbouring individual
+            //        corresponding to optimum fitness
+            //        uniform crossover with the local
+            //        individual according to the crossover rate
+            //        mutate the individual according to the
+            //        mutation rate
+            //    end parallel do
+            //    test the stopping criteria
+            //    end while
+
+            System.Threading.ThreadPool.GetAvailableThreads(out int workerThreads, out _);
+            if (workerThreads < 3)
+            {
+                await Task.Run(StartArrangement);
+                return;
+            }
+
+            int threads = Environment.ProcessorCount;
+            int populationSizePerNode = populationSize / threads;
+            Random random = new Random();
+
+            Task[] tasks = new Task[threads];
+            for (int i = 0; i < threads; i++)
+            {
+                tasks[i] = Task.Run(() =>
+                {
+                    //
+                });
+            }
         }
     }
 }

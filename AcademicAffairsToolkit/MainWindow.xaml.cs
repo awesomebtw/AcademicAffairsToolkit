@@ -175,7 +175,7 @@ namespace AcademicAffairsToolkit
 
             try
             {
-                await alg.StartArrangementAsync();
+                await Task.Run(alg.StartArrangement);
             }
             catch (Exception ex)
             {
@@ -202,7 +202,7 @@ namespace AcademicAffairsToolkit
                 {
                     Session.Arrangements?.Add(
                         e.InvigilateRecords.Select(
-                            (p, i) => new ArrangementResultEntry(p, result[i].Item1, result[i].Item2)).ToArray());
+                            (p, i) => new ArrangementResultEntry(p, result[i].Item1, e.PeopleNeeded[i])).ToArray());
                 }
 
                 arrangementProgessBar.Visibility = Visibility.Collapsed;

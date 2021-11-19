@@ -117,7 +117,7 @@
                         <Fluent:BackstageTabItem Header="About">
                             <StackPanel Margin="20" Orientation="Vertical">
                                 <TextBlock FontSize="36" Margin="5">Academic Affairs Toolkit</TextBlock>
-                                <TextBlock Margin="5" Text="Version 0.0.0.5"/>
+                                <TextBlock Margin="5" Text="Version 0.0.0.6"/>
                                 <TextBlock Margin="5" Text="Third party project/resources: "/>
                                 <Fluent:Gallery BorderThickness="1" Margin="5" MaxItemsInRow="1">
                                     <Fluent:GalleryItem>Extended WPF Toolkit</Fluent:GalleryItem>
@@ -304,14 +304,14 @@
                     <Fluent:InRibbonGallery AlternationCount="{Binding Path=(local:Session.Arrangements).Count}"
                                             ItemsSource="{Binding Path=(local:Session.Arrangements)}"
                                             IsSynchronizedWithCurrentItem="True"
-                                            MaxItemsInRow="4"
+                                            MaxItemsInRow="3"
                                             MinWidth="160">
                         <Fluent:InRibbonGallery.ItemTemplate>
                             <!--https://stackoverflow.com/questions/745568/numbered-listbox/748383-->
                             <DataTemplate>
-                                <TextBlock MinWidth="40"
+                                <TextBlock MinWidth="60"
                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent},
-                                    Path=TemplatedParent.(ItemsControl.AlternationIndex)}"/>
+                                    Path=TemplatedParent.(ItemsControl.AlternationIndex), StringFormat=Solution \#\{0\}}"/>
                             </DataTemplate>
                         </Fluent:InRibbonGallery.ItemTemplate>
                         <Fluent:InRibbonGallery.ToolTip>

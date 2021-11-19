@@ -22,6 +22,11 @@ namespace AcademicAffairsToolkit
 
         public string Location { get; set; }
 
+        public override string ToString()
+        {
+            return $"{Subject}[{Location}, {StartTime.ToShortDateString()} {StartTime.ToShortTimeString()}~{EndTime.ToShortTimeString()}]";
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as InvigilateRecordEntry);
