@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AcademicAffairsToolkit
@@ -29,22 +30,56 @@ namespace AcademicAffairsToolkit
 
         private readonly int populationSize;
 
+        private readonly double invigilatePerCapita;
+
+        private readonly CancellationToken cancellationToken;
+
         public event EventHandler<ArrangementStepForwardEventArgs> ArrangementStepForward;
         public event EventHandler<ArrangementTerminatedEventArgs> ArrangementTerminated;
 
-        private IEnumerable<TROfficeRecordEntry[]> result;
-
-        private double invigilatePerCapita;
-
         /// <summary>
-        /// construct a new object for invigilate arrangement
+        /// construct a new object for invigilate arrangement using genetic algorithm
         /// </summary>
         /// <param name="invigilateRecords">invigilate tasks to be assigned</param>
         /// <param name="trOfficeRecords">teaching and researching offices which will be </param>
         /// <param name="constraints">time constraints to be applied when evaluating arrangement</param>
         /// <param name="iterations">maximum iteration for arrangement</param>
         /// <param name="populationSize">population size for each generation</param>
-        public GeneticAlgorithm(IEnumerable<InvigilateRecordEntry> invigilateRecords, IEnumerable<TROfficeRecordEntry> trOfficeRecords, IEnumerable<InvigilateConstraint> constraints, int iterations, int populationSize = 100, int resultSize = 10)
+        /// <param name="resultSize">how many solutions to retrieve</param>
+        public GeneticAlgorithm(IEnumerable<InvigilateRecordEntry> invigilateRecords,
+            IEnumerable<TROfficeRecordEntry> trOfficeRecords,
+            IEnumerable<InvigilateConstraint> constraints,
+            int iterations,
+            int populationSize,
+            int resultSize)
+            : this(invigilateRecords,
+                  trOfficeRecords,
+                  constraints,
+                  iterations,
+                  populationSize,
+                  resultSize,
+                  CancellationToken.None)
+        {
+            
+        }
+
+        /// <summary>
+        /// construct a new object for invigilate arrangement using genetic algorithm
+        /// </summary>
+        /// <param name="invigilateRecords">invigilate tasks to be assigned</param>
+        /// <param name="trOfficeRecords">teaching and researching offices which will be </param>
+        /// <param name="constraints">time constraints to be applied when evaluating arrangement</param>
+        /// <param name="iterations">maximum iteration for arrangement</param>
+        /// <param name="populationSize">population size for each generation</param>
+        /// <param name="resultSize">how many solutions to retrieve</param>
+        /// <param name="cancellationToken">cancellation token for asynchronous task</param>
+        public GeneticAlgorithm(IEnumerable<InvigilateRecordEntry> invigilateRecords,
+            IEnumerable<TROfficeRecordEntry> trOfficeRecords,
+            IEnumerable<InvigilateConstraint> constraints,
+            int iterations,
+            int populationSize,
+            int resultSize,
+            CancellationToken cancellationToken)
         {
             if (populationSize <= 1)
                 throw new ArgumentOutOfRangeException(nameof(populationSize), "population size must be greater than 1");
@@ -53,6 +88,7 @@ namespace AcademicAffairsToolkit
             this.iterations = iterations;
             this.populationSize = populationSize;
             this.resultSize = resultSize;
+            this.cancellationToken = cancellationToken;
 
             // sort invigilate records by time for convenience
             // no need to use SortedList
@@ -289,6 +325,9 @@ namespace AcademicAffairsToolkit
 
             for (int i = 0; i < iterations; i++)
             {
+                if (cancellationToken.IsCancellationRequested == true)
+                    break;
+
                 for (int j = 0; j < innerIterations; j++)
                 {
                     (int index1, int index2) = PerformSelection(fitness);
@@ -338,14 +377,14 @@ namespace AcademicAffairsToolkit
             }
 
             var maxFitness = fitness.Max();
-            result = population.Where((_, i) => fitness[i] == maxFitness).Distinct().Take(resultSize);
+            var result = population.Where((_, i) => fitness[i] == maxFitness).Distinct().Take(resultSize);
 
-            ArrangementTerminated?.Invoke(this, new ArrangementTerminatedEventArgs(false, result, invigilateRecords, peopleNeeded));
+            ArrangementTerminated?.Invoke(this, new ArrangementTerminatedEventArgs(cancellationToken.IsCancellationRequested, result, invigilateRecords, peopleNeeded));
         }
 
         public async Task StartArrangementAsync()
         {
-            await Task.Run(StartArrangement);
+            await Task.Run(StartArrangement, cancellationToken);
         }
     }
 }

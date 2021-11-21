@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AcademicAffairsToolkit
@@ -22,7 +23,7 @@ namespace AcademicAffairsToolkit
         void StartArrangement();
 
         /// <summary>
-        /// start the algorithm in asynchronized, maybe multi-threaded way
+        /// start the algorithm in asynchronized way
         /// </summary>
         /// <returns>task object representing the thread</returns>
         Task StartArrangementAsync();
@@ -43,7 +44,7 @@ namespace AcademicAffairsToolkit
 
     class ArrangementTerminatedEventArgs : EventArgs
     {
-        public bool HasFault { get; private set; }
+        public bool Cancelled { get; private set; }
 
         public IEnumerable<TROfficeRecordEntry[]> Result { get; private set; }
 
@@ -51,9 +52,9 @@ namespace AcademicAffairsToolkit
 
         public int[] PeopleNeeded { get; private set; }
 
-        public ArrangementTerminatedEventArgs(bool hasFault, IEnumerable<TROfficeRecordEntry[]> result, InvigilateRecordEntry[] record, int[] peopleNeeded)
+        public ArrangementTerminatedEventArgs(bool cancelled, IEnumerable<TROfficeRecordEntry[]> result, InvigilateRecordEntry[] record, int[] peopleNeeded)
         {
-            HasFault = hasFault;
+            Cancelled = cancelled;
             Result = result;
             InvigilateRecords = record;
             PeopleNeeded = peopleNeeded;

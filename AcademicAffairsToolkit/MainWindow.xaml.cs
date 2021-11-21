@@ -7,6 +7,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Threading;
 
 namespace AcademicAffairsToolkit
 {
@@ -19,6 +20,8 @@ namespace AcademicAffairsToolkit
 
         public static readonly RoutedUICommand StartArrangement = new RoutedUICommand();
 
+        public static readonly RoutedUICommand StopArrangement = new RoutedUICommand();
+
         private static readonly OpenFileDialog openExcelDialog = new OpenFileDialog
         {
             DereferenceLinks = true,
@@ -28,11 +31,14 @@ namespace AcademicAffairsToolkit
 
         private IArrangementAlgorithm alg;
 
-        public ObservableCollection<Tuple<string, SelectedFileType>> RecentlyOpenedFiles { get; set; } = new ObservableCollection<Tuple<string, SelectedFileType>>();
+        private CancellationTokenSource cancellationTokenSource;
+
+        public ObservableCollection<Tuple<string, SelectedFileType>> RecentlyOpenedFiles { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            RecentlyOpenedFiles = new ObservableCollection<Tuple<string, SelectedFileType>>();
             openExcelDialog.FileOk += OpenExcelDialogFileOk;
         }
 
@@ -175,9 +181,13 @@ namespace AcademicAffairsToolkit
 
         private async void StartArrangementExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            cancellationTokenSource = new CancellationTokenSource();
+
             alg = new GeneticAlgorithm(
                 Session.InvigilateRecords, Session.TROffices, Session.Constraints,
-                (int)iterationsSpinner.Value, (int)populationSpinner.Value);
+                (int)iterationsSpinner.Value, (int)populationSpinner.Value, (int)solutionsSpinner.Value,
+                cancellationTokenSource.Token);
+
             arrangementProgessBar.Visibility = Visibility.Visible;
             statusText.Text = "Arrangement in progress...";
 
@@ -220,8 +230,21 @@ namespace AcademicAffairsToolkit
                 arrangementProgessBar.Value = 0;
                 ToggleView.Execute("/TableViewPage.xaml", this);
                 tableViewButton.IsChecked = true;
-                statusText.Text = "Arrangement finished";
+                statusText.Text = cancellationTokenSource?.IsCancellationRequested == true
+                    ? "Arrangement cancelled"
+                    : "Arrangement finished";
             }));
+        }
+
+        private void StopCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = Session.CanStartArrange();
+        }
+
+        private void StopCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            cancellationTokenSource?.Cancel();
+            cancellationTokenSource?.Dispose();
         }
 
         private void AddConstraintButtonClick(object sender, RoutedEventArgs e)

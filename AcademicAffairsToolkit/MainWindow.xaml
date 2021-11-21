@@ -16,6 +16,7 @@
         <CommandBinding Command="Close" CanExecute="CloseCommandCanExecute" Executed="CloseCommandExecuted"/>
         <CommandBinding Command="{x:Static local:MainWindow.ToggleView}" CanExecute="ToggleViewCommandCanExecute" Executed="ToggleViewCommandExecuted"/>
         <CommandBinding Command="{x:Static local:MainWindow.StartArrangement}" CanExecute="StartArrangementCanExecute" Executed="StartArrangementExecuted"/>
+        <CommandBinding Command="{x:Static local:MainWindow.StopArrangement}" CanExecute="StopCommandCanExecute" Executed="StopCommandExecuted"/>
     </Window.CommandBindings>
 
     <Fluent:RibbonWindow.Resources>
@@ -161,7 +162,8 @@
                                               DisableReason="At least one of two required files wasn't loaded."/>
                         </Fluent:Button.ToolTip>
                     </Fluent:Button>
-                    <Fluent:Button Header="Stop arrangement">
+                    <Fluent:Button Header="Stop arrangement"
+                                   Command="{x:Static local:MainWindow.StopArrangement}">
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource StopIcon}"/>
                         </Fluent:Button.Icon>
