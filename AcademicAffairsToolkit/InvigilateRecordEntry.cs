@@ -24,7 +24,11 @@ namespace AcademicAffairsToolkit
 
         public override string ToString()
         {
-            return $"{Subject}[{Location}, {StartTime.ToShortDateString()} {StartTime.ToShortTimeString()}~{EndTime.ToShortTimeString()}]";
+            // trim location string
+            int pos = Location.IndexOfAny(new char[] { ' ', '\n', '\t' });
+            if (pos == -1)
+                pos = Location.Length - 1;
+            return $"{Subject}[{Location[..pos]}, {StartTime.ToShortDateString()} {StartTime.ToShortTimeString()}~{EndTime.ToShortTimeString()}]";
         }
 
         public override bool Equals(object obj)

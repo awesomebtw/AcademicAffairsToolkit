@@ -7,7 +7,7 @@ namespace AcademicAffairsToolkit
     interface IArrangementAlgorithm
     {
         /// <summary>
-        /// will be raised when an iteration is finished
+        /// will be raised when an iteration of the algorithm is finished
         /// </summary>
         public event EventHandler<ArrangementStepForwardEventArgs> ArrangementStepForward;
 
@@ -45,13 +45,13 @@ namespace AcademicAffairsToolkit
     {
         public bool HasFault { get; private set; }
 
-        public IEnumerable<Tuple<TROfficeRecordEntry, int>[]> Result { get; private set; }
+        public IEnumerable<TROfficeRecordEntry[]> Result { get; private set; }
 
         public InvigilateRecordEntry[] InvigilateRecords { get; private set; }
 
         public int[] PeopleNeeded { get; private set; }
 
-        public ArrangementTerminatedEventArgs(bool hasFault, IEnumerable<Tuple<TROfficeRecordEntry, int>[]> result, InvigilateRecordEntry[] record, int[] peopleNeeded)
+        public ArrangementTerminatedEventArgs(bool hasFault, IEnumerable<TROfficeRecordEntry[]> result, InvigilateRecordEntry[] record, int[] peopleNeeded)
         {
             HasFault = hasFault;
             Result = result;

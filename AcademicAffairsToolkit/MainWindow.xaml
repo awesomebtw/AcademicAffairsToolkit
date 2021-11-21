@@ -9,7 +9,7 @@
         Title="Academic Affairs Toolkit"
         Height="500" Width="800" MinHeight="300" MinWidth="400"
         WindowStartupLocation="CenterScreen">
-    
+
     <Window.CommandBindings>
         <CommandBinding Command="Open" CanExecute="OpenCommandCanExecute" Executed="OpenCommandExecuted"/>
         <CommandBinding Command="Save" CanExecute="SaveCommandCanExecute" Executed="SaveCommandExecuted"/>
@@ -63,7 +63,7 @@
             </Grid>
         </Page>
 
-        <Style x:Key="PolicySpinnerStyle" TargetType="Fluent:Spinner">
+        <Style x:Key="PolicySpinnerStyle" TargetType="{x:Type Fluent:Spinner}">
             <Setter Property="Format" Value="N0"/>
             <Setter Property="HorizontalContentAlignment" Value="Right"/>
             <Setter Property="InputWidth" Value="60"/>
@@ -102,7 +102,7 @@
                     </Fluent:StartScreenTabControl>
                 </Fluent:StartScreen>
             </Fluent:Ribbon.StartScreen>
-            
+
             <!--file menu-->
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
@@ -268,7 +268,7 @@
                                               DisableReason="At least one of two required files wasn't loaded."/>
                         </Fluent:ToggleButton.ToolTip>
                     </Fluent:ToggleButton>
-                    <Fluent:ToggleButton Header="Plain table"
+                    <Fluent:ToggleButton Name="tableViewButton" Header="Plain table"
                                          GroupName="viewGroup"
                                          Size="Middle"
                                          Command="{x:Static local:MainWindow.ToggleView}"
@@ -321,12 +321,13 @@
                     </Fluent:InRibbonGallery>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Filter">
-                    
+
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
             <Fluent:Ribbon.ContextualGroups>
-                <Fluent:RibbonContextualTabGroup x:Name="resultGroup" Header="Result Tools" Background="Green" BorderBrush="Green"/>
+                <Fluent:RibbonContextualTabGroup x:Name="resultGroup" Header="Result Tools" Background="Green" BorderBrush="Green"
+                                                 Visibility="{Binding Converter={StaticResource BooleanToVisibilityConverter}, ElementName=tableViewButton, Path=IsChecked}"/>
             </Fluent:Ribbon.ContextualGroups>
         </Fluent:Ribbon>
 

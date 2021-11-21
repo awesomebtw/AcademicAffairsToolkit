@@ -175,12 +175,12 @@ namespace AcademicAffairsToolkit
 
             try
             {
-                await Task.Run(alg.StartArrangement);
+                await alg.StartArrangementAsync();
             }
             catch (Exception ex)
             {
-                arrangementProgessBar.Visibility= Visibility.Collapsed;
-                statusText.Text = "An error occurred during arrangeemnt. Please try again.";
+                arrangementProgessBar.Visibility = Visibility.Collapsed;
+                statusText.Text = "An error occurred during arrangement. Please try again.";
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -202,16 +202,13 @@ namespace AcademicAffairsToolkit
                 {
                     Session.Arrangements?.Add(
                         e.InvigilateRecords.Select(
-                            (p, i) => new ArrangementResultEntry(p, result[i].Item1, e.PeopleNeeded[i])).ToArray());
+                            (p, i) => new ArrangementResultEntry(p, result[i], e.PeopleNeeded[i])).ToArray());
                 }
 
                 arrangementProgessBar.Visibility = Visibility.Collapsed;
                 arrangementProgessBar.Value = 0;
                 ToggleView.Execute("/TableViewPage.xaml", this);
                 statusText.Text = "Arrangement finished";
-
-                // todo: change visibility according to view
-                resultGroup.Visibility = Visibility.Visible;
             }));
         }
 
