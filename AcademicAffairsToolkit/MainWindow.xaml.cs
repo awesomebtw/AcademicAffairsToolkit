@@ -124,21 +124,33 @@ namespace AcademicAffairsToolkit
 
         private void SaveCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = Session.AutoArrangementFinished();
         }
 
-        private void SaveCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+        private async void SaveCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             SaveFileDialog fileDialog = new SaveFileDialog()
             {
+                AddExtension = true,
                 Filter = "XLSX file|*.xlsx|XLS file|*.xls",
                 InitialDirectory = Environment.CurrentDirectory
             };
 
             if (fileDialog.ShowDialog(this) == true)
             {
-                // todo: save file
-                MessageBox.Show(fileDialog.FileName, "Saved (TODO)");
+                try
+                {
+                    await ExcelProcessor.SaveFileAsync(
+                        Session.Arrangements, fileDialog.FileName, fileDialog.FilterIndex != 1);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    throw;
+                }
+
+                MessageBox.Show($"{Session.Arrangements.Count} sheets written", "Save successfully",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

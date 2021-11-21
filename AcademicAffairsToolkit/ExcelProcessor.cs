@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace AcademicAffairsToolkit
 {
@@ -165,6 +168,73 @@ namespace AcademicAffairsToolkit
         public static async Task<IEnumerable<TROfficeRecordEntry>> ReadTROfficeTableAsync(string path, string password, TROfficeFileParsePolicy policy)
         {
             return await Task.Run(() => ReadTROfficeTable(path, password, policy));
+        }
+
+        public static void SaveFile(IEnumerable<ArrangementResultEntry[]> arrangementResults, string path, bool oldFormat)
+        {
+            IWorkbook workbook = oldFormat ? new HSSFWorkbook() : (IWorkbook)new XSSFWorkbook();
+
+            IDataFormat format = workbook.CreateDataFormat();
+            ICellStyle dateCellStyle = workbook.CreateCellStyle();
+            dateCellStyle.DataFormat = format.GetFormat("yyyy/m/d");
+
+            ICellStyle timeCellStyle = workbook.CreateCellStyle();
+            timeCellStyle.DataFormat = format.GetFormat("h:mm");
+
+            foreach (var solution in arrangementResults)
+            {
+                var sheet = workbook.CreateSheet();
+                var headerRow = sheet.CreateRow(0);
+
+                headerRow.CreateCell(1).SetCellValue(nameof(InvigilateRecordEntry.StartTime));
+                headerRow.CreateCell(2).SetCellValue(nameof(InvigilateRecordEntry.EndTime));
+                headerRow.CreateCell(3).SetCellValue(nameof(InvigilateRecordEntry.Subject));
+                headerRow.CreateCell(4).SetCellValue(nameof(InvigilateRecordEntry.Department));
+                headerRow.CreateCell(5).SetCellValue(nameof(InvigilateRecordEntry.Grade));
+                headerRow.CreateCell(6).SetCellValue(nameof(InvigilateRecordEntry.Specialty));
+                headerRow.CreateCell(7).SetCellValue(nameof(InvigilateRecordEntry.ExamineeCount));
+                headerRow.CreateCell(8).SetCellValue(nameof(InvigilateRecordEntry.Location));
+                headerRow.CreateCell(9).SetCellValue(nameof(InvigilateRecordEntry.ExamAspect));
+                headerRow.CreateCell(10).SetCellValue(nameof(TROfficeRecordEntry.Name));
+                headerRow.CreateCell(11).SetCellValue(nameof(TROfficeRecordEntry.Director));
+
+                for (int i = 0; i < solution.Length; i++)
+                {
+                    var row = sheet.CreateRow(i + 1);
+                    var entry = solution[i];
+
+                    ICell dateCell = row.CreateCell(0);
+                    dateCell.SetCellValue(entry.InvigilateRecord.StartTime);
+                    dateCell.CellStyle = dateCellStyle;
+
+                    ICell startTimeCell = row.CreateCell(1);
+                    startTimeCell.SetCellValue(entry.InvigilateRecord.StartTime);
+                    startTimeCell.CellStyle = timeCellStyle;
+
+                    ICell endTimeCell = row.CreateCell(2);
+                    endTimeCell.SetCellValue(entry.InvigilateRecord.EndTime);
+                    endTimeCell.CellStyle = timeCellStyle;
+
+                    row.CreateCell(3).SetCellValue(entry.InvigilateRecord.Subject);
+                    row.CreateCell(4).SetCellValue(entry.InvigilateRecord.Department);
+                    row.CreateCell(5).SetCellValue(entry.InvigilateRecord.Grade);
+                    row.CreateCell(6).SetCellValue(entry.InvigilateRecord.Specialty);
+                    row.CreateCell(7).SetCellValue(entry.InvigilateRecord.ExamineeCount);
+                    row.CreateCell(8).SetCellValue(entry.InvigilateRecord.Location);
+                    row.CreateCell(9).SetCellValue(entry.InvigilateRecord.ExamAspect);
+
+                    row.CreateCell(10).SetCellValue(entry.TROfficeRecord.Name);
+                    row.CreateCell(11).SetCellValue(entry.TROfficeRecord.Director);
+                }
+            }
+
+            using var stream = new FileStream(path, FileMode.Create);
+            workbook.Write(stream);
+        }
+
+        public static async Task SaveFileAsync(IEnumerable<ArrangementResultEntry[]> arrangementResults, string path, bool oldFormat)
+        {
+            await Task.Run(() => SaveFile(arrangementResults, path, oldFormat));
         }
     }
 }
