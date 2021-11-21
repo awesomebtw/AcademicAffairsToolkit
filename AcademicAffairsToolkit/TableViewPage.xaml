@@ -11,7 +11,7 @@
 
     <Page.Resources>
         <Style x:Key="DetailsTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="2"/>
         </Style>
     </Page.Resources>
     
@@ -30,6 +30,8 @@
                                    Text="{Binding Path=Grade, StringFormat=Grade: {0}}"/>
                         <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
                                    Text="{Binding Path=Department, StringFormat=Department: {0}}"/>
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=Specialty, StringFormat=Specialty: {0}}"/>
                         <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
                                    Text="{Binding Path=ExamineeCount, StringFormat=Examinees: {0}}"/>
                     </StackPanel>

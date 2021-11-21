@@ -20,11 +20,13 @@ namespace AcademicAffairsToolkit
 
         public int GradeColumn { get; set; }
 
-        public int SpecialityColumn { get; set; }
+        public int SpecialtyColumn { get; set; }
 
         public int ExamineeCountColumn { get; set; }
 
         public int LocationColumn { get; set; }
+
+        public int ExamAspectColumn { get; set; }
 
         public int StartRow { get; set; }
 
@@ -36,9 +38,10 @@ namespace AcademicAffairsToolkit
             SubjectColumn = 2,
             DepartmentColumn = 3,
             GradeColumn = 4,
-            SpecialityColumn = 5,
+            SpecialtyColumn = 5,
             ExamineeCountColumn = 6,
             LocationColumn = 7,
+            ExamAspectColumn = 8,
             StartRow = 2
         };
     }
@@ -125,7 +128,9 @@ namespace AcademicAffairsToolkit
                     EndTime = date.Add(endTimeInterval),
                     Grade = grade,
                     Location = row.GetCell(policy.LocationColumn).StringCellValue.Trim(),
-                    ExamineeCount = examineeCount
+                    ExamineeCount = examineeCount,
+                    ExamAspect = row.GetCell(policy.ExamAspectColumn).StringCellValue.Trim(),
+                    Specialty = row.GetCell(policy.SpecialtyColumn).StringCellValue.Trim()
                 };
             }
         }

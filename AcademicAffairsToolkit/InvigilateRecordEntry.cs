@@ -18,9 +18,13 @@ namespace AcademicAffairsToolkit
 
         public int Grade { get; set; }
 
+        public string Specialty { get; set; }
+
         public int ExamineeCount { get; set; }
 
         public string Location { get; set; }
+
+        public string ExamAspect { get; set; }
 
         public override string ToString()
         {
@@ -44,13 +48,25 @@ namespace AcademicAffairsToolkit
                    Subject == other.Subject &&
                    Department == other.Department &&
                    Grade == other.Grade &&
+                   Specialty == other.Specialty &&
                    ExamineeCount == other.ExamineeCount &&
-                   Location == other.Location;
+                   Location == other.Location &&
+                   ExamAspect == other.ExamAspect;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(StartTime, EndTime, Subject, Department, Grade, ExamineeCount, Location);
+            HashCode hash = new HashCode();
+            hash.Add(StartTime);
+            hash.Add(EndTime);
+            hash.Add(Subject);
+            hash.Add(Department);
+            hash.Add(Grade);
+            hash.Add(Specialty);
+            hash.Add(ExamineeCount);
+            hash.Add(Location);
+            hash.Add(ExamAspect);
+            return hash.ToHashCode();
         }
 
         public static bool operator ==(InvigilateRecordEntry left, InvigilateRecordEntry right)

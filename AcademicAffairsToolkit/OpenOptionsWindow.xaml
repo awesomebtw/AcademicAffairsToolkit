@@ -79,12 +79,21 @@
                     <Fluent:Spinner Header="Department column"
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
                                     Value="{Binding DepartmentColumn}"/>
+                    <Fluent:Spinner Header="Grade column"
+                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
+                                    Value="{Binding GradeColumn}"/>
+                    <Fluent:Spinner Header="Specialty column"
+                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
+                                    Value="{Binding SpecialtyColumn}"/>
                     <Fluent:Spinner Header="Examinee count column"
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
                                     Value="{Binding ExamineeCountColumn}"/>
                     <Fluent:Spinner Header="Location column"
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
                                     Value="{Binding LocationColumn}"/>
+                    <Fluent:Spinner Header="Exam aspect column"
+                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
+                                    Value="{Binding ExamAspectColumn}"/>
                 </ItemsControl>
                 <ItemsControl Padding="5" DataContext="{Binding Path=(local:Session.TROfficeFilePolicy)}"
                               Visibility="{Binding IsChecked, ElementName=trRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}">
