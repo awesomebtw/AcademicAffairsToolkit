@@ -42,16 +42,16 @@ namespace AcademicAffairsToolkit
             {
                 case SelectedFileType.InvigilateFile:
                     {
-                        Session.InvigilateRecords = (await ExcelProcessor.ReadInvigilateTableAsync(
-                                fileName, password, Session.InvigilateFilePolicy)).ToArray();
+                        Session.InvigilateRecords = await ExcelProcessor.ReadInvigilateTableAsync(
+                                fileName, password, Session.InvigilateFilePolicy);
                         ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
                         invigilateFileViewButton.IsChecked = true;
                     }
                     break;
                 case SelectedFileType.TROfficeFile:
                     {
-                        Session.TROffices = (await ExcelProcessor.ReadTROfficeTableAsync(
-                                fileName, password, Session.TROfficeFilePolicy)).ToArray();
+                        Session.TROffices = await ExcelProcessor.ReadTROfficeTableAsync(
+                                fileName, password, Session.TROfficeFilePolicy);
                         ToggleView.Execute("/TRFileViewPage.xaml", this);
                         trOfficeFileViewButton.IsChecked = true;
                     }
@@ -72,11 +72,10 @@ namespace AcademicAffairsToolkit
                 return;
             }
 
-            var openFileTask = OpenFileAsync(
-                openExcelDialog.FileName, openOptionsWindow.Password, openOptionsWindow.SelectedFileType);
             try
             {
-                await openFileTask;
+                await OpenFileAsync(
+                    openExcelDialog.FileName, openOptionsWindow.Password, openOptionsWindow.SelectedFileType);
                 RecentlyOpenedFiles.Add(Tuple.Create(openExcelDialog.FileName, openOptionsWindow.SelectedFileType));
             }
             catch (InvalidOperationException ex)
@@ -208,6 +207,7 @@ namespace AcademicAffairsToolkit
                 arrangementProgessBar.Visibility = Visibility.Collapsed;
                 arrangementProgessBar.Value = 0;
                 ToggleView.Execute("/TableViewPage.xaml", this);
+                tableViewButton.IsChecked = true;
                 statusText.Text = "Arrangement finished";
             }));
         }

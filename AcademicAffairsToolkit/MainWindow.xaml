@@ -117,7 +117,7 @@
                         <Fluent:BackstageTabItem Header="About">
                             <StackPanel Margin="20" Orientation="Vertical">
                                 <TextBlock FontSize="36" Margin="5">Academic Affairs Toolkit</TextBlock>
-                                <TextBlock Margin="5" Text="Version 0.0.0.6"/>
+                                <TextBlock Margin="5" Text="Version 0.0.0.7"/>
                                 <TextBlock Margin="5" Text="Third party project/resources: "/>
                                 <Fluent:Gallery BorderThickness="1" Margin="5" MaxItemsInRow="1">
                                     <Fluent:GalleryItem>Extended WPF Toolkit</Fluent:GalleryItem>
@@ -174,7 +174,7 @@
 
                     <Fluent:Spinner Name="iterationsSpinner"
                                     Style="{StaticResource PolicySpinnerStyle}" Header="Iterations: "
-                                    Maximum="1200" Minimum="60" Value="1000">
+                                    Maximum="2000" Minimum="100" Value="1000" Increment="10">
                         <Fluent:Spinner.Icon>
                             <Rectangle Fill="{StaticResource PolicyIcon}"/>
                         </Fluent:Spinner.Icon>
@@ -209,7 +209,7 @@
                         <Fluent:Spinner.ToolTip>
                             <Fluent:ScreenTip Title="Number of solutions">
                                 <Fluent:ScreenTip.Text>
-                                    Set how many arrangement solutions will provide with.
+                                    Set how many arrangement solutions will be displayed when done.
                                     The value must not be larger than "Population size".
                                 </Fluent:ScreenTip.Text>
                             </Fluent:ScreenTip>
@@ -268,7 +268,8 @@
                                               DisableReason="At least one of two required files wasn't loaded."/>
                         </Fluent:ToggleButton.ToolTip>
                     </Fluent:ToggleButton>
-                    <Fluent:ToggleButton Name="tableViewButton" Header="Plain table"
+                    <Fluent:ToggleButton Name="tableViewButton"
+                                         Header="Result table"
                                          GroupName="viewGroup"
                                          Size="Middle"
                                          Command="{x:Static local:MainWindow.ToggleView}"
@@ -279,20 +280,6 @@
                         <Fluent:ToggleButton.ToolTip>
                             <Fluent:ScreenTip Title="Table view"
                                               Text="See result in table view."
-                                              DisableReason="At least one of two required files wasn't loaded."/>
-                        </Fluent:ToggleButton.ToolTip>
-                    </Fluent:ToggleButton>
-                    <Fluent:ToggleButton Header="Calendar"
-                                         GroupName="viewGroup"
-                                         Size="Middle"
-                                         Command="{x:Static local:MainWindow.ToggleView}"
-                                         CommandParameter="/CalendarViewPage.xaml">
-                        <Fluent:ToggleButton.Icon>
-                            <Rectangle Fill="{StaticResource CalendarIcon}"/>
-                        </Fluent:ToggleButton.Icon>
-                        <Fluent:ToggleButton.ToolTip>
-                            <Fluent:ScreenTip Title="Calendar view"
-                                              Text="See result in calendar view."
                                               DisableReason="At least one of two required files wasn't loaded."/>
                         </Fluent:ToggleButton.ToolTip>
                     </Fluent:ToggleButton>

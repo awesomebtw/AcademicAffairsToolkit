@@ -9,6 +9,51 @@
       Title="TableViewPage"
       DataContext="{Binding Path=(local:Session.Arrangements)}">
 
-    <DataGrid Name="tableViewGrid" ItemsSource="{Binding Path=/}" AlternatingRowBackground="LightBlue" IsReadOnly="True"/>
+    <Page.Resources>
+        <Style x:Key="DetailsTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Page.Resources>
+    
+    <DataGrid Name="tableViewGrid"
+              ItemsSource="{Binding Path=/}"
+              AlternatingRowBackground="LightBlue"
+              IsReadOnly="True"
+              RowDetailsVisibilityMode="VisibleWhenSelected">
+        <DataGrid.RowDetailsTemplate>
+            <DataTemplate DataType="{x:Type local:ArrangementResultEntry}">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel DataContext="{Binding Path=InvigilateRecord}" Orientation="Vertical">
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=Subject, StringFormat=Subject: {0}}"/>
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=Grade, StringFormat=Grade: {0}}"/>
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=Department, StringFormat=Department: {0}}"/>
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=ExamineeCount, StringFormat=Examinees: {0}}"/>
+                    </StackPanel>
+                    <StackPanel DataContext="{Binding Path=InvigilateRecord}" Orientation="Vertical">
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=StartTime, StringFormat=From: {0}}"/>
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=EndTime, StringFormat=To: {0}}"/>
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=Location, StringFormat=Location: {0}}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=TROfficeRecord.Name, StringFormat=Office: {0}}"/>
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=TROfficeRecord.Director, StringFormat=Director: {0}}"/>
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=TROfficeRecord.PeopleCount, StringFormat=People count: {0}}"/>
+                        <TextBlock Style="{StaticResource DetailsTextBlockStyle}"
+                                   Text="{Binding Path=PeopleNeeded, StringFormat=People needed: {0}}"/>
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+        </DataGrid.RowDetailsTemplate>
+    </DataGrid>
 
 </Page>
