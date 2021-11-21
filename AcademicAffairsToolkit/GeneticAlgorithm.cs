@@ -342,9 +342,9 @@ namespace AcademicAffairsToolkit
             ArrangementTerminated?.Invoke(this, new ArrangementTerminatedEventArgs(false, result, invigilateRecords, peopleNeeded));
         }
 
-        public Task StartArrangementAsync()
+        public async Task StartArrangementAsync()
         {
-            return Task.Run(StartArrangement);
+            await Task.Run(StartArrangement);
         }
     }
 }
