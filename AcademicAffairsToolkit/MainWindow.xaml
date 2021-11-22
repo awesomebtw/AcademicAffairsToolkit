@@ -124,7 +124,7 @@
                                 <TextBlock Margin="5" Text="Version 0.0.0.7"/>
                                 <TextBlock Margin="5" Text="Third party project/resources: "/>
                                 <Fluent:Gallery BorderThickness="1" Margin="5" MaxItemsInRow="1">
-                                    <Fluent:GalleryItem>Extended WPF Toolkit</Fluent:GalleryItem>
+                                    <Fluent:GalleryItem>Extended WPF Toolkit (dotnetproject fork)</Fluent:GalleryItem>
                                     <Fluent:GalleryItem>Fluent.Ribbon</Fluent:GalleryItem>
                                     <Fluent:GalleryItem>npoi</Fluent:GalleryItem>
                                     <Fluent:GalleryItem>RangeTree</Fluent:GalleryItem>

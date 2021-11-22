@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.1.0" />
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.97" />
     <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
     <PackageReference Include="NPOI" Version="2.5.5" />
     <PackageReference Include="RangeTree" Version="3.0.1" />

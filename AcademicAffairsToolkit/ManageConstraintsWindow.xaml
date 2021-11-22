@@ -8,6 +8,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Manage Constraints" WindowStartupLocation="CenterOwner"
+        MinHeight="400" MinWidth="400"
         Height="400" Width="400"
         DataContext="{Binding Path=(local:Session.Constraints)}">
     
