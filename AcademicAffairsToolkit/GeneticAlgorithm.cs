@@ -319,8 +319,14 @@ namespace AcademicAffairsToolkit
             Random random = new Random();
             int innerIterations = populationSize / 2; //< two offsprings will be generated for each iteration
             var population = GenerateInitialPopulation(populationSize).ToList();
+
             var fitnessDict = population.ToDictionary(p => p, p => GetFitness(p));
             var fitness = population.Select(p => fitnessDict[p]).ToArray();
+            double fitnessAverage = fitness.Average();
+            double fitnessVariance = fitness.Sum(p => Math.Pow(p - fitnessAverage, 2)) / fitness.Length;
+
+            double localCrossoverProbability = crossoverProbability;
+            double localMutationProbabilty = mutationProbability;
 
             for (int i = 0; i < iterations; i++)
             {
@@ -334,11 +340,11 @@ namespace AcademicAffairsToolkit
                     var child1 = population[index1].ToArray();
                     var child2 = population[index2].ToArray();
 
-                    if (random.NextDouble() < crossoverProbability)
+                    if (random.NextDouble() < localCrossoverProbability)
                         ApplyCrossoverInplace(ref child1, ref child2);
-                    if (random.NextDouble() < mutationProbability)
+                    if (random.NextDouble() < localMutationProbabilty)
                         MutateInplace(ref child1);
-                    if (random.NextDouble() < mutationProbability)
+                    if (random.NextDouble() < localMutationProbabilty)
                         MutateInplace(ref child2);
 
                     int minFitness = fitness.Min();
@@ -369,8 +375,17 @@ namespace AcademicAffairsToolkit
                 }
 
                 fitness = population.Select(p => fitnessDict[p]).ToArray();
+                fitnessAverage = fitness.Average();
+                fitnessVariance = fitness.Sum(p => Math.Pow(p - fitnessAverage, 2)) / fitness.Length;
 
-                Debug.WriteLine($"generation {i}, max fitness {fitness.Max()}, avg fitness {fitness.Average()}");
+                // increase crossover and mutation probability to ensure diversity and optimal solution
+                if (fitnessVariance < 0.1)
+                {
+                    localCrossoverProbability = Math.Min(localCrossoverProbability * 1.005, 0.9);
+                    localMutationProbabilty = Math.Min(localMutationProbabilty * 1.005, 0.8);
+                }
+
+                Debug.WriteLine($"generation {i}, fitness max {fitness.Max()}, avg {fitnessAverage}, var {fitnessVariance}");
 
                 ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i, iterations));
             }
