@@ -32,12 +32,9 @@ namespace AcademicAffairsToolkit
     {
         public int CurrentIteration { get; private set; }
 
-        public int TotalIterations { get; private set; }
-
-        public ArrangementStepForwardEventArgs(int currentIteration, int totalIterations)
+        public ArrangementStepForwardEventArgs(int currentIteration)
         {
             CurrentIteration = currentIteration;
-            TotalIterations = totalIterations;
         }
     }
 

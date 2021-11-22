@@ -285,7 +285,7 @@ namespace AcademicAffairsToolkit
         /// </summary>
         /// <param name="fitness">array of evaluated fitness</param>
         /// <returns>a pair of integer representing selected indices of chromosome</returns>
-        private (int, int) PerformSelection(IEnumerable<int> fitness)
+        private (int, int) PerformSelection(in int[] fitness)
         {
             // normalize fitnesses
             int max = fitness.Max();
@@ -323,7 +323,7 @@ namespace AcademicAffairsToolkit
             var fitnessDict = population.ToDictionary(p => p, p => GetFitness(p));
             var fitness = population.Select(p => fitnessDict[p]).ToArray();
             double fitnessAverage = fitness.Average();
-            double fitnessVariance = fitness.Sum(p => Math.Pow(p - fitnessAverage, 2)) / fitness.Length;
+            double fitnessAvgDev = fitness.Sum(p => Math.Abs(p - fitnessAverage)) / fitness.Length;
 
             double localCrossoverProbability = crossoverProbability;
             double localMutationProbabilty = mutationProbability;
@@ -376,24 +376,27 @@ namespace AcademicAffairsToolkit
 
                 fitness = population.Select(p => fitnessDict[p]).ToArray();
                 fitnessAverage = fitness.Average();
-                fitnessVariance = fitness.Sum(p => Math.Pow(p - fitnessAverage, 2)) / fitness.Length;
+                fitnessAvgDev = fitness.Sum(p => Math.Abs(p - fitnessAverage)) / fitness.Length;
 
                 // increase crossover and mutation probability to ensure diversity and optimal solution
-                if (fitnessVariance < 0.1)
+                if (fitnessAvgDev < 0.01)
                 {
                     localCrossoverProbability = Math.Min(localCrossoverProbability * 1.005, 0.9);
                     localMutationProbabilty = Math.Min(localMutationProbabilty * 1.005, 0.8);
                 }
 
-                Debug.WriteLine($"generation {i}, fitness max {fitness.Max()}, avg {fitnessAverage}, var {fitnessVariance}");
+                Debug.WriteLine($"generation {i}, fitness max {fitness.Max()}, avg {fitnessAverage}, " +
+                    $"avgdev {fitnessAvgDev}, crate {localCrossoverProbability}, mrate {localMutationProbabilty}");
 
-                ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i, iterations));
+                ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i));
             }
 
             var maxFitness = fitness.Max();
             var result = population.Where((_, i) => fitness[i] == maxFitness).Distinct().Take(resultSize);
 
-            ArrangementTerminated?.Invoke(this, new ArrangementTerminatedEventArgs(cancellationToken.IsCancellationRequested, result, invigilateRecords, peopleNeeded));
+            ArrangementTerminated?.Invoke(this,
+                new ArrangementTerminatedEventArgs(cancellationToken.IsCancellationRequested,
+                    result, invigilateRecords, peopleNeeded));
         }
 
         public async Task StartArrangementAsync()

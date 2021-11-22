@@ -244,9 +244,7 @@ namespace AcademicAffairsToolkit
                 arrangementProgessBar.Value = 0;
                 ToggleView.Execute("/TableViewPage.xaml", this);
                 tableViewButton.IsChecked = true;
-                statusText.Text = cancellationTokenSource?.IsCancellationRequested == true
-                    ? "Arrangement cancelled"
-                    : "Arrangement finished";
+                statusText.Text = e.Cancelled ? "Arrangement cancelled" : "Arrangement finished";
             }));
         }
 
