@@ -121,7 +121,7 @@
                         <Fluent:BackstageTabItem Header="About">
                             <StackPanel Margin="20" Orientation="Vertical">
                                 <TextBlock FontSize="36" Margin="5">Academic Affairs Toolkit</TextBlock>
-                                <TextBlock Margin="5" Text="Version 0.0.0.7"/>
+                                <TextBlock Margin="5" Text="Version 0.0.0.8"/>
                                 <TextBlock Margin="5" Text="Third party project/resources: "/>
                                 <Fluent:Gallery BorderThickness="1" Margin="5" MaxItemsInRow="1">
                                     <Fluent:GalleryItem>Extended WPF Toolkit (dotnetproject fork)</Fluent:GalleryItem>
@@ -179,7 +179,7 @@
 
                     <Fluent:Spinner Name="iterationsSpinner"
                                     Style="{StaticResource PolicySpinnerStyle}" Header="Iterations: "
-                                    Maximum="2000" Minimum="100" Value="1000" Increment="10">
+                                    Maximum="2000" Minimum="100" Value="400" Increment="10">
                         <Fluent:Spinner.Icon>
                             <Rectangle Fill="{StaticResource IterationCountIcon}"/>
                         </Fluent:Spinner.Icon>

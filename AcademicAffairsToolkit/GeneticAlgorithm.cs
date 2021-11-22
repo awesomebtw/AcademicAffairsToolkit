@@ -10,7 +10,7 @@ namespace AcademicAffairsToolkit
 {
     class GeneticAlgorithm : IArrangementAlgorithm
     {
-        private static readonly double crossoverProbability = 0.75;
+        private static readonly double crossoverProbability = 0.7;
 
         private static readonly double mutationProbability = 0.1;
 
@@ -181,7 +181,7 @@ namespace AcademicAffairsToolkit
         /// <returns>fitness of given chromosome</returns>
         private int GetFitness(TROfficeRecordEntry[] chromosome)
         {
-            const int constraintViolationFactor = 200;
+            const int constraintViolationFactor = 1000;
             const int arrangeOverlapFactor = 400;
             const int distributionFactor = 30;
 
