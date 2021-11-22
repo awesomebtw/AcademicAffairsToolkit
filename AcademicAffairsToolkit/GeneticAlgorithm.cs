@@ -137,7 +137,6 @@ namespace AcademicAffairsToolkit
         /// invigilate task at <c>InvigilateRecords[i]</c> is assigned to <c>chromosome[i]</c>.</returns>
         private IEnumerable<TROfficeRecordEntry> GenerateChromosome()
         {
-            var trOfficeList = new List<TROfficeRecordEntry>(trOfficeRecords);
             var trOfficeRemaining = trOfficeRecords.Select(p => p.PeopleCount).ToList();
 
             Random random = new Random();
@@ -149,16 +148,16 @@ namespace AcademicAffairsToolkit
                 // by picking a random index and check if people is enough
                 // to prevent endless loop when there's no office suitable,
                 // a variable is added here to record the initial index
-                int j = random.Next(trOfficeList.Count);
+                int j = random.Next(trOfficeRecords.Length);
                 int k = j;
                 while (trOfficeRemaining[j] < peopleNeeded[i])
                 {
-                    j = (j + 1) % trOfficeList.Count;
+                    j = (j + 1) % trOfficeRecords.Length;
                     if (j == k)
                         throw new ApplicationException("available person is not sufficient for arrangement");
                 }
 
-                yield return trOfficeList[j];
+                yield return trOfficeRecords[j];
             }
         }
 
@@ -262,7 +261,7 @@ namespace AcademicAffairsToolkit
         }
 
         /// <summary>
-        /// do mutation in place with inverse mutating
+        /// do mutation in place with inversion mutating
         /// </summary>
         /// <param name="chromosome">chromosome to be mutated</param>
         private void MutateInplace(ref TROfficeRecordEntry[] chromosome)
