@@ -188,6 +188,12 @@ namespace AcademicAffairsToolkit
                 (int)iterationsSpinner.Value, (int)populationSpinner.Value, (int)solutionsSpinner.Value,
                 cancellationTokenSource.Token);
 
+            stopArrangementButton.IsEnabled = true;
+            startArrangementButton.IsEnabled = false;
+            iterationsSpinner.IsEnabled = false;
+            populationSpinner.IsEnabled = false;
+            solutionsSpinner.IsEnabled = false;
+
             arrangementProgessBar.Visibility = Visibility.Visible;
             statusText.Text = "Arrangement in progress...";
 
@@ -225,6 +231,14 @@ namespace AcademicAffairsToolkit
                         e.InvigilateRecords.Select(
                             (p, i) => new ArrangementResultEntry(p, result[i], e.PeopleNeeded[i])).ToArray());
                 }
+
+                stopArrangementButton.IsEnabled = false;
+                startArrangementButton.IsEnabled = true;
+                iterationsSpinner.IsEnabled = true;
+                populationSpinner.IsEnabled = true;
+                solutionsSpinner.IsEnabled = true;
+
+                selectedSolutionGallery.SelectedIndex = 0;
 
                 arrangementProgessBar.Visibility = Visibility.Collapsed;
                 arrangementProgessBar.Value = 0;
