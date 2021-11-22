@@ -45,7 +45,7 @@
                         </Fluent:Button.LargeIcon>
                         <Fluent:Button.ToolTip>
                             <Fluent:ScreenTip Title="Open then close this page"
-                                              Text="Open files for arrangement; close the file open page after open dialog is shown."/>
+                                              Text="Open files for arrangement; close this page after open dialog is shown."/>
                         </Fluent:Button.ToolTip>
                     </Fluent:Button>
                 </StackPanel>
@@ -181,7 +181,7 @@
                                     Style="{StaticResource PolicySpinnerStyle}" Header="Iterations: "
                                     Maximum="2000" Minimum="100" Value="1000" Increment="10">
                         <Fluent:Spinner.Icon>
-                            <Rectangle Fill="{StaticResource PolicyIcon}"/>
+                            <Rectangle Fill="{StaticResource IterationCountIcon}"/>
                         </Fluent:Spinner.Icon>
                         <Fluent:Spinner.ToolTip>
                             <Fluent:ScreenTip Title="Iterations" DisableReason="Arrangement is in progress.">
@@ -198,7 +198,7 @@
                                     Style="{StaticResource PolicySpinnerStyle}" Header="Population size: "
                                     Maximum="200" Minimum="10" Value="100">
                         <Fluent:Spinner.Icon>
-                            <Rectangle Fill="{StaticResource PolicyIcon}"/>
+                            <Rectangle Fill="{StaticResource PopulationCountIcon}"/>
                         </Fluent:Spinner.Icon>
                         <Fluent:Spinner.ToolTip>
                             <Fluent:ScreenTip Title="Population size"
