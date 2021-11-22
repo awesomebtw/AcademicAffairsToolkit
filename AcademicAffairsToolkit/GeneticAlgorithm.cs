@@ -1,5 +1,6 @@
 ﻿using IntervalTree;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -313,90 +314,131 @@ namespace AcademicAffairsToolkit
 
             return (selectedIndices[0], selectedIndices[1]);
         }
+        
 
         public void StartArrangement()
         {
-            Random random = new Random();
-            int innerIterations = populationSize / 2; //< two offsprings will be generated for each iteration
-            var population = GenerateInitialPopulation(populationSize).ToList();
+            int threads = Environment.ProcessorCount / 2;
 
-            var fitnessDict = population.ToDictionary(p => p, p => GetFitness(p));
-            var fitness = population.Select(p => fitnessDict[p]).ToArray();
-            double fitnessAverage = fitness.Average();
-            double fitnessAvgDev = fitness.Sum(p => Math.Abs(p - fitnessAverage)) / fitness.Length;
+            var migrationCollection = new ConcurrentDictionary<long, TROfficeRecordEntry[]>();
+            var resultList = new ConcurrentBag<TROfficeRecordEntry[]>();
 
-            double localCrossoverProbability = crossoverProbability;
-            double localMutationProbabilty = mutationProbability;
+            var populationPartitioner = Partitioner.Create(GenerateInitialPopulation(populationSize).ToArray(), false);
 
-            for (int i = 0; i < iterations; i++)
+            var loopResult = Parallel.ForEach(populationPartitioner.GetPartitions(threads), new ParallelOptions() { CancellationToken = cancellationToken }, (populationEnumerator, loopState, index) =>
             {
-                if (cancellationToken.IsCancellationRequested == true)
-                    break;
+                var population = new List<TROfficeRecordEntry[]>();
 
-                for (int j = 0; j < innerIterations; j++)
+                using (populationEnumerator)
                 {
-                    (int index1, int index2) = PerformSelection(fitness);
+                    while (populationEnumerator.MoveNext())
+                        population.Add(populationEnumerator.Current);
+                }
+                Debug.WriteLine($"thread {index} has a population of {population.Count}");
 
-                    var child1 = population[index1].ToArray();
-                    var child2 = population[index2].ToArray();
+                int innerIterations = population.Count / 2; //< two offsprings will be generated for each iteration
 
-                    if (random.NextDouble() < localCrossoverProbability)
-                        ApplyCrossoverInplace(ref child1, ref child2);
-                    if (random.NextDouble() < localMutationProbabilty)
-                        MutateInplace(ref child1);
-                    if (random.NextDouble() < localMutationProbabilty)
-                        MutateInplace(ref child2);
+                var fitnessDict = population.ToDictionary(p => p, p => GetFitness(p));
+                var fitness = population.Select(p => fitnessDict[p]).ToArray();
+                double fitnessAverage = fitness.Average();
+                double fitnessAvgDev = fitness.Sum(p => Math.Abs(p - fitnessAverage)) / fitness.Length;
 
-                    int minFitness = fitness.Min();
-                    int fitness1 = GetFitness(child1);
-                    if (fitness1 > minFitness && fitnessDict.TryAdd(child1, fitness1))
+                Random random = new Random();
+                var localCrossoverProbability = crossoverProbability + (random.NextDouble() * 0.2 - 0.1);
+                var localMutationProbability = mutationProbability + (random.NextDouble() * 0.1 - 0.05);
+
+                for (int i = 0; i < iterations; i++)
+                {
+                    if (cancellationToken.IsCancellationRequested == true)
+                        break;
+
+                    for (int j = 0; j < innerIterations; j++)
                     {
-                        population.Add(child1);
+                        (int index1, int index2) = PerformSelection(fitness);
+
+                        var child1 = population[index1].ToArray();
+                        var child2 = population[index2].ToArray();
+
+                        if (random.NextDouble() < localCrossoverProbability)
+                            ApplyCrossoverInplace(ref child1, ref child2);
+                        if (random.NextDouble() < localMutationProbability)
+                            MutateInplace(ref child1);
+                        if (random.NextDouble() < localMutationProbability)
+                            MutateInplace(ref child2);
+
+                        int minFitness = fitness.Min();
+                        int fitness1 = GetFitness(child1);
+                        if (fitness1 > minFitness && fitnessDict.TryAdd(child1, fitness1))
+                        {
+                            population.Add(child1);
+                        }
+
+                        int fitness2 = GetFitness(child2);
+                        if (fitness2 > minFitness && fitnessDict.TryAdd(child2, fitness2))
+                        {
+                            population.Add(child2);
+                        }
                     }
 
-                    int fitness2 = GetFitness(child2);
-                    if (fitness2 > minFitness && fitnessDict.TryAdd(child2, fitness2))
+                    // the best individual migrates to another island
+                    if ((i + 1) % (iterations / 15) == 0)
                     {
-                        population.Add(child2);
+                        long pos = (index + 1) % threads;
+                        if (!migrationCollection.ContainsKey(pos) || migrationCollection[pos] == null)
+                        {
+                            var max = fitnessDict.Values.Max();
+                            var maxItem = population.First(p => fitnessDict[p] == max);
+                            population.Remove(maxItem);
+                            migrationCollection[pos] = maxItem;
+                            Debug.WriteLine($"thread {index} migrate out");
+                        }
                     }
+                    // get best individual from other island
+                    if (migrationCollection.TryGetValue(index, out var migration) && migration != null)
+                    {
+                        fitnessDict.TryAdd(migration, GetFitness(migration));
+                        population.Add(migration);
+                        migrationCollection[index] = null;
+                        Debug.WriteLine($"thread {index} migrate in");
+                    }
+
+                    // elinimate low-fitness population
+                    // use dictionary here to avoid repeated fitness evaluations
+                    var fitnessThreshold = fitnessDict.Values.OrderByDescending(p => p).Take(populationSize).Last();
+                    // Remove() will always return true here because elements are guarantee to be exist,
+                    // therefore we can dalete corresponding items from the dictionary when delete from population
+                    population.RemoveAll(p => fitnessDict[p] < fitnessThreshold && fitnessDict.Remove(p));
+                    // if two or more chromosomes has the same length, just arbitrarily choose chromosomes to remove
+                    for (int j = population.Count - 1; population.Count > populationSize && j >= 0; j--)
+                    {
+                        if (fitnessDict[population[j]] == fitnessThreshold)
+                            population.RemoveAt(j);
+                    }
+
+                    fitness = population.Select(p => fitnessDict[p]).ToArray();
+                    fitnessAverage = fitness.Average();
+                    fitnessAvgDev = fitness.Sum(p => Math.Abs(p - fitnessAverage)) / fitness.Length;
+
+                    // increase crossover and mutation probability to ensure diversity and optimal solution
+                    if (fitnessAvgDev < 0.01)
+                    {
+                        localCrossoverProbability = Math.Min(localCrossoverProbability * 1.001, 0.95);
+                        localMutationProbability = Math.Min(localMutationProbability * 1.005, 0.8);
+                    }
+
+                    Debug.WriteLine($"thread {index}, generation {i}, fitness max {fitness.Max()}, avg {fitnessAverage}, " +
+                        $"avgdev {fitnessAvgDev}, crate {localCrossoverProbability}, mrate {localMutationProbability}");
+
+                    //ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i));
                 }
 
-                // elinimate low-fitness population
-                // use dictionary here to avoid repeated fitness evaluations
-                var fitnessThreshold = fitnessDict.Values.OrderByDescending(p => p).Take(populationSize).Last();
-                // Remove() will always return true here because elements are guarantee to be exist,
-                // therefore we can dalete corresponding items from the dictionary when delete from population
-                population.RemoveAll(p => fitnessDict[p] < fitnessThreshold && fitnessDict.Remove(p));
-                // if two or more chromosomes has the same length, just arbitrarily choose chromosomes to remove
-                for (int j = population.Count - 1; population.Count > populationSize && j >= 0; j--)
+                var maxFitness = fitness.Max();
+                foreach (var item in population.Where((p, i) => fitness[i] == maxFitness).Distinct().Take(resultSize))
                 {
-                    if (fitnessDict[population[j]] == fitnessThreshold)
-                        population.RemoveAt(j);
+                    resultList.Add(item);
                 }
-
-                fitness = population.Select(p => fitnessDict[p]).ToArray();
-                fitnessAverage = fitness.Average();
-                fitnessAvgDev = fitness.Sum(p => Math.Abs(p - fitnessAverage)) / fitness.Length;
-
-                // increase crossover and mutation probability to ensure diversity and optimal solution
-                if (fitnessAvgDev < 0.01)
-                {
-                    localCrossoverProbability = Math.Min(localCrossoverProbability * 1.001, 0.95);
-                    localMutationProbabilty = Math.Min(localMutationProbabilty * 1.005, 0.8);
-                }
-
-                Debug.WriteLine($"generation {i}, fitness max {fitness.Max()}, avg {fitnessAverage}, " +
-                    $"avgdev {fitnessAvgDev}, crate {localCrossoverProbability}, mrate {localMutationProbabilty}");
-
-                ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i));
-            }
-
-            var maxFitness = fitness.Max();
-            var result = population.Where((_, i) => fitness[i] == maxFitness).Distinct(new TROfficeArrayEqualityComparer()).Take(resultSize);
-
-            ArrangementTerminated?.Invoke(this,
-                new ArrangementTerminatedEventArgs(cancellationToken.IsCancellationRequested,
-                    result, invigilateRecords, peopleNeeded));
+            });
+            ArrangementTerminated?.Invoke(this, new ArrangementTerminatedEventArgs(false, resultList.Distinct(), invigilateRecords, peopleNeeded));
         }
 
         public async Task StartArrangementAsync()
