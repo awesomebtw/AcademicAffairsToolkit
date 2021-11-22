@@ -344,25 +344,25 @@ namespace AcademicAffairsToolkit
 
                     int minFitness = fitness.Min();
                     int fitness1 = GetFitness(child1);
-                    if (fitness1 > minFitness)
+                    if (fitness1 > minFitness && fitnessDict.TryAdd(child1, fitness1))
                     {
-                        fitnessDict.Add(child1, fitness1);
                         population.Add(child1);
                     }
 
                     int fitness2 = GetFitness(child2);
-                    if (fitness2 > minFitness)
+                    if (fitness2 > minFitness && fitnessDict.TryAdd(child2, fitness2))
                     {
-                        fitnessDict.Add(child2, fitness2);
                         population.Add(child2);
                     }
                 }
 
                 // elinimate low-fitness population
                 // use dictionary here to avoid repeated fitness evaluations
-                // if two or more chromosomes has the same length, just arbitrarily choose chromosomes to remove
                 var fitnessThreshold = fitnessDict.Values.OrderByDescending(p => p).Take(populationSize).Last();
+                // Remove() will always return true here because elements are guarantee to be exist,
+                // therefore we can dalete corresponding items from the dictionary when delete from population
                 population.RemoveAll(p => fitnessDict[p] < fitnessThreshold && fitnessDict.Remove(p));
+                // if two or more chromosomes has the same length, just arbitrarily choose chromosomes to remove
                 for (int j = population.Count - 1; population.Count > populationSize && j >= 0; j--)
                 {
                     if (fitnessDict[population[j]] == fitnessThreshold)
