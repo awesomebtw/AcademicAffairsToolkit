@@ -381,7 +381,7 @@ namespace AcademicAffairsToolkit
                 // increase crossover and mutation probability to ensure diversity and optimal solution
                 if (fitnessAvgDev < 0.01)
                 {
-                    localCrossoverProbability = Math.Min(localCrossoverProbability * 1.005, 0.9);
+                    localCrossoverProbability = Math.Min(localCrossoverProbability * 1.001, 0.95);
                     localMutationProbabilty = Math.Min(localMutationProbabilty * 1.005, 0.8);
                 }
 
@@ -392,7 +392,7 @@ namespace AcademicAffairsToolkit
             }
 
             var maxFitness = fitness.Max();
-            var result = population.Where((_, i) => fitness[i] == maxFitness).Distinct().Take(resultSize);
+            var result = population.Where((_, i) => fitness[i] == maxFitness).Distinct(new TROfficeArrayEqualityComparer()).Take(resultSize);
 
             ArrangementTerminated?.Invoke(this,
                 new ArrangementTerminatedEventArgs(cancellationToken.IsCancellationRequested,
