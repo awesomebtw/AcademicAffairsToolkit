@@ -232,7 +232,6 @@ namespace AcademicAffairsToolkit
                             (p, i) => new ArrangementResultEntry(p, result[i], e.PeopleNeeded[i])).ToArray());
                 }
 
-                stopArrangementButton.IsEnabled = false;
                 startArrangementButton.IsEnabled = true;
                 iterationsSpinner.IsEnabled = true;
                 populationSpinner.IsEnabled = true;
@@ -257,6 +256,7 @@ namespace AcademicAffairsToolkit
         {
             cancellationTokenSource?.Cancel();
             cancellationTokenSource?.Dispose();
+            stopArrangementButton.IsEnabled = false;
         }
 
         private void AddConstraintButtonClick(object sender, RoutedEventArgs e)
