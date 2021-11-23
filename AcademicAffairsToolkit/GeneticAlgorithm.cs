@@ -14,7 +14,11 @@ namespace AcademicAffairsToolkit
 
         private static readonly double mutationProbability = 0.1;
 
-        private readonly int resultSize = 10;
+        private static readonly int constraintViolationFactor = 101;
+
+        private static readonly int arrangeOverlapFactor = 157;
+        
+        private static readonly int distributionFactor = 3;
 
         private readonly TimeSpan longestExamTime = TimeSpan.Zero;
 
@@ -22,13 +26,15 @@ namespace AcademicAffairsToolkit
 
         private readonly int[] peopleNeeded;
 
-        private readonly IntervalTree<DateTime, TROfficeRecordEntry> constraints;
-
         private readonly TROfficeRecordEntry[] trOfficeRecords;
+
+        private readonly IntervalTree<DateTime, TROfficeRecordEntry> constraints;
 
         private readonly int iterations;
 
         private readonly int populationSize;
+
+        private readonly int resultSize;
 
         private readonly double invigilatePerCapita;
 
@@ -72,7 +78,7 @@ namespace AcademicAffairsToolkit
         /// <param name="iterations">maximum iteration for arrangement</param>
         /// <param name="populationSize">population size for each generation</param>
         /// <param name="resultSize">how many solutions to retrieve</param>
-        /// <param name="cancellationToken">cancellation token for asynchronous task</param>
+        /// <param name="cancellationToken">cancellation token for asynchronous arrangement task</param>
         public GeneticAlgorithm(IEnumerable<InvigilateRecordEntry> invigilateRecords,
             IEnumerable<TROfficeRecordEntry> trOfficeRecords,
             IEnumerable<InvigilateConstraint> constraints,
@@ -111,7 +117,7 @@ namespace AcademicAffairsToolkit
         /// get invigilate person needed for an exam according to requirement
         /// </summary>
         /// <param name="students">examinee count of an exam</param>
-        /// <returns>count of person needed</returns>
+        /// <returns>count of people needed for invigilate</returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         private static int GetInvigilatePersonCount(int students)
         {
@@ -132,9 +138,9 @@ namespace AcademicAffairsToolkit
         /// <summary>
         /// generate a random permutation of arrangement regardless of user-defined constraints
         /// </summary>
-        /// <returns>An array of tuple with office and people needed,
-        /// whose length is <c>InvigilateRecords.Length</c> and
-        /// invigilate task at <c>InvigilateRecords[i]</c> is assigned to <c>chromosome[i]</c>.</returns>
+        /// <returns>An array of tuple with office and people needed, whose length is
+        /// <see cref="invigilateRecords"/>.Length and the i-th element in <see cref="invigilateRecords"/>
+        /// is assigned to the i-th element in <see cref="trOfficeRecords"/>.</returns>
         private IEnumerable<TROfficeRecordEntry> GenerateChromosome()
         {
             var trOfficeRemaining = trOfficeRecords.Select(p => p.PeopleCount).ToList();
@@ -181,10 +187,6 @@ namespace AcademicAffairsToolkit
         /// <returns>fitness of given chromosome</returns>
         private int GetFitness(TROfficeRecordEntry[] chromosome)
         {
-            const int constraintViolationFactor = 1000;
-            const int arrangeOverlapFactor = 400;
-            const int distributionFactor = 30;
-
             int fitness = 0;
 
             // see how many constraints are violated in chromosome.Length * log(n)+m time
@@ -350,15 +352,11 @@ namespace AcademicAffairsToolkit
                     int minFitness = fitness.Min();
                     int fitness1 = GetFitness(child1);
                     if (fitness1 > minFitness && fitnessDict.TryAdd(child1, fitness1))
-                    {
                         population.Add(child1);
-                    }
 
                     int fitness2 = GetFitness(child2);
                     if (fitness2 > minFitness && fitnessDict.TryAdd(child2, fitness2))
-                    {
                         population.Add(child2);
-                    }
                 }
 
                 // elinimate low-fitness population
@@ -371,7 +369,10 @@ namespace AcademicAffairsToolkit
                 for (int j = population.Count - 1; population.Count > populationSize && j >= 0; j--)
                 {
                     if (fitnessDict[population[j]] == fitnessThreshold)
+                    {
+                        fitnessDict.Remove(population[j]);
                         population.RemoveAt(j);
+                    }
                 }
 
                 fitness = population.Select(p => fitnessDict[p]).ToArray();
@@ -379,7 +380,7 @@ namespace AcademicAffairsToolkit
                 fitnessAvgDev = fitness.Sum(p => Math.Abs(p - fitnessAverage)) / fitness.Length;
 
                 // increase crossover and mutation probability to ensure diversity and optimal solution
-                if (fitnessAvgDev < 0.01)
+                if (fitnessAvgDev == 0.0)
                 {
                     localCrossoverProbability = Math.Min(localCrossoverProbability * 1.001, 0.95);
                     localMutationProbabilty = Math.Min(localMutationProbabilty * 1.005, 0.8);
@@ -396,6 +397,7 @@ namespace AcademicAffairsToolkit
 
             ArrangementTerminated?.Invoke(this,
                 new ArrangementTerminatedEventArgs(cancellationToken.IsCancellationRequested,
+                    maxFitness >= Math.Min(constraintViolationFactor, arrangeOverlapFactor),
                     result, invigilateRecords, peopleNeeded));
         }
 

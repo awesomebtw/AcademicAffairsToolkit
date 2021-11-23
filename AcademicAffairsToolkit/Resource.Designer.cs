@@ -178,11 +178,56 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
+        ///   查找类似 日期列 的本地化字符串。
+        /// </summary>
+        public static string DateColumn {
+            get {
+                return ResourceManager.GetString("DateColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 学院列 的本地化字符串。
+        /// </summary>
+        public static string DepartmentColumn {
+            get {
+                return ResourceManager.GetString("DepartmentColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 主任列 的本地化字符串。
+        /// </summary>
+        public static string DirectorColumn {
+            get {
+                return ResourceManager.GetString("DirectorColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 错误 的本地化字符串。
         /// </summary>
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 考试方式列 的本地化字符串。
+        /// </summary>
+        public static string ExamAspectColumn {
+            get {
+                return ResourceManager.GetString("ExamAspectColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 考生人数列 的本地化字符串。
+        /// </summary>
+        public static string ExamineeCountColumn {
+            get {
+                return ResourceManager.GetString("ExamineeCountColumn", resourceCulture);
             }
         }
         
@@ -259,6 +304,15 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
+        ///   查找类似 年级列 的本地化字符串。
+        /// </summary>
+        public static string GradeColumn {
+            get {
+                return ResourceManager.GetString("GradeColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 主页 的本地化字符串。
         /// </summary>
         public static string Home {
@@ -304,6 +358,15 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
+        ///   查找类似 考试地点列 的本地化字符串。
+        /// </summary>
+        public static string LocationColumn {
+            get {
+                return ResourceManager.GetString("LocationColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 管理... 的本地化字符串。
         /// </summary>
         public static string Manage {
@@ -318,6 +381,15 @@ namespace AcademicAffairsToolkit {
         public static string ManageTooltip {
             get {
                 return ResourceManager.GetString("ManageTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 教研室名称列 的本地化字符串。
+        /// </summary>
+        public static string NameColumn {
+            get {
+                return ResourceManager.GetString("NameColumn", resourceCulture);
             }
         }
         
@@ -403,6 +475,15 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
+        ///   查找类似 人数列 的本地化字符串。
+        /// </summary>
+        public static string PeopleCountColumn {
+            get {
+                return ResourceManager.GetString("PeopleCountColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 种群大小 的本地化字符串。
         /// </summary>
         public static string PopulationSize {
@@ -417,6 +498,15 @@ namespace AcademicAffairsToolkit {
         public static string PopulationSizeToolTip {
             get {
                 return ResourceManager.GetString("PopulationSizeToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 安排完成，但是结果可能不尽如人意，这可能是因为教研室人数太少或者约束条件太多，可以尝试重新开始安排 的本地化字符串。
+        /// </summary>
+        public static string PotentialUnableToArrangeTip {
+            get {
+                return ResourceManager.GetString("PotentialUnableToArrangeTip", resourceCulture);
             }
         }
         
@@ -513,18 +603,18 @@ namespace AcademicAffairsToolkit {
         /// <summary>
         ///   查找类似 个工作表 的本地化字符串。
         /// </summary>
-        public static string SheetWrittenPostfix {
+        public static string SheetsWrittenPostfix {
             get {
-                return ResourceManager.GetString("SheetWrittenPostfix", resourceCulture);
+                return ResourceManager.GetString("SheetsWrittenPostfix", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 已写入 的本地化字符串。
         /// </summary>
-        public static string SheetWrittenPrefix {
+        public static string SheetsWrittenPrefix {
             get {
-                return ResourceManager.GetString("SheetWrittenPrefix", resourceCulture);
+                return ResourceManager.GetString("SheetsWrittenPrefix", resourceCulture);
             }
         }
         
@@ -543,6 +633,15 @@ namespace AcademicAffairsToolkit {
         public static string SolutionNumTooltip {
             get {
                 return ResourceManager.GetString("SolutionNumTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 专业列 的本地化字符串。
+        /// </summary>
+        public static string SpecialtyColumn {
+            get {
+                return ResourceManager.GetString("SpecialtyColumn", resourceCulture);
             }
         }
         
@@ -601,11 +700,29 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
+        ///   查找类似 考试科目列 的本地化字符串。
+        /// </summary>
+        public static string SubjectColumn {
+            get {
+                return ResourceManager.GetString("SubjectColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 第三方项目和资源： 的本地化字符串。
         /// </summary>
         public static string ThirdPartyProject {
             get {
                 return ResourceManager.GetString("ThirdPartyProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 时间列 的本地化字符串。
+        /// </summary>
+        public static string TimeIntervalColumn {
+            get {
+                return ResourceManager.GetString("TimeIntervalColumn", resourceCulture);
             }
         }
         
@@ -669,6 +786,15 @@ namespace AcademicAffairsToolkit {
         public static string View {
             get {
                 return ResourceManager.GetString("View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 警告 的本地化字符串。
+        /// </summary>
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
     }

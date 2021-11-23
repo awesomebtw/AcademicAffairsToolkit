@@ -42,15 +42,18 @@ namespace AcademicAffairsToolkit
     {
         public bool Cancelled { get; private set; }
 
+        public bool PotentialUnableToArrange { get; private set; }
+
         public IEnumerable<TROfficeRecordEntry[]> Result { get; private set; }
 
         public InvigilateRecordEntry[] InvigilateRecords { get; private set; }
 
         public int[] PeopleNeeded { get; private set; }
 
-        public ArrangementTerminatedEventArgs(bool cancelled, IEnumerable<TROfficeRecordEntry[]> result, InvigilateRecordEntry[] record, int[] peopleNeeded)
+        public ArrangementTerminatedEventArgs(bool cancelled, bool potentialUnableToArrange, IEnumerable<TROfficeRecordEntry[]> result, InvigilateRecordEntry[] record, int[] peopleNeeded)
         {
             Cancelled = cancelled;
+            PotentialUnableToArrange = potentialUnableToArrange;
             Result = result;
             InvigilateRecords = record;
             PeopleNeeded = peopleNeeded;

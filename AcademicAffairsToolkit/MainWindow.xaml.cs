@@ -155,7 +155,7 @@ namespace AcademicAffairsToolkit
                     throw;
                 }
 
-                MessageBox.Show($"{Resource.SheetWrittenPrefix} {Session.Arrangements.Count} {Resource.SheetWrittenPostfix}",
+                MessageBox.Show($"{Resource.SheetsWrittenPrefix} {Session.Arrangements.Count} {Resource.SheetsWrittenPostfix}",
                     Resource.Save, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -244,6 +244,12 @@ namespace AcademicAffairsToolkit
                 ToggleView.Execute("/TableViewPage.xaml", this);
                 tableViewButton.IsChecked = true;
                 statusText.Text = e.Cancelled ? Resource.ArrangementCanceled : Resource.ArrangementFinished;
+
+                if (e.PotentialUnableToArrange)
+                {
+                    MessageBox.Show(Resource.PotentialUnableToArrangeTip, Resource.Warning,
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }));
         }
 

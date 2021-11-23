@@ -156,8 +156,23 @@
   <data name="Constraints" xml:space="preserve">
     <value>约束条件</value>
   </data>
+  <data name="DateColumn" xml:space="preserve">
+    <value>日期列</value>
+  </data>
+  <data name="DepartmentColumn" xml:space="preserve">
+    <value>学院列</value>
+  </data>
+  <data name="DirectorColumn" xml:space="preserve">
+    <value>主任列</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>错误</value>
+  </data>
+  <data name="ExamAspectColumn" xml:space="preserve">
+    <value>考试方式列</value>
+  </data>
+  <data name="ExamineeCountColumn" xml:space="preserve">
+    <value>考生人数列</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>退出</value>
@@ -183,6 +198,9 @@
   <data name="From" xml:space="preserve">
     <value>从</value>
   </data>
+  <data name="GradeColumn" xml:space="preserve">
+    <value>年级列</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>主页</value>
   </data>
@@ -198,11 +216,17 @@
   <data name="IterationsTooltip" xml:space="preserve">
     <value>设置算法的迭代次数，较大的数字可能有利于找到较优解，较小的数字能够减少执行时间</value>
   </data>
+  <data name="LocationColumn" xml:space="preserve">
+    <value>考试地点列</value>
+  </data>
   <data name="Manage" xml:space="preserve">
     <value>管理...</value>
   </data>
   <data name="ManageTooltip" xml:space="preserve">
     <value>管理已经添加的约束</value>
+  </data>
+  <data name="NameColumn" xml:space="preserve">
+    <value>教研室名称列</value>
   </data>
   <data name="NewConstraint" xml:space="preserve">
     <value>新约束条件...</value>
@@ -231,11 +255,17 @@
   <data name="OpenTooltip" xml:space="preserve">
     <value>打开安排所需的文件</value>
   </data>
+  <data name="PeopleCountColumn" xml:space="preserve">
+    <value>人数列</value>
+  </data>
   <data name="PopulationSize" xml:space="preserve">
     <value>种群大小</value>
   </data>
   <data name="PopulationSizeToolTip" xml:space="preserve">
     <value>设置算法中种群（中间解的集合）的大小</value>
+  </data>
+  <data name="PotentialUnableToArrangeTip" xml:space="preserve">
+    <value>安排完成，但是结果可能不尽如人意，这可能是因为教研室人数太少或者约束条件太多，可以尝试重新开始安排</value>
   </data>
   <data name="Recent" xml:space="preserve">
     <value>最近文件</value>
@@ -267,10 +297,10 @@
   <data name="Sheet" xml:space="preserve">
     <value>工作表</value>
   </data>
-  <data name="SheetWrittenPostfix" xml:space="preserve">
+  <data name="SheetsWrittenPostfix" xml:space="preserve">
     <value>个工作表</value>
   </data>
-  <data name="SheetWrittenPrefix" xml:space="preserve">
+  <data name="SheetsWrittenPrefix" xml:space="preserve">
     <value>已写入</value>
   </data>
   <data name="SolutionNum" xml:space="preserve">
@@ -278,6 +308,9 @@
   </data>
   <data name="SolutionNumTooltip" xml:space="preserve">
     <value>设置要显示的解决方案的数量，数值不能大于“种群大小”</value>
+  </data>
+  <data name="SpecialtyColumn" xml:space="preserve">
+    <value>专业列</value>
   </data>
   <data name="StartArrangement" xml:space="preserve">
     <value>开始安排</value>
@@ -297,8 +330,14 @@
   <data name="StopArrangementTooltip" xml:space="preserve">
     <value>停止当前进行的安排并显示结果</value>
   </data>
+  <data name="SubjectColumn" xml:space="preserve">
+    <value>考试科目列</value>
+  </data>
   <data name="ThirdPartyProject" xml:space="preserve">
     <value>第三方项目和资源：</value>
+  </data>
+  <data name="TimeIntervalColumn" xml:space="preserve">
+    <value>时间列</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>教务工具箱</value>
@@ -320,5 +359,8 @@
   </data>
   <data name="View" xml:space="preserve">
     <value>视图</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
   </data>
 </root>
