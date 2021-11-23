@@ -12,12 +12,15 @@ namespace AcademicAffairsToolkit
     {
         public bool Equals([AllowNull] TROfficeRecordEntry[] x, [AllowNull] TROfficeRecordEntry[] y)
         {
-            return x?.SequenceEqual(y) ?? false;
+            return x?.SequenceEqual(y) ?? y == null;
         }
 
         public int GetHashCode([DisallowNull] TROfficeRecordEntry[] obj)
         {
-            return obj.GetHashCode();
+            HashCode hashCode = new HashCode();
+            foreach (var x in obj)
+                hashCode.Add(x);
+            return HashCode.Combine(obj);
         }
     }
 }
