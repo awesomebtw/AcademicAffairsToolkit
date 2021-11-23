@@ -34,7 +34,7 @@ namespace AcademicAffairsToolkit
 
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            DialogResult = sender is ButtonBase b && b.Content.ToString() == "OK";
+            DialogResult = sender is ButtonBase b && b.Tag?.ToString() == "OK";
             Close();
         }
 

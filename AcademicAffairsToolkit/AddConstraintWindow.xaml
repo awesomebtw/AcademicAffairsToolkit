@@ -8,7 +8,7 @@
         xmlns:Fluent="urn:fluent-ribbon"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Add Constraint" Height="140" Width="300"
+        Title="{x:Static local:Resource.NewConstraint}" Height="140" Width="300"
         ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid Margin="5">
         <Grid.RowDefinitions>
@@ -21,17 +21,17 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="From: " VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+        <TextBlock Text="{x:Static local:Resource.From}" Margin="5" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
         <xctk:DateTimePicker Name="fromDateTimePicker" DefaultValue="{Binding Path=(sys:DateTime.Now), Mode=OneTime}" Margin="0,2" Grid.Row="0" Grid.Column="1"/>
-        <TextBlock Text="To: " VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+        <TextBlock Text="{x:Static local:Resource.To}" Margin="5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
         <xctk:DateTimePicker Name="toDateTimePicker" DefaultValue="{Binding Path=(sys:DateTime.Now), Mode=OneTime}" Margin="0,2" Grid.Row="1" Grid.Column="1"/>
 
         <Fluent:ComboBox Name="trOfficePicker"
-                         Header="TR Office: "
+                         Header="{x:Static local:Resource.TROffice}"
                          IsEditable="False"
                          ItemsSource="{Binding Path=(local:Session.TROffices)}"
                          Grid.Row="2" Grid.ColumnSpan="2"/>
-        
-        <Button Content="OK" IsDefault="True" Margin="0,5,0,0" Grid.Row="3" Grid.ColumnSpan="2" Click="OKButtonClick"/>
+
+        <Button Content="{x:Static local:Resource.OKText}" IsDefault="True" Margin="0,5,0,0" Grid.Row="3" Grid.ColumnSpan="2" Click="OKButtonClick"/>
     </Grid>
 </Fluent:RibbonWindow>

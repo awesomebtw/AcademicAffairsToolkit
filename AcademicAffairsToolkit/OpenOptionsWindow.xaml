@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AcademicAffairsToolkit"
         xmlns:Fluent="urn:fluent-ribbon"
         mc:Ignorable="d"
-        Title="File open options"
+        Title="{x:Static local:Resource.OpenOptions}"
         Width="300"
         ResizeMode="NoResize"
         SizeToContent="Height"
@@ -22,26 +22,26 @@
     </Fluent:RibbonWindow.Resources>
 
     <ItemsControl Padding="5">
-        <GroupBox Header="Selected file" Padding="5">
+        <GroupBox Header="{x:Static local:Resource.SelectedFile}" Padding="5">
             <TextBlock Text="{Binding FileName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:OpenOptionsWindow}}}"
                        TextWrapping="Wrap"/>
         </GroupBox>
-        <GroupBox Header="File password" Padding="5">
+        <GroupBox Header="{x:Static local:Resource.FilePassword}" Padding="5">
             <ItemsControl>
-                <TextBlock Margin="0,0,0,5" Text="Leave empty if selected file has no password."/>
+                <TextBlock Margin="0,0,0,5" Text="{x:Static local:Resource.FilePasswordTip}"/>
                 <PasswordBox Name="filePasswordBox"/>
             </ItemsControl>
         </GroupBox>
-        <GroupBox Header="Open as" Padding="5">
+        <GroupBox Header="{x:Static local:Resource.OpenAs}" Padding="5">
             <ItemsControl>
                 <Fluent:RadioButton x:Name="invigilateRadioButton"
-                                    Header="Invigilate info file"
+                                    Header="{x:Static local:Resource.InvigilateFile}"
                                     GroupName="fileTypeGroup"
                                     Checked="OpenAsRadioButtonChecked"
                                     Tag="{x:Static local:SelectedFileType.InvigilateFile}"
                                     IsChecked="True"/>
                 <Fluent:RadioButton x:Name="trRadioButton"
-                                    Header="Teaching and researching office file"
+                                    Header="{x:Static local:Resource.TROfficeFile}"
                                     GroupName="fileTypeGroup"
                                     Checked="OpenAsRadioButtonChecked"
                                     Tag="{x:Static local:SelectedFileType.TROfficeFile}"/>
@@ -54,17 +54,17 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            
-            <Fluent:DropDownButton Size="Middle" Header="Advanced..." Margin="5" Grid.Column="0">
+
+            <Fluent:DropDownButton Size="Middle" Header="{x:Static local:Resource.Advanced}" Margin="5" Grid.Column="0">
                 <Fluent:DropDownButton.Icon>
                     <Rectangle Fill="{StaticResource AdvancedViewIcon}"/>
                 </Fluent:DropDownButton.Icon>
                 <ItemsControl Padding="5" DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}"
                               Visibility="{Binding IsChecked, ElementName=invigilateRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Fluent:Spinner Header="Sheet"
+                    <Fluent:Spinner Header="{x:Static local:Resource.Sheet}"
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
                                     Value="{Binding Sheet}"/>
-                    <Fluent:Spinner Header="Start row"
+                    <Fluent:Spinner Header="{x:Static local:Resource.StartRow}"
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
                                     Value="{Binding StartRow}"/>
                     <Fluent:Spinner Header="Date column"
@@ -97,10 +97,10 @@
                 </ItemsControl>
                 <ItemsControl Padding="5" DataContext="{Binding Path=(local:Session.TROfficeFilePolicy)}"
                               Visibility="{Binding IsChecked, ElementName=trRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Fluent:Spinner Header="Sheet"
+                    <Fluent:Spinner Header="{x:Static local:Resource.Sheet}"
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
                                     Value="{Binding Sheet}"/>
-                    <Fluent:Spinner Header="Start row"
+                    <Fluent:Spinner Header="{x:Static local:Resource.StartRow}"
                                     Style="{StaticResource OpenOptionsSpinnerStyle}"
                                     Value="{Binding StartRow}"/>
                     <Fluent:Spinner Header="Name column"
@@ -115,8 +115,8 @@
                 </ItemsControl>
             </Fluent:DropDownButton>
 
-            <Button Content="OK" Click="ButtonClick" Margin="5" Grid.Column="1"/>
-            <Button Content="Cancel" Click="ButtonClick" Margin="5" Grid.Column="2"/>
+            <Button Content="{x:Static local:Resource.OKText}" Tag="OK" Click="ButtonClick" Margin="5" Grid.Column="1"/>
+            <Button Content="{x:Static local:Resource.CancelText}" Click="ButtonClick" Margin="5" Grid.Column="2"/>
         </Grid>
     </ItemsControl>
 </Fluent:RibbonWindow>

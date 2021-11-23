@@ -25,7 +25,7 @@ namespace AcademicAffairsToolkit
         private static readonly OpenFileDialog openExcelDialog = new OpenFileDialog
         {
             DereferenceLinks = true,
-            Filter = "XLSX files|*.xlsx|XLS files|*.xls|All Excel files|*.xlsx;*.xls",
+            Filter = $"XLSX {Resource.File}|*.xlsx|XLS {Resource.File}|*.xls|Excel {Resource.File}|*.xlsx;*.xls",
             InitialDirectory = Environment.CurrentDirectory
         };
 
@@ -87,22 +87,22 @@ namespace AcademicAffairsToolkit
             catch (InvalidOperationException ex)
             {
                 MessageBox.Show(
-                    ex.Message + "\nCheck if file type and/or parse policies settings is incorrect.",
-                    "Unable to open file", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ex.Message + "\n" + Resource.FileFormatErrorTip,
+                    Resource.UnableToOpenFile, MessageBoxButton.OK, MessageBoxImage.Error);
                 e.Cancel = true;
                 return;
             }
             catch (IOException ex)
             {
                 MessageBox.Show(
-                    ex.Message + "\nCheck if the file is being used or does not exist.",
-                    "Unable to open file", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ex.Message + "\n" + Resource.FileIOErrorTip,
+                    Resource.UnableToOpenFile, MessageBoxButton.OK, MessageBoxImage.Error);
                 e.Cancel = true;
                 return;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Unable to open file", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Resource.UnableToOpenFile, MessageBoxButton.OK, MessageBoxImage.Error);
                 e.Cancel = true;
                 return;
             }
@@ -138,7 +138,7 @@ namespace AcademicAffairsToolkit
             SaveFileDialog fileDialog = new SaveFileDialog()
             {
                 AddExtension = true,
-                Filter = "XLSX file|*.xlsx|XLS file|*.xls",
+                Filter = $"XLSX {Resource.File}|*.xlsx|XLS {Resource.File}|*.xls",
                 InitialDirectory = Environment.CurrentDirectory
             };
 
@@ -151,12 +151,12 @@ namespace AcademicAffairsToolkit
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, Resource.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                     throw;
                 }
 
-                MessageBox.Show($"{Session.Arrangements.Count} sheets written", "Save successfully",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"{Resource.SheetWrittenPrefix} {Session.Arrangements.Count} {Resource.SheetWrittenPostfix}",
+                    Resource.Save, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -195,7 +195,7 @@ namespace AcademicAffairsToolkit
             solutionsSpinner.IsEnabled = false;
 
             arrangementProgessBar.Visibility = Visibility.Visible;
-            statusText.Text = "Arrangement in progress...";
+            statusText.Text = Resource.ArrangementIsInProgress + "...";
 
             alg.ArrangementStepForward += AlgArrangementStepForward;
             alg.ArrangementTerminated += AlgArrangementTerminated;
@@ -207,8 +207,8 @@ namespace AcademicAffairsToolkit
             catch (Exception ex)
             {
                 arrangementProgessBar.Visibility = Visibility.Collapsed;
-                statusText.Text = "An error occurred during arrangement. Please try again.";
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                statusText.Text = Resource.ArrangementErrorTip;
+                MessageBox.Show(ex.Message, Resource.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -243,7 +243,7 @@ namespace AcademicAffairsToolkit
                 arrangementProgessBar.Value = 0;
                 ToggleView.Execute("/TableViewPage.xaml", this);
                 tableViewButton.IsChecked = true;
-                statusText.Text = e.Cancelled ? "Arrangement cancelled" : "Arrangement finished";
+                statusText.Text = e.Cancelled ? Resource.ArrangementCanceled : Resource.ArrangementFinished;
             }));
         }
 
@@ -272,8 +272,8 @@ namespace AcademicAffairsToolkit
             }
             else
             {
-                var result = MessageBox.Show("There's no constraints added. Add one?",
-                    "Constraint list empty", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                var result = MessageBox.Show(Resource.ConstraintListEmptyTip,
+                    Resource.ConstraintListEmpty, MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if (result == MessageBoxResult.Yes)
                     new AddConstraintWindow() { Owner = this }.ShowDialog();
             }

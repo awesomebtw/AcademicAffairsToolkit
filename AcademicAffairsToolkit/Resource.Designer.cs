@@ -19,10 +19,10 @@ namespace AcademicAffairsToolkit {
     // 类通过类似于 ResGen 或 Visual Studio 的工具自动生成的。
     // 若要添加或移除成员，请编辑 .ResX 文件，然后重新运行 ResGen
     // (以 /str 作为命令选项)，或重新生成 VS 项目。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace AcademicAffairsToolkit {
         ///   返回此类使用的缓存的 ResourceManager 实例。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AcademicAffairsToolkit.Resource", typeof(Resource).Assembly);
@@ -51,12 +51,624 @@ namespace AcademicAffairsToolkit {
         ///   使用此强类型资源类的所有资源查找执行重写。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 关于 的本地化字符串。
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 高级选项 的本地化字符串。
+        /// </summary>
+        public static string Advanced {
+            get {
+                return ResourceManager.GetString("Advanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 安排已取消 的本地化字符串。
+        /// </summary>
+        public static string ArrangementCanceled {
+            get {
+                return ResourceManager.GetString("ArrangementCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 在安排过程中遇到错误，请重试 的本地化字符串。
+        /// </summary>
+        public static string ArrangementErrorTip {
+            get {
+                return ResourceManager.GetString("ArrangementErrorTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 安排已完成 的本地化字符串。
+        /// </summary>
+        public static string ArrangementFinished {
+            get {
+                return ResourceManager.GetString("ArrangementFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 安排 的本地化字符串。
+        /// </summary>
+        public static string ArrangementGroup {
+            get {
+                return ResourceManager.GetString("ArrangementGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 目前正在安排 的本地化字符串。
+        /// </summary>
+        public static string ArrangementIsInProgress {
+            get {
+                return ResourceManager.GetString("ArrangementIsInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 没有开始安排 的本地化字符串。
+        /// </summary>
+        public static string ArrangementIsNotStarted {
+            get {
+                return ResourceManager.GetString("ArrangementIsNotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 取消 的本地化字符串。
+        /// </summary>
+        public static string CancelText {
+            get {
+                return ResourceManager.GetString("CancelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 关闭开始页面 的本地化字符串。
+        /// </summary>
+        public static string CloseStartScreen {
+            get {
+                return ResourceManager.GetString("CloseStartScreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 没有约束条件 的本地化字符串。
+        /// </summary>
+        public static string ConstraintListEmpty {
+            get {
+                return ResourceManager.GetString("ConstraintListEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 目前没有约束条件，是否需要添加约束条件？ 的本地化字符串。
+        /// </summary>
+        public static string ConstraintListEmptyTip {
+            get {
+                return ResourceManager.GetString("ConstraintListEmptyTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 约束条件 的本地化字符串。
+        /// </summary>
+        public static string Constraints {
+            get {
+                return ResourceManager.GetString("Constraints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 错误 的本地化字符串。
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 退出 的本地化字符串。
+        /// </summary>
+        public static string Exit {
+            get {
+                return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 文件 的本地化字符串。
+        /// </summary>
+        public static string File {
+            get {
+                return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 检查文件格式或高级选项设置是否错误 的本地化字符串。
+        /// </summary>
+        public static string FileFormatErrorTip {
+            get {
+                return ResourceManager.GetString("FileFormatErrorTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 检查文件是否存在或被占用 的本地化字符串。
+        /// </summary>
+        public static string FileIOErrorTip {
+            get {
+                return ResourceManager.GetString("FileIOErrorTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 至少有一个需要的文件没有打开 的本地化字符串。
+        /// </summary>
+        public static string FileNotLoadedText {
+            get {
+                return ResourceManager.GetString("FileNotLoadedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 文件密码 的本地化字符串。
+        /// </summary>
+        public static string FilePassword {
+            get {
+                return ResourceManager.GetString("FilePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 如果文件没有密码则留空 的本地化字符串。
+        /// </summary>
+        public static string FilePasswordTip {
+            get {
+                return ResourceManager.GetString("FilePasswordTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 从 的本地化字符串。
+        /// </summary>
+        public static string From {
+            get {
+                return ResourceManager.GetString("From", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 主页 的本地化字符串。
+        /// </summary>
+        public static string Home {
+            get {
+                return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 监考文件 的本地化字符串。
+        /// </summary>
+        public static string InvigilateFile {
+            get {
+                return ResourceManager.GetString("InvigilateFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 显示读取的监考文件内容 的本地化字符串。
+        /// </summary>
+        public static string InvigilateFileTooltip {
+            get {
+                return ResourceManager.GetString("InvigilateFileTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 迭代次数 的本地化字符串。
+        /// </summary>
+        public static string Iterations {
+            get {
+                return ResourceManager.GetString("Iterations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置算法的迭代次数，较大的数字可能有利于找到较优解，较小的数字能够减少执行时间 的本地化字符串。
+        /// </summary>
+        public static string IterationsTooltip {
+            get {
+                return ResourceManager.GetString("IterationsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 管理... 的本地化字符串。
+        /// </summary>
+        public static string Manage {
+            get {
+                return ResourceManager.GetString("Manage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 管理已经添加的约束 的本地化字符串。
+        /// </summary>
+        public static string ManageTooltip {
+            get {
+                return ResourceManager.GetString("ManageTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 新约束条件... 的本地化字符串。
+        /// </summary>
+        public static string NewConstraint {
+            get {
+                return ResourceManager.GetString("NewConstraint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 添加安排算法的约束，即某时间段内不会为某一教研室安排监考 的本地化字符串。
+        /// </summary>
+        public static string NewConstraintTooltip {
+            get {
+                return ResourceManager.GetString("NewConstraintTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 确定 的本地化字符串。
+        /// </summary>
+        public static string OKText {
+            get {
+                return ResourceManager.GetString("OKText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开 的本地化字符串。
+        /// </summary>
+        public static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开文件类型 的本地化字符串。
+        /// </summary>
+        public static string OpenAs {
+            get {
+                return ResourceManager.GetString("OpenAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开选项 的本地化字符串。
+        /// </summary>
+        public static string OpenOptions {
+            get {
+                return ResourceManager.GetString("OpenOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开并关闭本页面 的本地化字符串。
+        /// </summary>
+        public static string OpenThenCloseThisPage {
+            get {
+                return ResourceManager.GetString("OpenThenCloseThisPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开安排所需的文件，并在文件对话框显示后关闭本页面 的本地化字符串。
+        /// </summary>
+        public static string OpenThenCloseThisPageTooltip {
+            get {
+                return ResourceManager.GetString("OpenThenCloseThisPageTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开安排所需的文件 的本地化字符串。
+        /// </summary>
+        public static string OpenTooltip {
+            get {
+                return ResourceManager.GetString("OpenTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 种群大小 的本地化字符串。
+        /// </summary>
+        public static string PopulationSize {
+            get {
+                return ResourceManager.GetString("PopulationSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置算法中种群（中间解的集合）的大小 的本地化字符串。
+        /// </summary>
+        public static string PopulationSizeToolTip {
+            get {
+                return ResourceManager.GetString("PopulationSizeToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 最近文件 的本地化字符串。
+        /// </summary>
+        public static string Recent {
+            get {
+                return ResourceManager.GetString("Recent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除选定约束 的本地化字符串。
+        /// </summary>
+        public static string RemoveSelected {
+            get {
+                return ResourceManager.GetString("RemoveSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 结果表格 的本地化字符串。
+        /// </summary>
+        public static string ResultTable {
+            get {
+                return ResourceManager.GetString("ResultTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 显示安排结果表格 的本地化字符串。
+        /// </summary>
+        public static string ResultTableTooltip {
+            get {
+                return ResourceManager.GetString("ResultTableTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 结果工具 的本地化字符串。
+        /// </summary>
+        public static string ResultTools {
+            get {
+                return ResourceManager.GetString("ResultTools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 保存 的本地化字符串。
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 选择 的本地化字符串。
+        /// </summary>
+        public static string Selected {
+            get {
+                return ResourceManager.GetString("Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 选择的文件 的本地化字符串。
+        /// </summary>
+        public static string SelectedFile {
+            get {
+                return ResourceManager.GetString("SelectedFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 在生成多个结果时，选择要查看哪一个 的本地化字符串。
+        /// </summary>
+        public static string SelectedTooltip {
+            get {
+                return ResourceManager.GetString("SelectedTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 工作表 的本地化字符串。
+        /// </summary>
+        public static string Sheet {
+            get {
+                return ResourceManager.GetString("Sheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 个工作表 的本地化字符串。
+        /// </summary>
+        public static string SheetWrittenPostfix {
+            get {
+                return ResourceManager.GetString("SheetWrittenPostfix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 已写入 的本地化字符串。
+        /// </summary>
+        public static string SheetWrittenPrefix {
+            get {
+                return ResourceManager.GetString("SheetWrittenPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 解决方法数 的本地化字符串。
+        /// </summary>
+        public static string SolutionNum {
+            get {
+                return ResourceManager.GetString("SolutionNum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置要显示的解决方案的数量，数值不能大于“种群大小” 的本地化字符串。
+        /// </summary>
+        public static string SolutionNumTooltip {
+            get {
+                return ResourceManager.GetString("SolutionNumTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始安排 的本地化字符串。
+        /// </summary>
+        public static string StartArrangement {
+            get {
+                return ResourceManager.GetString("StartArrangement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 根据监考计划、教研室和约束条件安排监考 的本地化字符串。
+        /// </summary>
+        public static string StartArrangementTooltip {
+            get {
+                return ResourceManager.GetString("StartArrangementTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始安排之前，需要选择监考和教研室文件。点击“打开”选择监考和教研室文件，完成后点击“关闭开始页面”按钮。 的本地化字符串。
+        /// </summary>
+        public static string StartPageHelpText {
+            get {
+                return ResourceManager.GetString("StartPageHelpText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 起始行 的本地化字符串。
+        /// </summary>
+        public static string StartRow {
+            get {
+                return ResourceManager.GetString("StartRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 停止安排 的本地化字符串。
+        /// </summary>
+        public static string StopArrangement {
+            get {
+                return ResourceManager.GetString("StopArrangement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 停止当前进行的安排并显示结果 的本地化字符串。
+        /// </summary>
+        public static string StopArrangementTooltip {
+            get {
+                return ResourceManager.GetString("StopArrangementTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 第三方项目和资源： 的本地化字符串。
+        /// </summary>
+        public static string ThirdPartyProject {
+            get {
+                return ResourceManager.GetString("ThirdPartyProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 教务工具箱 的本地化字符串。
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 到 的本地化字符串。
+        /// </summary>
+        public static string To {
+            get {
+                return ResourceManager.GetString("To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 教研室 的本地化字符串。
+        /// </summary>
+        public static string TROffice {
+            get {
+                return ResourceManager.GetString("TROffice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 教研室文件 的本地化字符串。
+        /// </summary>
+        public static string TROfficeFile {
+            get {
+                return ResourceManager.GetString("TROfficeFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 显示读取的教研室文件内容 的本地化字符串。
+        /// </summary>
+        public static string TROfficeFileTooltip {
+            get {
+                return ResourceManager.GetString("TROfficeFileTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 无法打开文件 的本地化字符串。
+        /// </summary>
+        public static string UnableToOpenFile {
+            get {
+                return ResourceManager.GetString("UnableToOpenFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 视图 的本地化字符串。
+        /// </summary>
+        public static string View {
+            get {
+                return ResourceManager.GetString("View", resourceCulture);
             }
         }
     }
