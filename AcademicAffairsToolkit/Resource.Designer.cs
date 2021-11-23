@@ -178,7 +178,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 日期列 的本地化字符串。
+        ///   查找类似 日期 的本地化字符串。
         /// </summary>
         public static string DateColumn {
             get {
@@ -187,7 +187,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 学院列 的本地化字符串。
+        ///   查找类似 学院 的本地化字符串。
         /// </summary>
         public static string DepartmentColumn {
             get {
@@ -196,11 +196,38 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 主任列 的本地化字符串。
+        ///   查找类似 主任 的本地化字符串。
         /// </summary>
         public static string DirectorColumn {
             get {
                 return ResourceManager.GetString("DirectorColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请先填写所有信息再点击“确定” 的本地化字符串。
+        /// </summary>
+        public static string EmptyFieldErrorTip {
+            get {
+                return ResourceManager.GetString("EmptyFieldErrorTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 结束时间 的本地化字符串。
+        /// </summary>
+        public static string EndTimeColumn {
+            get {
+                return ResourceManager.GetString("EndTimeColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 开始时间必须早于结束时间 的本地化字符串。
+        /// </summary>
+        public static string EndTimeEarlierThanStartTimeErrorTip {
+            get {
+                return ResourceManager.GetString("EndTimeEarlierThanStartTimeErrorTip", resourceCulture);
             }
         }
         
@@ -214,7 +241,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 考试方式列 的本地化字符串。
+        ///   查找类似 考试方式 的本地化字符串。
         /// </summary>
         public static string ExamAspectColumn {
             get {
@@ -223,7 +250,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 考生人数列 的本地化字符串。
+        ///   查找类似 考生人数 的本地化字符串。
         /// </summary>
         public static string ExamineeCountColumn {
             get {
@@ -304,7 +331,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 年级列 的本地化字符串。
+        ///   查找类似 年级 的本地化字符串。
         /// </summary>
         public static string GradeColumn {
             get {
@@ -349,7 +376,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 设置算法的迭代次数，较大的数字可能有利于找到较优解，较小的数字能够减少执行时间 的本地化字符串。
+        ///   查找类似 设置算法的迭代次数，较大的数字可能有利于找到最优解，而较小的数字能够减少执行时间 的本地化字符串。
         /// </summary>
         public static string IterationsTooltip {
             get {
@@ -358,7 +385,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 考试地点列 的本地化字符串。
+        ///   查找类似 考试地点 的本地化字符串。
         /// </summary>
         public static string LocationColumn {
             get {
@@ -385,7 +412,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 教研室名称列 的本地化字符串。
+        ///   查找类似 教研室名称 的本地化字符串。
         /// </summary>
         public static string NameColumn {
             get {
@@ -475,7 +502,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 人数列 的本地化字符串。
+        ///   查找类似 人数 的本地化字符串。
         /// </summary>
         public static string PeopleCountColumn {
             get {
@@ -592,6 +619,15 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
+        ///   查找类似 选择以下字段所在的列 的本地化字符串。
+        /// </summary>
+        public static string SetColumnTip {
+            get {
+                return ResourceManager.GetString("SetColumnTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 工作表 的本地化字符串。
         /// </summary>
         public static string Sheet {
@@ -628,7 +664,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 设置要显示的解决方案的数量，数值不能大于“种群大小” 的本地化字符串。
+        ///   查找类似 设置要显示以及最终导出的解决方案的数量，数值不能大于“种群大小” 的本地化字符串。
         /// </summary>
         public static string SolutionNumTooltip {
             get {
@@ -637,7 +673,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 专业列 的本地化字符串。
+        ///   查找类似 专业 的本地化字符串。
         /// </summary>
         public static string SpecialtyColumn {
             get {
@@ -682,6 +718,15 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
+        ///   查找类似 开始时间 的本地化字符串。
+        /// </summary>
+        public static string StartTimeColumn {
+            get {
+                return ResourceManager.GetString("StartTimeColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 停止安排 的本地化字符串。
         /// </summary>
         public static string StopArrangement {
@@ -700,7 +745,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 考试科目列 的本地化字符串。
+        ///   查找类似 考试科目 的本地化字符串。
         /// </summary>
         public static string SubjectColumn {
             get {
@@ -718,7 +763,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 时间列 的本地化字符串。
+        ///   查找类似 时间 的本地化字符串。
         /// </summary>
         public static string TimeIntervalColumn {
             get {
@@ -777,6 +822,15 @@ namespace AcademicAffairsToolkit {
         public static string UnableToOpenFile {
             get {
                 return ResourceManager.GetString("UnableToOpenFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 出现未知错误 的本地化字符串。
+        /// </summary>
+        public static string UnhandledError {
+            get {
+                return ResourceManager.GetString("UnhandledError", resourceCulture);
             }
         }
         

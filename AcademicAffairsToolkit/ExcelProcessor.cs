@@ -186,17 +186,18 @@ namespace AcademicAffairsToolkit
                 var sheet = workbook.CreateSheet();
                 var headerRow = sheet.CreateRow(0);
 
-                headerRow.CreateCell(1).SetCellValue(nameof(InvigilateRecordEntry.StartTime));
-                headerRow.CreateCell(2).SetCellValue(nameof(InvigilateRecordEntry.EndTime));
-                headerRow.CreateCell(3).SetCellValue(nameof(InvigilateRecordEntry.Subject));
-                headerRow.CreateCell(4).SetCellValue(nameof(InvigilateRecordEntry.Department));
-                headerRow.CreateCell(5).SetCellValue(nameof(InvigilateRecordEntry.Grade));
-                headerRow.CreateCell(6).SetCellValue(nameof(InvigilateRecordEntry.Specialty));
-                headerRow.CreateCell(7).SetCellValue(nameof(InvigilateRecordEntry.ExamineeCount));
-                headerRow.CreateCell(8).SetCellValue(nameof(InvigilateRecordEntry.Location));
-                headerRow.CreateCell(9).SetCellValue(nameof(InvigilateRecordEntry.ExamAspect));
-                headerRow.CreateCell(10).SetCellValue(nameof(TROfficeRecordEntry.Name));
-                headerRow.CreateCell(11).SetCellValue(nameof(TROfficeRecordEntry.Director));
+                headerRow.CreateCell(0).SetCellValue(Resource.DateColumn);
+                headerRow.CreateCell(1).SetCellValue(Resource.StartTimeColumn);
+                headerRow.CreateCell(2).SetCellValue(Resource.EndTimeColumn);
+                headerRow.CreateCell(3).SetCellValue(Resource.SubjectColumn);
+                headerRow.CreateCell(4).SetCellValue(Resource.DepartmentColumn);
+                headerRow.CreateCell(5).SetCellValue(Resource.GradeColumn);
+                headerRow.CreateCell(6).SetCellValue(Resource.SpecialtyColumn);
+                headerRow.CreateCell(7).SetCellValue(Resource.ExamineeCountColumn);
+                headerRow.CreateCell(8).SetCellValue(Resource.LocationColumn);
+                headerRow.CreateCell(9).SetCellValue(Resource.ExamAspectColumn);
+                headerRow.CreateCell(10).SetCellValue(Resource.NameColumn);
+                headerRow.CreateCell(11).SetCellValue(Resource.DirectorColumn);
 
                 for (int i = 0; i < solution.Length; i++)
                 {

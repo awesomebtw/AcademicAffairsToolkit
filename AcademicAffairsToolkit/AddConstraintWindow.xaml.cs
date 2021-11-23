@@ -21,7 +21,7 @@ namespace AcademicAffairsToolkit
             {
                 if (from >= to)
                 {
-                    MessageBox.Show("The first date must be earlier than the second date.", "Error",
+                    MessageBox.Show(Resource.EndTimeEarlierThanStartTimeErrorTip, Resource.Error,
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
@@ -33,7 +33,7 @@ namespace AcademicAffairsToolkit
             }
             else
             {
-                MessageBox.Show("Please fill in all fields before pressing OK.", "Error",
+                MessageBox.Show(Resource.EmptyFieldErrorTip, Resource.Error,
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
