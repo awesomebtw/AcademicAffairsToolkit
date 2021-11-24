@@ -48,16 +48,24 @@ namespace AcademicAffairsToolkit
             {
                 case SelectedFileType.InvigilateFile:
                     {
-                        Session.InvigilateRecords = await ExcelProcessor.ReadInvigilateTableAsync(
-                                fileName, Session.InvigilateFilePolicy);
+                        Session.InvigilateRecords.Clear();
+                        foreach (var item in await ExcelProcessor.ReadInvigilateTableAsync(
+                            fileName, Session.InvigilateFilePolicy))
+                        {
+                            Session.InvigilateRecords.Add(item);
+                        }
                         ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
                         invigilateFileViewButton.IsChecked = true;
                     }
                     break;
                 case SelectedFileType.TROfficeFile:
                     {
-                        Session.TROffices = await ExcelProcessor.ReadTROfficeTableAsync(
-                                fileName, Session.TROfficeFilePolicy);
+                        Session.TROffices.Clear();
+                        foreach (var item in await ExcelProcessor.ReadTROfficeTableAsync(
+                            fileName, Session.TROfficeFilePolicy))
+                        {
+                            Session.TROffices.Add(item);
+                        }
                         ToggleView.Execute("/TRFileViewPage.xaml", this);
                         trOfficeFileViewButton.IsChecked = true;
                     }

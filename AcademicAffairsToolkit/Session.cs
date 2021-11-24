@@ -10,9 +10,9 @@ namespace AcademicAffairsToolkit
 
         public static FileParsePolicy TROfficeFilePolicy { get; set; } = FileParsePolicy.TROfficeFileDefaultPolicy;
 
-        public static IEnumerable<InvigilateRecordEntry> InvigilateRecords { get; set; }
+        public static ObservableCollection<InvigilateRecordEntry> InvigilateRecords { get; set; } = new ObservableCollection<InvigilateRecordEntry>();
 
-        public static IEnumerable<TROfficeRecordEntry> TROffices { get; set; }
+        public static ObservableCollection<TROfficeRecordEntry> TROffices { get; set; } = new ObservableCollection<TROfficeRecordEntry>();
 
         public static ObservableCollection<InvigilateConstraint> Constraints { get; set; } = new ObservableCollection<InvigilateConstraint>();
 
