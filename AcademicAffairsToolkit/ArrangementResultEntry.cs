@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Ganss.Excel;
 
 namespace AcademicAffairsToolkit
 {
@@ -10,6 +8,7 @@ namespace AcademicAffairsToolkit
 
         public TROfficeRecordEntry TROfficeRecord { get; set; }
 
+        [Column("监考人数")]
         public int PeopleNeeded { get; set; }
 
         public ArrangementResultEntry(InvigilateRecordEntry invigilateRecord, TROfficeRecordEntry trOfficeRecord, int peopleNeeded)

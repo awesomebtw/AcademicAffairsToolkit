@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ganss.Excel;
+using System;
 using System.Collections.Generic;
 
 namespace AcademicAffairsToolkit
@@ -8,22 +9,31 @@ namespace AcademicAffairsToolkit
     /// </summary>
     class InvigilateRecordEntry : IEquatable<InvigilateRecordEntry>
     {
+        [Column("开始时间", MappingDirections.ObjectToExcel)]
         public DateTime StartTime { get; set; }
 
+        [Column("结束时间", MappingDirections.ObjectToExcel)]
         public DateTime EndTime { get; set; }
 
+        [Column("考试科目")]
         public string Subject { get; set; }
 
+        [Column("学院")]
         public string Department { get; set; }
 
-        public int Grade { get; set; }
+        [Column("年级")]
+        public string Grade { get; set; }
 
+        [Column("专业")]
         public string Specialty { get; set; }
 
+        [Column("人数")]
         public int ExamineeCount { get; set; }
 
+        [Column("考试地点")]
         public string Location { get; set; }
 
+        [Column("考试方式")]
         public string ExamAspect { get; set; }
 
         public override string ToString()

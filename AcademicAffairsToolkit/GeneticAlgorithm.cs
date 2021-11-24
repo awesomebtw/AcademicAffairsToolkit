@@ -206,8 +206,8 @@ namespace AcademicAffairsToolkit
                 if (!inWindow.TryAdd(chromosome[right], peopleNeeded[right]))
                     inWindow[chromosome[right]] += peopleNeeded[right];
 
-                currentRange = invigilateRecords[right].EndTime - invigilateRecords[left].StartTime;
                 right++;
+                currentRange = invigilateRecords[right - 1].EndTime - invigilateRecords[left].StartTime;
 
                 if (currentRange > longestRange)
                 {
@@ -222,7 +222,7 @@ namespace AcademicAffairsToolkit
                     inWindow[chromosome[left]] -= peopleNeeded[left];
 
                     left++;
-                    currentRange = invigilateRecords[right].EndTime - invigilateRecords[left].StartTime;
+                    currentRange = invigilateRecords[right - 1].EndTime - invigilateRecords[left].StartTime;
                 }
             }
             fitness -= arrangeOverlapFactor * overlapCount;

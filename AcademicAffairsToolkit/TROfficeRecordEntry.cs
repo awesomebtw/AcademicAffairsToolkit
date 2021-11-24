@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ganss.Excel;
+using System;
 using System.Collections.Generic;
 
 namespace AcademicAffairsToolkit
@@ -8,10 +9,13 @@ namespace AcademicAffairsToolkit
     /// </summary>
     class TROfficeRecordEntry : IEquatable<TROfficeRecordEntry>
     {
+        [Column("教研室")]
         public string Name { get; set; }
 
+        [Column("人数", MappingDirections.ExcelToObject)]
         public int PeopleCount { get; set; }
 
+        [Column("主任")]
         public string Director { get; set; }
 
         public override bool Equals(object obj)
