@@ -70,15 +70,6 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 高级选项 的本地化字符串。
-        /// </summary>
-        public static string Advanced {
-            get {
-                return ResourceManager.GetString("Advanced", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 安排已取消 的本地化字符串。
         /// </summary>
         public static string ArrangementCanceled {

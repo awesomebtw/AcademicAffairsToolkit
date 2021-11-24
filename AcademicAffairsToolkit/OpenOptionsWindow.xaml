@@ -16,8 +16,7 @@
         <Style x:Key="OpenOptionsSpinnerStyle" TargetType="Fluent:Spinner">
             <Setter Property="Format" Value="N0"/>
             <Setter Property="InputWidth" Value="60"/>
-            <Setter Property="HorizontalContentAlignment" Value="Right"/>
-            <Setter Property="Padding" Value="0,3"/>
+            <Setter Property="Margin" Value="2"/>
         </Style>
     </Fluent:RibbonWindow.Resources>
 
@@ -41,7 +40,7 @@
                                     Tag="{x:Static local:SelectedFileType.TROfficeFile}"/>
             </WrapPanel>
         </GroupBox>
-        <GroupBox Header="{x:Static local:Resource.FileParsingOption}" Padding="5">
+        <GroupBox Header="{x:Static local:Resource.FileParsingOption}">
             <WrapPanel Name="parseOptionsPanel" DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}" Orientation="Horizontal">
                 <Fluent:Spinner Header="{x:Static local:Resource.Sheet}"
                                 Style="{StaticResource OpenOptionsSpinnerStyle}"
