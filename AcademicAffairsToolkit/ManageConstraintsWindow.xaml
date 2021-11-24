@@ -64,10 +64,20 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{x:Static local:Resource.From}" Margin="5" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
-            <xctk:DateTimePicker Name="fromDateTimePicker" Margin="5" Value="{Binding Path=/From}" Grid.Row="0" Grid.Column="1"/>
-            <TextBlock Text="{x:Static local:Resource.To}" Margin="5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-            <xctk:DateTimePicker Name="toDateTimePicker" Margin="5" Value="{Binding Path=/To}" Grid.Row="1" Grid.Column="1"/>
+            <TextBlock Text="{x:Static local:Resource.From}"
+                       Margin="5" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+            <xctk:DateTimePicker Name="fromDateTimePicker"
+                                 Margin="5"
+                                 Value="{Binding Path=/From}"
+                                 ValueChanged="DateTimePickerValueChanged"
+                                 Grid.Row="0" Grid.Column="1"/>
+            <TextBlock Text="{x:Static local:Resource.To}"
+                       Margin="5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+            <xctk:DateTimePicker Name="toDateTimePicker"
+                                 Margin="5"
+                                 Value="{Binding Path=/To}"
+                                 ValueChanged="DateTimePickerValueChanged"
+                                 Grid.Row="1" Grid.Column="1"/>
             <Fluent:ComboBox Name="trOfficePicker"
                              Header="{x:Static local:Resource.TROffice}"
                              IsEditable="False"
