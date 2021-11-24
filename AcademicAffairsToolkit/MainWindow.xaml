@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AcademicAffairsToolkit"
         mc:Ignorable="d"
         xmlns:Fluent="urn:fluent-ribbon"
-        Title="{x:Static local:Resource.Title}"
+        Title="{x:Static local:Resource.TitleText}"
         Height="500" Width="800" MinHeight="300" MinWidth="400"
         WindowStartupLocation="CenterScreen">
 
@@ -87,7 +87,7 @@
                     <Fluent:StartScreenTabControl RightContent="{StaticResource OpenFilePage}">
                         <Fluent:StartScreenTabControl.LeftContent>
                             <StackPanel TextBlock.Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}">
-                                <TextBlock Text="{x:Static local:Resource.Title}" FontSize="36" Margin="5" MaxWidth="300" TextWrapping="Wrap"/>
+                                <TextBlock Text="{x:Static local:Resource.TitleText}" FontSize="36" Margin="5" MaxWidth="300" TextWrapping="Wrap"/>
                                 <TextBlock Text="{x:Static local:Resource.StartPageHelpText}" Margin="5" MaxWidth="300" TextWrapping="Wrap"/>
 
                                 <Fluent:MenuItem Foreground="{StaticResource Fluent.Ribbon.Brushes.IdealForegroundColorBrush}"
@@ -117,13 +117,13 @@
 
                         <Fluent:BackstageTabItem Header="{x:Static local:Resource.About}">
                             <StackPanel Margin="20" Orientation="Vertical">
-                                <TextBlock FontSize="36" Margin="5" Text="{x:Static local:Resource.Title}"/>
-                                <TextBlock Margin="5" Text="Version 0.0.0.9"/>
+                                <TextBlock FontSize="36" Margin="5" Text="{x:Static local:Resource.TitleText}"/>
+                                <TextBlock Name="versionTextBlock" Margin="5"/>
                                 <TextBlock Margin="5" Text="{x:Static local:Resource.ThirdPartyProject}"/>
                                 <Fluent:Gallery BorderThickness="1" Margin="5" MaxItemsInRow="1">
-                                    <Fluent:GalleryItem IsDefinitive="False">Extended WPF Toolkit (dotnetproject fork)</Fluent:GalleryItem>
+                                    <Fluent:GalleryItem IsDefinitive="False">ExcelMapper</Fluent:GalleryItem>
+                                    <Fluent:GalleryItem IsDefinitive="False">Extended WPF Toolkit (dotnetproject version)</Fluent:GalleryItem>
                                     <Fluent:GalleryItem IsDefinitive="False">Fluent.Ribbon</Fluent:GalleryItem>
-                                    <Fluent:GalleryItem IsDefinitive="False">npoi</Fluent:GalleryItem>
                                     <Fluent:GalleryItem IsDefinitive="False">RangeTree</Fluent:GalleryItem>
                                     <Fluent:GalleryItem IsDefinitive="False">Visual Studio 2019 Icons Library</Fluent:GalleryItem>
                                 </Fluent:Gallery>
@@ -321,7 +321,9 @@
             </Fluent:RibbonTabItem>
 
             <Fluent:Ribbon.ContextualGroups>
-                <Fluent:RibbonContextualTabGroup x:Name="resultGroup" Header="{x:Static local:Resource.ResultTools}" Background="Green" BorderBrush="Green"
+                <Fluent:RibbonContextualTabGroup x:Name="resultGroup"
+                                                 Header="{x:Static local:Resource.ResultTools}"
+                                                 Background="Green" BorderBrush="Green"
                                                  Visibility="{Binding Converter={StaticResource BooleanToVisibilityConverter}, ElementName=tableViewButton, Path=IsChecked}"/>
             </Fluent:Ribbon.ContextualGroups>
         </Fluent:Ribbon>

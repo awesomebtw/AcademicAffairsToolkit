@@ -40,6 +40,7 @@ namespace AcademicAffairsToolkit
             InitializeComponent();
             RecentlyOpenedFiles = new ObservableCollection<Tuple<string, SelectedFileType>>();
             openExcelDialog.FileOk += OpenExcelDialogFileOk;
+            versionTextBlock.Text = Application.ResourceAssembly.GetName().Version.ToString();
         }
 
         private async Task OpenFileAsync(string fileName, SelectedFileType selectedFileType)
