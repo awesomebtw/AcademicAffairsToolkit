@@ -19,7 +19,8 @@ namespace AcademicAffairsToolkit
         public static ObservableCollection<ArrangementResultEntry[]> Arrangements { get; set; } = new ObservableCollection<ArrangementResultEntry[]>();
 
         public static bool AnyFileLoaded() =>
-            InvigilateRecords != null || TROffices != null;
+            (InvigilateRecords != null && InvigilateRecords.Count != 0) ||
+            (TROffices != null && TROffices.Count != 0);
 
         public static bool CanStartArrange() =>
             InvigilateRecords != null && InvigilateRecords.Count() != 0 &&
