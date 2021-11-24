@@ -619,15 +619,6 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 选择以下字段所在的列 的本地化字符串。
-        /// </summary>
-        public static string SetColumnTip {
-            get {
-                return ResourceManager.GetString("SetColumnTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 工作表 的本地化字符串。
         /// </summary>
         public static string Sheet {
@@ -655,7 +646,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 解决方法数 的本地化字符串。
+        ///   查找类似 解决方案数 的本地化字符串。
         /// </summary>
         public static string SolutionNum {
             get {
@@ -664,7 +655,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 设置要显示以及最终导出的解决方案的数量，数值不能大于“种群大小” 的本地化字符串。
+        ///   查找类似 设置要显示及导出的安排方案的最大数量，数值不能大于“种群大小”，实际的安排方案数量可能小于设定值 的本地化字符串。
         /// </summary>
         public static string SolutionNumTooltip {
             get {
@@ -700,7 +691,7 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 开始安排之前，需要选择监考和教研室文件。点击“打开”选择监考和教研室文件，完成后点击“关闭开始页面”按钮。 的本地化字符串。
+        ///   查找类似 要开始安排，请先选择监考和教研室文件。点击“打开”选择监考和教研室文件，完成后点击“关闭开始页面”按钮。 的本地化字符串。
         /// </summary>
         public static string StartPageHelpText {
             get {
@@ -774,9 +765,9 @@ namespace AcademicAffairsToolkit {
         /// <summary>
         ///   查找类似 教务工具箱 的本地化字符串。
         /// </summary>
-        public static string Title {
+        public static string TitleText {
             get {
-                return ResourceManager.GetString("Title", resourceCulture);
+                return ResourceManager.GetString("TitleText", resourceCulture);
             }
         }
         

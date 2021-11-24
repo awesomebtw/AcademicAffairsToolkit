@@ -20,7 +20,7 @@ namespace AcademicAffairsToolkit
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             MessageBox.Show($"{e.Exception.Message}\n{e.Exception.StackTrace}",
-                "An error occurred", MessageBoxButton.OK, MessageBoxImage.Error);
+                Resource.UnhandledError, MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
         }
     }

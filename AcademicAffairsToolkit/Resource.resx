@@ -303,9 +303,6 @@
   <data name="SelectedTooltip" xml:space="preserve">
     <value>在生成多个结果时，选择要查看哪一个</value>
   </data>
-  <data name="SetColumnTip" xml:space="preserve">
-    <value>选择以下字段所在的列</value>
-  </data>
   <data name="Sheet" xml:space="preserve">
     <value>工作表</value>
   </data>
@@ -316,10 +313,10 @@
     <value>已写入</value>
   </data>
   <data name="SolutionNum" xml:space="preserve">
-    <value>解决方法数</value>
+    <value>解决方案数</value>
   </data>
   <data name="SolutionNumTooltip" xml:space="preserve">
-    <value>设置要显示以及最终导出的解决方案的数量，数值不能大于“种群大小”</value>
+    <value>设置要显示及导出的安排方案的最大数量，数值不能大于“种群大小”，实际的安排方案数量可能小于设定值</value>
   </data>
   <data name="SpecialtyColumn" xml:space="preserve">
     <value>专业</value>
@@ -331,7 +328,7 @@
     <value>根据监考计划、教研室和约束条件安排监考</value>
   </data>
   <data name="StartPageHelpText" xml:space="preserve">
-    <value>开始安排之前，需要选择监考和教研室文件。点击“打开”选择监考和教研室文件，完成后点击“关闭开始页面”按钮。</value>
+    <value>要开始安排，请先选择监考和教研室文件。点击“打开”选择监考和教研室文件，完成后点击“关闭开始页面”按钮。</value>
   </data>
   <data name="StartRow" xml:space="preserve">
     <value>起始行</value>
@@ -354,7 +351,7 @@
   <data name="TimeIntervalColumn" xml:space="preserve">
     <value>时间</value>
   </data>
-  <data name="Title" xml:space="preserve">
+  <data name="TitleText" xml:space="preserve">
     <value>教务工具箱</value>
   </data>
   <data name="To" xml:space="preserve">
