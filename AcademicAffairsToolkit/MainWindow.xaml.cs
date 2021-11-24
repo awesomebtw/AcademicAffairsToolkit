@@ -152,7 +152,6 @@ namespace AcademicAffairsToolkit
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, Resource.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                    throw;
                 }
 
                 MessageBox.Show($"{Resource.SheetsWrittenPrefix} {Session.Arrangements.Count} {Resource.SheetsWrittenPostfix}",
