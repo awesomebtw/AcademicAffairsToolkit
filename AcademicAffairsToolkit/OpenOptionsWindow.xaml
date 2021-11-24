@@ -21,11 +21,11 @@
     </Fluent:RibbonWindow.Resources>
 
     <ItemsControl Padding="5">
-        <GroupBox Header="{x:Static local:Resource.SelectedFile}" Padding="5">
+        <GroupBox Header="{x:Static local:Resource.SelectedFile}">
             <TextBlock Text="{Binding FileName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:OpenOptionsWindow}}}"
                        TextWrapping="Wrap"/>
         </GroupBox>
-        <GroupBox Header="{x:Static local:Resource.OpenAs}" Padding="5">
+        <GroupBox Header="{x:Static local:Resource.OpenAs}">
             <WrapPanel>
                 <Fluent:RadioButton x:Name="invigilateRadioButton"
                                     Header="{x:Static local:Resource.InvigilateFile}"
@@ -53,6 +53,8 @@
                                 Value="{Binding StartRow}"/>
             </WrapPanel>
         </GroupBox>
+
+        <TextBlock Text="{x:Static local:Resource.OpenFileFormatTip}" Margin="5" TextWrapping="Wrap"/>
 
         <Grid>
             <Grid.ColumnDefinitions>

@@ -198,12 +198,6 @@
   <data name="FileParsingOption" xml:space="preserve">
     <value>文件解析选项</value>
   </data>
-  <data name="FilePassword" xml:space="preserve">
-    <value>文件密码</value>
-  </data>
-  <data name="FilePasswordTip" xml:space="preserve">
-    <value>如果文件没有密码则留空</value>
-  </data>
   <data name="From" xml:space="preserve">
     <value>从</value>
   </data>
@@ -254,6 +248,9 @@
   </data>
   <data name="OpenAs" xml:space="preserve">
     <value>打开文件类型</value>
+  </data>
+  <data name="OpenFileFormatTip" xml:space="preserve">
+    <value>若选择的文件类型或打开的文件内容不正确，则无法正确解析数据，也无法正确安排监考，可在打开文件后检查数据是否已经正确读取</value>
   </data>
   <data name="OpenOptions" xml:space="preserve">
     <value>打开选项</value>

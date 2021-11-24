@@ -304,24 +304,6 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 文件密码 的本地化字符串。
-        /// </summary>
-        public static string FilePassword {
-            get {
-                return ResourceManager.GetString("FilePassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 如果文件没有密码则留空 的本地化字符串。
-        /// </summary>
-        public static string FilePasswordTip {
-            get {
-                return ResourceManager.GetString("FilePasswordTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 从 的本地化字符串。
         /// </summary>
         public static string From {
@@ -471,6 +453,15 @@ namespace AcademicAffairsToolkit {
         public static string OpenAs {
             get {
                 return ResourceManager.GetString("OpenAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 若选择的文件类型或打开的文件内容不正确，则无法正确解析数据，也无法正确安排监考，可在打开文件后检查数据是否已经正确读取 的本地化字符串。
+        /// </summary>
+        public static string OpenFileFormatTip {
+            get {
+                return ResourceManager.GetString("OpenFileFormatTip", resourceCulture);
             }
         }
         
