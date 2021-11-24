@@ -10,6 +10,18 @@
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="IconsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="DataGridStyle" TargetType="DataGrid">
+                <Setter Property="AlternatingRowBackground" Value="{StaticResource Fluent.Ribbon.Brushes.AccentColorBrush20}"/>
+                <Setter Property="Background" Value="{StaticResource Fluent.Ribbon.Brushes.DropDown.BackgroundBrush}"/>
+                <Setter Property="ColumnHeaderStyle" Value="{StaticResource Fluent.Ribbon.Styles.RibbonGroupBox.TwoLineHeaderContentControl}"/>
+                <Setter Property="Foreground" Value="{StaticResource Fluent.Ribbon.Brushes.LabelTextBrush}"/>
+                <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource Fluent.Ribbon.Brushes.DropDown.BorderBrush}"/>
+                <Setter Property="RowBackground" Value="{StaticResource Fluent.Ribbon.Brushes.DropDown.BackgroundBrush}"/>
+                <Setter Property="RowHeaderStyle" Value="{StaticResource Fluent.Ribbon.Styles.RibbonGroupBox.TwoLineHeaderContentControl}"/>
+                <Setter Property="VerticalGridLinesBrush" Value="{StaticResource Fluent.Ribbon.Brushes.DropDown.BorderBrush}"/>
+            </Style>
         </ResourceDictionary>
+
     </Application.Resources>
 </Application>

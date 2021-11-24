@@ -8,5 +8,5 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="TRFileViewPage">
 
-    <DataGrid Name="trFileViewGrid" AlternatingRowBackground="LightYellow" ItemsSource="{Binding Path=(local:Session.TROffices)}" IsReadOnly="True"/>
+    <DataGrid Name="trFileViewGrid" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding Path=(local:Session.TROffices)}" IsReadOnly="True"/>
 </Page>

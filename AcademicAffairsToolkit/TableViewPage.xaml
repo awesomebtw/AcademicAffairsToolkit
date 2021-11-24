@@ -17,7 +17,7 @@
     
     <DataGrid Name="tableViewGrid"
               ItemsSource="{Binding Path=/}"
-              AlternatingRowBackground="LightBlue"
+              Style="{StaticResource DataGridStyle}"
               IsReadOnly="True"
               RowDetailsVisibilityMode="VisibleWhenSelected">
         <DataGrid.RowDetailsTemplate>
