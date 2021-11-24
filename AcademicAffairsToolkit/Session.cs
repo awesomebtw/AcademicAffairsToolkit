@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -7,9 +6,9 @@ namespace AcademicAffairsToolkit
 {
     static class Session
     {
-        public static InvigilateFileParsePolicy InvigilateFilePolicy { get; set; } = InvigilateFileParsePolicy.DefaultPolicy;
+        public static FileParsePolicy InvigilateFilePolicy { get; set; } = FileParsePolicy.InvigilateFileDefaultPolicy;
 
-        public static TROfficeFileParsePolicy TROfficeFilePolicy { get; set; } = TROfficeFileParsePolicy.DefaultPolicy;
+        public static FileParsePolicy TROfficeFilePolicy { get; set; } = FileParsePolicy.TROfficeFileDefaultPolicy;
 
         public static IEnumerable<InvigilateRecordEntry> InvigilateRecords { get; set; }
 

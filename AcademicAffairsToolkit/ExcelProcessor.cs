@@ -19,13 +19,13 @@ namespace AcademicAffairsToolkit
                 throw new FormatException("time interval string format is incorrect");
         }
 
-        public static async Task<IEnumerable<InvigilateRecordEntry>> ReadInvigilateTableAsync(string path, string password, InvigilateFileParsePolicy policy)
+        public static async Task<IEnumerable<InvigilateRecordEntry>> ReadInvigilateTableAsync(string path, FileParsePolicy policy)
         {
             using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
             var mapper = new ExcelMapper()
             {
                 TrackObjects = false,
-                HeaderRowNumber = policy.StartRow - 1,
+                HeaderRowNumber = policy.HeaderRow,
                 MinRowNumber = policy.StartRow
             };
 
@@ -57,13 +57,13 @@ namespace AcademicAffairsToolkit
             return await mapper.FetchAsync<InvigilateRecordEntry>(stream, policy.Sheet);
         }
 
-        public static async Task<IEnumerable<TROfficeRecordEntry>> ReadTROfficeTableAsync(string path, string password, TROfficeFileParsePolicy policy)
+        public static async Task<IEnumerable<TROfficeRecordEntry>> ReadTROfficeTableAsync(string path, FileParsePolicy policy)
         {
             using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
             var mapper = new ExcelMapper()
             {
                 TrackObjects = false,
-                HeaderRowNumber = policy.StartRow - 1,
+                HeaderRowNumber = policy.HeaderRow,
                 MinRowNumber = policy.StartRow
             };
 

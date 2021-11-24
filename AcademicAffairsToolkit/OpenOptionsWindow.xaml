@@ -26,14 +26,8 @@
             <TextBlock Text="{Binding FileName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:OpenOptionsWindow}}}"
                        TextWrapping="Wrap"/>
         </GroupBox>
-        <GroupBox Header="{x:Static local:Resource.FilePassword}" Padding="5">
-            <ItemsControl>
-                <TextBlock Margin="0,0,0,5" Text="{x:Static local:Resource.FilePasswordTip}"/>
-                <PasswordBox Name="filePasswordBox"/>
-            </ItemsControl>
-        </GroupBox>
         <GroupBox Header="{x:Static local:Resource.OpenAs}" Padding="5">
-            <ItemsControl>
+            <WrapPanel>
                 <Fluent:RadioButton x:Name="invigilateRadioButton"
                                     Header="{x:Static local:Resource.InvigilateFile}"
                                     GroupName="fileTypeGroup"
@@ -45,85 +39,30 @@
                                     GroupName="fileTypeGroup"
                                     Checked="OpenAsRadioButtonChecked"
                                     Tag="{x:Static local:SelectedFileType.TROfficeFile}"/>
-            </ItemsControl>
+            </WrapPanel>
+        </GroupBox>
+        <GroupBox Header="{x:Static local:Resource.FileParsingOption}" Padding="5">
+            <WrapPanel Name="parseOptionsPanel" DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}" Orientation="Horizontal">
+                <Fluent:Spinner Header="{x:Static local:Resource.Sheet}"
+                                Style="{StaticResource OpenOptionsSpinnerStyle}"
+                                Value="{Binding Sheet}"/>
+                <Fluent:Spinner Header="{x:Static local:Resource.HeaderRow}"
+                                Style="{StaticResource OpenOptionsSpinnerStyle}"
+                                Value="{Binding HeaderRow}"/>
+                <Fluent:Spinner Header="{x:Static local:Resource.StartRow}"
+                                Style="{StaticResource OpenOptionsSpinnerStyle}"
+                                Value="{Binding StartRow}"/>
+            </WrapPanel>
         </GroupBox>
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Fluent:DropDownButton Size="Middle" Header="{x:Static local:Resource.Advanced}" Margin="5" Grid.Column="0">
-                <Fluent:DropDownButton.Icon>
-                    <Rectangle Fill="{StaticResource AdvancedViewIcon}"/>
-                </Fluent:DropDownButton.Icon>
-                <StackPanel Orientation="Horizontal" DataContext="{Binding Path=(local:Session.InvigilateFilePolicy)}"
-                            Visibility="{Binding IsChecked, ElementName=invigilateRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel Orientation="Vertical">
-                        <Fluent:Spinner Header="{x:Static local:Resource.Sheet}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding Sheet}"/>
-                        <Fluent:Spinner Header="{x:Static local:Resource.StartRow}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding StartRow}"/>
-                        <TextBlock Text="{x:Static local:Resource.SetColumnTip}" Margin="5"/>
-                        <Fluent:Spinner Header="{x:Static local:Resource.DateColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding DateColumn}"/>
-                        <Fluent:Spinner Header="{x:Static local:Resource.TimeIntervalColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding TimeIntervalColumn}"/>
-                        <Fluent:Spinner Header="{x:Static local:Resource.SubjectColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding SubjectColumn}"/>
-                    </StackPanel>
-                    <Separator/>
-                    <StackPanel Orientation="Vertical">
-                        <Fluent:Spinner Header="{x:Static local:Resource.DepartmentColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding DepartmentColumn}"/>
-                        <Fluent:Spinner Header="{x:Static local:Resource.GradeColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding GradeColumn}"/>
-                        <Fluent:Spinner Header="{x:Static local:Resource.SpecialtyColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding SpecialtyColumn}"/>
-                        <Fluent:Spinner Header="{x:Static local:Resource.ExamineeCountColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding ExamineeCountColumn}"/>
-                        <Fluent:Spinner Header="{x:Static local:Resource.LocationColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding LocationColumn}"/>
-                        <Fluent:Spinner Header="{x:Static local:Resource.ExamAspectColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding ExamAspectColumn}"/>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" DataContext="{Binding Path=(local:Session.TROfficeFilePolicy)}"
-                            Visibility="{Binding IsChecked, ElementName=trRadioButton, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Fluent:Spinner Header="{x:Static local:Resource.Sheet}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding Sheet}"/>
-                    <Fluent:Spinner Header="{x:Static local:Resource.StartRow}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding StartRow}"/>
-                    <TextBlock Text="{x:Static local:Resource.SetColumnTip}" Margin="5"/>
-                    <Fluent:Spinner Header="{x:Static local:Resource.NameColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding NameColumn}"/>
-                    <Fluent:Spinner Header="{x:Static local:Resource.PeopleCountColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding PeopleCountColumn}"/>
-                    <Fluent:Spinner Header="{x:Static local:Resource.DirectorColumn}"
-                                    Style="{StaticResource OpenOptionsSpinnerStyle}"
-                                    Value="{Binding DirectorColumn}"/>
-                </StackPanel>
-            </Fluent:DropDownButton>
-
-            <Button Content="{x:Static local:Resource.OKText}" Tag="OK" Click="ButtonClick" Margin="5" Grid.Column="1"/>
-            <Button Content="{x:Static local:Resource.CancelText}" Click="ButtonClick" Margin="5" Grid.Column="2"/>
+            <Button Content="{x:Static local:Resource.OKText}" Tag="OK" Click="ButtonClick" Margin="5" Grid.Column="0"/>
+            <Button Content="{x:Static local:Resource.CancelText}" Click="ButtonClick" Margin="5" Grid.Column="1"/>
         </Grid>
     </ItemsControl>
 </Fluent:RibbonWindow>

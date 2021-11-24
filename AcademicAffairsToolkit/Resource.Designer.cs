@@ -304,6 +304,15 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
+        ///   查找类似 文件解析选项 的本地化字符串。
+        /// </summary>
+        public static string FileParsingOption {
+            get {
+                return ResourceManager.GetString("FileParsingOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 文件密码 的本地化字符串。
         /// </summary>
         public static string FilePassword {
@@ -336,6 +345,15 @@ namespace AcademicAffairsToolkit {
         public static string GradeColumn {
             get {
                 return ResourceManager.GetString("GradeColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 表头行 的本地化字符串。
+        /// </summary>
+        public static string HeaderRow {
+            get {
+                return ResourceManager.GetString("HeaderRow", resourceCulture);
             }
         }
         

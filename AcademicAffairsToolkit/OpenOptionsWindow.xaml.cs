@@ -17,8 +17,6 @@ namespace AcademicAffairsToolkit
     {
         public string FileName { get; set; }
 
-        public string Password { get => filePasswordBox.Password; }
-
         public SelectedFileType SelectedFileType { get; private set; }
 
         public OpenOptionsWindow()
@@ -43,6 +41,15 @@ namespace AcademicAffairsToolkit
             if (sender is Fluent.RadioButton rb && rb.Tag is SelectedFileType type)
             {
                 SelectedFileType = type;
+                if (parseOptionsPanel != null)
+                {
+                    parseOptionsPanel.DataContext = type switch
+                    {
+                        SelectedFileType.InvigilateFile => Session.InvigilateFilePolicy,
+                        SelectedFileType.TROfficeFile => Session.TROfficeFilePolicy,
+                        _ => null
+                    };
+                }
             }
         }
     }

@@ -42,14 +42,14 @@ namespace AcademicAffairsToolkit
             openExcelDialog.FileOk += OpenExcelDialogFileOk;
         }
 
-        private async Task OpenFileAsync(string fileName, string password, SelectedFileType selectedFileType)
+        private async Task OpenFileAsync(string fileName, SelectedFileType selectedFileType)
         {
             switch (selectedFileType)
             {
                 case SelectedFileType.InvigilateFile:
                     {
                         Session.InvigilateRecords = await ExcelProcessor.ReadInvigilateTableAsync(
-                                fileName, password, Session.InvigilateFilePolicy);
+                                fileName, Session.InvigilateFilePolicy);
                         ToggleView.Execute("/InvigilateFileViewPage.xaml", this);
                         invigilateFileViewButton.IsChecked = true;
                     }
@@ -57,7 +57,7 @@ namespace AcademicAffairsToolkit
                 case SelectedFileType.TROfficeFile:
                     {
                         Session.TROffices = await ExcelProcessor.ReadTROfficeTableAsync(
-                                fileName, password, Session.TROfficeFilePolicy);
+                                fileName, Session.TROfficeFilePolicy);
                         ToggleView.Execute("/TRFileViewPage.xaml", this);
                         trOfficeFileViewButton.IsChecked = true;
                     }
@@ -80,8 +80,7 @@ namespace AcademicAffairsToolkit
 
             try
             {
-                await OpenFileAsync(
-                    openExcelDialog.FileName, openOptionsWindow.Password, openOptionsWindow.SelectedFileType);
+                await OpenFileAsync(openExcelDialog.FileName, openOptionsWindow.SelectedFileType);
                 RecentlyOpenedFiles.Add(Tuple.Create(openExcelDialog.FileName, openOptionsWindow.SelectedFileType));
             }
             catch (InvalidOperationException ex)
@@ -288,7 +287,7 @@ namespace AcademicAffairsToolkit
         {
             if (sender is Fluent.Gallery gallery && gallery.SelectedItem is Tuple<string, SelectedFileType> tuple)
             {
-                await OpenFileAsync(tuple.Item1, "", tuple.Item2);
+                await OpenFileAsync(tuple.Item1, tuple.Item2);
             }
         }
     }
