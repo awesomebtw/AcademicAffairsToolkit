@@ -98,7 +98,6 @@ namespace AcademicAffairsToolkit
                     ex.Message + "\n" + Resource.FileFormatErrorTip,
                     Resource.UnableToOpenFile, MessageBoxButton.OK, MessageBoxImage.Error);
                 e.Cancel = true;
-                return;
             }
             catch (IOException ex)
             {
@@ -106,13 +105,11 @@ namespace AcademicAffairsToolkit
                     ex.Message + "\n" + Resource.FileIOErrorTip,
                     Resource.UnableToOpenFile, MessageBoxButton.OK, MessageBoxImage.Error);
                 e.Cancel = true;
-                return;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, Resource.UnableToOpenFile, MessageBoxButton.OK, MessageBoxImage.Error);
                 e.Cancel = true;
-                return;
             }
         }
 
@@ -143,23 +140,24 @@ namespace AcademicAffairsToolkit
 
         private async void SaveCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            SaveFileDialog fileDialog = new SaveFileDialog()
+            SaveFileDialog saveDialog = new SaveFileDialog()
             {
                 AddExtension = true,
                 Filter = $"XLSX {Resource.File}|*.xlsx|XLS {Resource.File}|*.xls",
                 InitialDirectory = Environment.CurrentDirectory
             };
 
-            if (fileDialog.ShowDialog(this) == true)
+            if (saveDialog.ShowDialog(this) == true)
             {
                 try
                 {
                     await ExcelProcessor.SaveFileAsync(
-                        Session.Arrangements, fileDialog.FileName, fileDialog.FilterIndex != 1);
+                        Session.Arrangements, saveDialog.FileName, saveDialog.FilterIndex != 1);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, Resource.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
 
                 MessageBox.Show($"{Resource.SheetsWrittenPrefix} {Session.Arrangements.Count} {Resource.SheetsWrittenPostfix}",
