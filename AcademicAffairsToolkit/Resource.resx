@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>关于</value>
   </data>
+  <data name="AddConstraintTip" xml:space="preserve">
+    <value>可以在此处添加某时段某教研室不安排监考的约束条件。</value>
+  </data>
   <data name="ArrangementCanceled" xml:space="preserve">
     <value>安排已取消</value>
   </data>
