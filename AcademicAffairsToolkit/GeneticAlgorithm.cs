@@ -20,6 +20,8 @@ namespace AcademicAffairsToolkit
         
         private static readonly int distributionFactor = 3;
 
+        private static readonly int maxPossibleFitness = 0;
+
         private readonly TimeSpan longestExamTime = TimeSpan.Zero;
 
         private readonly InvigilateRecordEntry[] invigilateRecords;
@@ -379,6 +381,9 @@ namespace AcademicAffairsToolkit
                 fitnessAverage = fitness.Average();
                 fitnessAvgDev = fitness.Sum(p => Math.Abs(p - fitnessAverage)) / fitness.Length;
 
+                Debug.WriteLine($"generation {i}, fitness max {fitness.Max()}, avg {fitnessAverage}, " +
+                    $"avgdev {fitnessAvgDev}, crate {localCrossoverProbability}, mrate {localMutationProbabilty}");
+
                 // increase crossover and mutation probability to ensure diversity and optimal solution
                 if (fitnessAvgDev == 0.0)
                 {
@@ -386,10 +391,11 @@ namespace AcademicAffairsToolkit
                     localMutationProbabilty = Math.Min(localMutationProbabilty * 1.005, 0.8);
                 }
 
-                Debug.WriteLine($"generation {i}, fitness max {fitness.Max()}, avg {fitnessAverage}, " +
-                    $"avgdev {fitnessAvgDev}, crate {localCrossoverProbability}, mrate {localMutationProbabilty}");
-
                 ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i));
+
+                // stop when fitness reaches maximum possible
+                if (fitness.Min() == maxPossibleFitness)
+                    break;
             }
 
             var maxFitness = fitness.Max();
