@@ -295,7 +295,14 @@ namespace AcademicAffairsToolkit
         {
             if (sender is Fluent.Gallery gallery && gallery.SelectedItem is Tuple<string, SelectedFileType> tuple)
             {
-                await OpenFileAsync(tuple.Item1, tuple.Item2);
+                try
+                {
+                    await OpenFileAsync(tuple.Item1, tuple.Item2);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, Resource.UnableToOpenFile, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
