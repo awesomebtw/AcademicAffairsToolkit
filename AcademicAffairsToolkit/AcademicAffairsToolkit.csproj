@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.97" />
-    <PackageReference Include="ExcelMapper" Version="5.2.337" />
+    <PackageReference Include="ExcelMapper" Version="5.2.352" />
     <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
     <PackageReference Include="RangeTree" Version="3.0.1" />
   </ItemGroup>
