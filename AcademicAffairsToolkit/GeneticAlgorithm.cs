@@ -321,7 +321,7 @@ namespace AcademicAffairsToolkit
         public void StartArrangement()
         {
             Random random = new Random();
-            int innerIterations = populationSize / 2; //< two offsprings will be generated for each iteration
+            int innerIterations = populationSize / 2;
             var population = GenerateInitialPopulation(populationSize).ToList();
 
             var fitnessDict = population.ToDictionary(p => p, p => GetFitness(p));
@@ -334,8 +334,7 @@ namespace AcademicAffairsToolkit
 
             for (int i = 0; i < iterations; i++)
             {
-                if (cancellationToken.IsCancellationRequested == true)
-                    break;
+                ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i));
 
                 for (int j = 0; j < innerIterations; j++)
                 {
@@ -362,12 +361,11 @@ namespace AcademicAffairsToolkit
                 }
 
                 // elinimate low-fitness population
-                // use dictionary here to avoid repeated fitness evaluations
                 var fitnessThreshold = fitnessDict.Values.OrderByDescending(p => p).Take(populationSize).Last();
-                // Remove() will always return true here because elements are guarantee to be exist,
-                // therefore we can dalete corresponding items from the dictionary when delete from population
+                // Remove() will always return true here as elements are guaranteed to be exist,
+                // therefore we can delete corresponding items from dictionary when delete from population
                 population.RemoveAll(p => fitnessDict[p] < fitnessThreshold && fitnessDict.Remove(p));
-                // if two or more chromosomes has the same length, just arbitrarily choose chromosomes to remove
+                // if two or more chromosomes have the same fitness, just arbitrarily choose chromosomes to remove
                 for (int j = population.Count - 1; population.Count > populationSize && j >= 0; j--)
                 {
                     if (fitnessDict[population[j]] == fitnessThreshold)
@@ -391,10 +389,8 @@ namespace AcademicAffairsToolkit
                     localMutationProbabilty = Math.Min(localMutationProbabilty * 1.005, 0.8);
                 }
 
-                ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i));
-
-                // stop when fitness reaches maximum possible
-                if (fitness.Min() == maxPossibleFitness)
+                // stop when fitness reaches maximum possible or canceliation is requested
+                if (fitness.Min() == maxPossibleFitness || cancellationToken.IsCancellationRequested == true)
                     break;
             }
 
