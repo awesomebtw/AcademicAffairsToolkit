@@ -233,7 +233,7 @@
                                               Text="{x:Static local:Resource.NewConstraintTooltip}"/>
                         </Fluent:Button.ToolTip>
                     </Fluent:Button>
-                    <Fluent:Button Header="{x:Static local:Resource.Manage}"
+                    <Fluent:Button Header="{x:Static local:Resource.ManageConstraints}"
                                    Click="ManageConstraintButtonClick" SizeDefinition="Large,Middle,Small">
                         <Fluent:Button.Icon>
                             <Rectangle Fill="{StaticResource RuleIcon}"/>
@@ -242,7 +242,7 @@
                             <Rectangle Fill="{StaticResource RuleIcon}"/>
                         </Fluent:Button.LargeIcon>
                         <Fluent:Button.ToolTip>
-                            <Fluent:ScreenTip Title="{x:Static local:Resource.Manage}" Text="{x:Static local:Resource.ManageTooltip}"/>
+                            <Fluent:ScreenTip Title="{x:Static local:Resource.ManageConstraints}" Text="{x:Static local:Resource.ManageTooltip}"/>
                         </Fluent:Button.ToolTip>
                     </Fluent:Button>
                 </Fluent:RibbonGroupBox>

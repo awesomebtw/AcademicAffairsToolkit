@@ -228,8 +228,8 @@
   <data name="LocationColumn" xml:space="preserve">
     <value>考试地点</value>
   </data>
-  <data name="Manage" xml:space="preserve">
-    <value>管理...</value>
+  <data name="ManageConstraints" xml:space="preserve">
+    <value>管理约束...</value>
   </data>
   <data name="ManageTooltip" xml:space="preserve">
     <value>管理已经添加的约束</value>

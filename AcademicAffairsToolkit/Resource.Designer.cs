@@ -394,11 +394,11 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 管理... 的本地化字符串。
+        ///   查找类似 管理约束... 的本地化字符串。
         /// </summary>
-        public static string Manage {
+        public static string ManageConstraints {
             get {
-                return ResourceManager.GetString("Manage", resourceCulture);
+                return ResourceManager.GetString("ManageConstraints", resourceCulture);
             }
         }
         
