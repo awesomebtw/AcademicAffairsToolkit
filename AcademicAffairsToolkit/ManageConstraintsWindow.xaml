@@ -18,6 +18,10 @@
             <Setter Property="InputWidth" Value="40"/>
         </Style>
     </Fluent:RibbonWindow.Resources>
+
+    <Fluent:RibbonWindow.BindingGroup>
+        <BindingGroup/>
+    </Fluent:RibbonWindow.BindingGroup>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -33,7 +37,7 @@
                         MaxItemsInRow="1"
                         Padding="10"
                         SelectionMode="Single"
-                        Grid.Row="0">
+                        Grid.Row="0" SelectionChanged="ItemsGallerySelectionChanged">
             <Fluent:Gallery.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
@@ -69,28 +73,28 @@
             <xctk:DateTimePicker Name="fromDateTimePicker"
                                  Margin="5"
                                  Value="{Binding Path=/From}"
-                                 ValueChanged="DateTimePickerValueChanged"
-                                 Grid.Row="0" Grid.Column="1"/>
+                                 LostFocus="DateTimePickerLostFocus"
+                                 Grid.Row="0" Grid.Column="1" GotFocus="DateTimePickerGotFocus"/>
             <TextBlock Text="{x:Static local:Resource.To}"
                        Margin="5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
             <xctk:DateTimePicker Name="toDateTimePicker"
                                  Margin="5"
                                  Value="{Binding Path=/To}"
-                                 ValueChanged="DateTimePickerValueChanged"
-                                 Grid.Row="1" Grid.Column="1"/>
+                                 LostFocus="DateTimePickerLostFocus"
+                                 Grid.Row="1" Grid.Column="1" GotFocus="DateTimePickerGotFocus"/>
             <Fluent:ComboBox Name="trOfficePicker"
                              Header="{x:Static local:Resource.TROffice}"
                              IsEditable="False"
                              Margin="0"
                              ItemsSource="{Binding Path=(local:Session.TROffices)}"
-                             SelectedItem="{Binding Path=/TROffice}"
+                             SelectedItem="{Binding Path=/TROffice, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Row="2" Grid.ColumnSpan="2"/>
             <Button Content="{x:Static local:Resource.RemoveSelected}" Margin="5" Click="RemoveButtonClick" Grid.Row="3" Grid.ColumnSpan="2"/>
         </Grid>
         
         <Fluent:StatusBar Grid.Row="2">
             <Fluent:StatusBarItem>
-                <TextBlock Text="{Binding ElementName=itemsGallery, Path=Items.Count, StringFormat=\{0\} items}"/>
+                <TextBlock Height="24" Text="{Binding ElementName=itemsGallery, Path=Items.Count, StringFormat=\{0\} items, FallbackValue=0}"/>
             </Fluent:StatusBarItem>
         </Fluent:StatusBar>
     </Grid>
