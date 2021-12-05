@@ -1,10 +1,8 @@
 ﻿# 教务工具箱 Academic affairs toolkit
-这是“C#程序设计”课设，**请不要用于实际工作中**。
+这是吉林大学“C#程序设计”课设作品，**请不要用于实际工作中**。
 This project is a course design for "C# programming language", Jilin University.
 **Do not use for actual work.**
-## Prereq
-- .NET Core 3.1
-- C# 8.0
+使用 .NET Core 3.1 和 C# 8.0。
 ## 课设要求
 本课程设计采用团队方式利用C#开发一款辅助教务工作的软件，主要包含督学课表生成，工作量计算和监考分配三个模块。
 3.监考分配策略（40%）
@@ -20,12 +18,10 @@ This project is a course design for "C# programming language", Jilin University.
 - 提供排除功能，界面中可以设置某天某个时间段不安排某个教研室监考；
 - 用教研室主任名字+人数补全监考信息表。
 ## 如何工作
-利用遗传算法生成满足要求的教研室的序列，与监考信息一一对应
-## 第三方库和资源
-- npoi
+利用遗传算法生成满足要求的教研室的序列。使用的交叉算子均匀交叉，变异算子为简单倒位变异。
+## 使用的第三方库和资源
+- ExcelMapper
+- Extended Wpf Toolkit (dotnetproject 版)
 - Fluent.Ribbon
-- IntervalTree
-- Extended Wpf Toolkit (dotnetproject version)
+- RangeTree
 - Visual Studio 2019 Image Library
-## 参考资料
-TBD
