@@ -8,7 +8,10 @@ namespace AcademicAffairsToolkit
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            if ((value as BindingGroup).Items[0] is InvigilateConstraint selected)
+            // designer will crash if items count is not checked
+            if (value is BindingGroup bindingGroup
+                && bindingGroup.Items.Count > 0
+                && bindingGroup.Items[0] is InvigilateConstraint selected)
             {
                 if (selected.From >= selected.To)
                 {
