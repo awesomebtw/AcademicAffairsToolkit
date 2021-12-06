@@ -44,8 +44,6 @@ namespace AcademicAffairsToolkit
 
         public InvigilateConstraint(DateTime from, DateTime to, TROfficeRecordEntry excludeTROffice)
         {
-            if (from > to)
-                throw new ArgumentOutOfRangeException("to", to.ToString());
             From = from;
             To = to;
             TROffice = excludeTROffice ?? throw new ArgumentNullException(nameof(excludeTROffice));

@@ -11,6 +11,7 @@ namespace AcademicAffairsToolkit
         public ManageConstraintsWindow()
         {
             InitializeComponent();
+            currentItemBindingGroup?.BeginEdit();
         }
 
         private void RemoveButtonClick(object sender, RoutedEventArgs e)
@@ -21,30 +22,28 @@ namespace AcademicAffairsToolkit
 
         private void ItemsGallerySelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            BindingGroup.CommitEdit();
-        }
-
-        private void DateTimePickerGotFocus(object sender, RoutedEventArgs e)
-        {
-            BindingGroup.BeginEdit();
+            if (currentItemBindingGroup?.CommitEdit() == true)
+                currentItemBindingGroup?.BeginEdit();
+            else
+                currentItemBindingGroup?.CancelEdit();
         }
 
         private void DateTimePickerLostFocus(object sender, RoutedEventArgs e)
         {
-            if (fromDateTimePicker != null && toDateTimePicker != null)
-            {
-                if (fromDateTimePicker.Value >= toDateTimePicker.Value)
-                {
-                    BindingGroup.CancelEdit();
+            if (currentItemBindingGroup?.CommitEdit() == true)
+                currentItemBindingGroup?.BeginEdit();
+            else
+                currentItemBindingGroup?.CancelEdit();
+        }
 
-                    MessageBox.Show(Resource.EndTimeEarlierThanStartTimeErrorTip, Resource.Error,
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                else
-                {
-                    BindingGroup.CommitEdit();
-                }
+        private void Grid_Error(object sender, ValidationErrorEventArgs e)
+        {
+            if (e.Action == ValidationErrorEventAction.Added)
+            {
+                MessageBox.Show(e.Error.ErrorContent.ToString(), Resource.Error,
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
             e.Handled = true;
         }
     }
