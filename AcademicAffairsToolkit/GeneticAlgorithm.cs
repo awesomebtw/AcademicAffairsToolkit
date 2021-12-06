@@ -141,8 +141,8 @@ namespace AcademicAffairsToolkit
         /// generate a random permutation of arrangement regardless of user-defined constraints
         /// </summary>
         /// <returns>An array of tuple with office and people needed, whose length is
-        /// <see cref="invigilateRecords"/>.Length and the i-th element in <see cref="invigilateRecords"/>
-        /// is assigned to the i-th element in <see cref="trOfficeRecords"/>.</returns>
+        /// <see cref="invigilateRecords"/>.Length and the i-th examination in <see cref="invigilateRecords"/>
+        /// is assigned to the i-th office in <see cref="trOfficeRecords"/>.</returns>
         private IEnumerable<TROfficeRecordEntry> GenerateChromosome()
         {
             var trOfficeRemaining = trOfficeRecords.Select(p => p.PeopleCount).ToList();
@@ -154,15 +154,15 @@ namespace AcademicAffairsToolkit
             {
                 // ensure the selected office has enough people
                 // by picking a random index and check if people is enough
-                // to prevent endless loop when there's no office suitable,
-                // a variable is added here to record the initial index
+                // to prevent endless loop when there's no enough people,
+                // a variable is used here to record initial seelcted index
                 int j = random.Next(trOfficeRecords.Length);
                 int k = j;
                 while (trOfficeRemaining[j] < peopleNeeded[i])
                 {
                     j = (j + 1) % trOfficeRecords.Length;
                     if (j == k)
-                        throw new ApplicationException("available person is not sufficient for arrangement");
+                        throw new ApplicationException("people available is not sufficient for arrangement");
                 }
 
                 yield return trOfficeRecords[j];
@@ -217,8 +217,7 @@ namespace AcademicAffairsToolkit
                 }
 
                 // there must be no overlaps when window range is twice as long as the longest exam time,
-                // therefore, we can shrink the window.
-                // todo: sometimes cause exception because key is not found
+                // therefore, we can shrink the window
                 while (currentRange > longestRange)
                 {
                     inWindow[chromosome[left]] -= peopleNeeded[left];
@@ -229,8 +228,8 @@ namespace AcademicAffairsToolkit
             }
             fitness -= arrangeOverlapFactor * overlapCount;
 
-            // check if the arrangement is evenly assigned to every office by
-            // evaluating difference between expected count considering invigilate per capita and actual count
+            // check if examinations are assigned to every office evenly by
+            // evaluating differences between expected and actual count
             var invigilateCountDelta = trOfficeRecords.ToDictionary(p => p, p => p.PeopleCount * invigilatePerCapita);
             for (int i = 0; i < chromosome.Length; i++)
             {
@@ -250,7 +249,7 @@ namespace AcademicAffairsToolkit
         private void ApplyCrossoverInplace(ref TROfficeRecordEntry[] left, ref TROfficeRecordEntry[] right)
         {
             if (left.Length != right.Length)
-                throw new ArgumentException("two parent chromosomes must have the same length");
+                throw new ArgumentException("two parent chromosomes have different length");
 
             Random random = new Random();
             for (int i = 0; i < left.Length; i++)
@@ -274,13 +273,11 @@ namespace AcademicAffairsToolkit
 
             int right = random.Next(chromosome.Length);
             int left = random.Next(right);
-            while (right > left)
+            for (; right > left; left++, right--)
             {
                 var temp = chromosome[left];
                 chromosome[left] = chromosome[right];
                 chromosome[right] = temp;
-                left++;
-                right--;
             }
         }
 
@@ -291,10 +288,8 @@ namespace AcademicAffairsToolkit
         /// <returns>a pair of integer representing selected indices of chromosome</returns>
         private (int, int) PerformSelection(in int[] fitness)
         {
-            // normalize fitnesses
-            int max = fitness.Max();
             int min = fitness.Min();
-            double[] normalizedFitness = fitness.Select(p => (double)(p - min) / (max - min)).ToArray();
+            double[] normalizedFitness = fitness.Select(p => (double)(p - min)).ToArray();
             double fitnessSum = normalizedFitness.Sum();
 
             int[] selectedIndices = new int[2];
@@ -302,7 +297,7 @@ namespace AcademicAffairsToolkit
             for (int i = 0; i < 2; i++)
             {
                 double pos = random.NextDouble() * fitnessSum;
-                double current = 0;
+                double current = 0.0;
 
                 for (int j = 0; j < normalizedFitness.Length; j++)
                 {
