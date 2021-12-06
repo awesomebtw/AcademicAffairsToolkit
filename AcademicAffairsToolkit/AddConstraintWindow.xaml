@@ -25,7 +25,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{x:Static local:Resource.AddConstraintTip}" Margin="5" TextWrapping="Wrap" Grid.Row="0" Grid.ColumnSpan="2"/>
+        <TextBlock Text="{x:Static local:Resource.NewConstraintTooltip}" Margin="5" TextWrapping="Wrap" Grid.Row="0" Grid.ColumnSpan="2"/>
 
         <TextBlock Text="{x:Static local:Resource.From}" Margin="5" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
         <xctk:DateTimePicker Name="fromDateTimePicker" DefaultValue="{Binding Path=(sys:DateTime.Now), Mode=OneTime}" Margin="0,2" Grid.Row="1" Grid.Column="1"/>

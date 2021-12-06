@@ -70,15 +70,6 @@ namespace AcademicAffairsToolkit {
         }
         
         /// <summary>
-        ///   查找类似 可以在此处添加某时段某教研室不安排监考的约束条件。 的本地化字符串。
-        /// </summary>
-        public static string AddConstraintTip {
-            get {
-                return ResourceManager.GetString("AddConstraintTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 安排已取消 的本地化字符串。
         /// </summary>
         public static string ArrangementCanceled {
