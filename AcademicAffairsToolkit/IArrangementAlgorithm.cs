@@ -7,9 +7,9 @@ namespace AcademicAffairsToolkit
     interface IArrangementAlgorithm
     {
         /// <summary>
-        /// will be raised when an iteration of the algorithm is finished
+        /// report progress of the algorithm
         /// </summary>
-        public event EventHandler<ArrangementStepForwardEventArgs> ArrangementStepForward;
+        public IProgress<int> ProgressReporter { get; set; }
 
         /// <summary>
         /// will be raised when the algorithm is terminated
@@ -26,16 +26,6 @@ namespace AcademicAffairsToolkit
         /// </summary>
         /// <returns>task object representing the thread</returns>
         Task StartArrangementAsync();
-    }
-
-    class ArrangementStepForwardEventArgs : EventArgs
-    {
-        public int CurrentIteration { get; private set; }
-
-        public ArrangementStepForwardEventArgs(int currentIteration)
-        {
-            CurrentIteration = currentIteration;
-        }
     }
 
     class ArrangementTerminatedEventArgs : EventArgs

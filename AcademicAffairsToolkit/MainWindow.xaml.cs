@@ -202,7 +202,7 @@ namespace AcademicAffairsToolkit
             arrangementProgessBar.Visibility = Visibility.Visible;
             statusText.Text = Resource.ArrangementIsInProgress + "...";
 
-            alg.ArrangementStepForward += AlgArrangementStepForward;
+            alg.ProgressReporter = new Progress<int>(p => arrangementProgessBar.Value = p);
             alg.ArrangementTerminated += AlgArrangementTerminated;
 
             try
@@ -215,14 +215,6 @@ namespace AcademicAffairsToolkit
                 statusText.Text = Resource.ArrangementErrorTip;
                 MessageBox.Show(ex.Message, Resource.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private async void AlgArrangementStepForward(object sender, ArrangementStepForwardEventArgs e)
-        {
-            await Dispatcher.BeginInvoke((Action)(() =>
-            {
-                arrangementProgessBar.Value = e.CurrentIteration;
-            }));
         }
 
         private async void AlgArrangementTerminated(object sender, ArrangementTerminatedEventArgs e)

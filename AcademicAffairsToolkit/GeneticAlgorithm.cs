@@ -42,7 +42,8 @@ namespace AcademicAffairsToolkit
 
         private readonly CancellationToken cancellationToken;
 
-        public event EventHandler<ArrangementStepForwardEventArgs> ArrangementStepForward;
+        public IProgress<int> ProgressReporter { get; set; }
+
         public event EventHandler<ArrangementTerminatedEventArgs> ArrangementTerminated;
 
         /// <summary>
@@ -329,7 +330,7 @@ namespace AcademicAffairsToolkit
 
             for (int i = 0; i < iterations; i++)
             {
-                ArrangementStepForward?.Invoke(this, new ArrangementStepForwardEventArgs(i));
+                ProgressReporter?.Report(i);
 
                 for (int j = 0; j < innerIterations; j++)
                 {
