@@ -217,17 +217,17 @@ namespace AcademicAffairsToolkit
             }
         }
 
-        private void AlgArrangementStepForward(object sender, ArrangementStepForwardEventArgs e)
+        private async void AlgArrangementStepForward(object sender, ArrangementStepForwardEventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)(() =>
+            await Dispatcher.BeginInvoke((Action)(() =>
             {
                 arrangementProgessBar.Value = e.CurrentIteration;
             }));
         }
 
-        private void AlgArrangementTerminated(object sender, ArrangementTerminatedEventArgs e)
+        private async void AlgArrangementTerminated(object sender, ArrangementTerminatedEventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)(() =>
+            await Dispatcher.BeginInvoke((Action)(() =>
             {
                 Session.Arrangements?.Clear();
                 foreach (var result in e.Result)
