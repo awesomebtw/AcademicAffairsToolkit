@@ -386,7 +386,7 @@ namespace AcademicAffairsToolkit
                 }
 
                 // stop when fitness reaches maximum possible or canceliation is requested
-                if (fitness.Min() == maxPossibleFitness || cancellationToken.IsCancellationRequested == true)
+                if (fitness.Min() == maxPossibleFitness || cancellationToken.IsCancellationRequested)
                     break;
             }
 
