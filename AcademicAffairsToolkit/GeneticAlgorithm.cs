@@ -50,7 +50,7 @@ namespace AcademicAffairsToolkit
         /// construct a new object for invigilate arrangement using genetic algorithm
         /// </summary>
         /// <param name="invigilateRecords">invigilate tasks to be assigned</param>
-        /// <param name="trOfficeRecords">teaching and researching offices which will be </param>
+        /// <param name="trOfficeRecords">teaching and researching offices to be assigned to invigilation tasks</param>
         /// <param name="constraints">time constraints to be applied when evaluating arrangement</param>
         /// <param name="iterations">maximum iteration for arrangement</param>
         /// <param name="populationSize">population size for each generation</param>
@@ -117,10 +117,10 @@ namespace AcademicAffairsToolkit
         }
 
         /// <summary>
-        /// get invigilate person needed for an exam according to requirement
+        /// get how many peopple needed for invigilating an exam according to requirement
         /// </summary>
         /// <param name="students">examinee count of an exam</param>
-        /// <returns>count of people needed for invigilate</returns>
+        /// <returns>count of people needed for the invigilation</returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         private static int GetInvigilatePersonCount(int students)
         {
@@ -150,13 +150,12 @@ namespace AcademicAffairsToolkit
 
             Random random = new Random();
 
-            // assign for each invigilate task
             for (int i = 0; i < invigilateRecords.Length; i++)
             {
                 // ensure the selected office has enough people
-                // by picking a random index and check if people is enough
+                // by picking a random index and check if people is enough.
                 // to prevent endless loop when there's no enough people,
-                // a variable is used here to record initial seelcted index
+                // a variable is used here to memorize initial selected index
                 int j = random.Next(trOfficeRecords.Length);
                 int k = j;
                 while (trOfficeRemaining[j] < peopleNeeded[i])
@@ -171,9 +170,9 @@ namespace AcademicAffairsToolkit
         }
 
         /// <summary>
-        /// randomly generate a population (a group of arrangement) regardless of user-defined constraints
+        /// randomly generate a population (a set of solutions) regardless of constraints
         /// </summary>
-        /// <param name="count">size of the generated popullation</param>
+        /// <param name="count">size of generated population</param>
         /// <returns>generated population</returns>
         private IEnumerable<TROfficeRecordEntry[]> GenerateInitialPopulation(int count)
         {
@@ -265,7 +264,7 @@ namespace AcademicAffairsToolkit
         }
 
         /// <summary>
-        /// do mutation in place with inversion mutating
+        /// perform mutation in place with inversion mutating
         /// </summary>
         /// <param name="chromosome">chromosome to be mutated</param>
         private void MutateInplace(ref TROfficeRecordEntry[] chromosome)
@@ -358,10 +357,10 @@ namespace AcademicAffairsToolkit
 
                 // elinimate low-fitness population
                 var fitnessThreshold = fitnessDict.Values.OrderByDescending(p => p).Take(populationSize).Last();
-                // Remove() will always return true here as elements are guaranteed to be exist,
+                // Remove() will always return true here as elements to be removed are guaranteed to be exist,
                 // therefore we can delete corresponding items from dictionary when delete from population
                 population.RemoveAll(p => fitnessDict[p] < fitnessThreshold && fitnessDict.Remove(p));
-                // if two or more chromosomes have the same fitness, just arbitrarily choose chromosomes to remove
+                // if two or more chromosomes have the same fitness, just arbitrarily choose some chromosomes to remove
                 for (int j = population.Count - 1; population.Count > populationSize && j >= 0; j--)
                 {
                     if (fitnessDict[population[j]] == fitnessThreshold)
