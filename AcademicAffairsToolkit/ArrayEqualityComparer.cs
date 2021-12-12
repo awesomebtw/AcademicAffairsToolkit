@@ -6,16 +6,17 @@ using System.Linq;
 namespace AcademicAffairsToolkit
 {
     /// <summary>
-    /// equality comparer for arrangement algorithm
+    /// an type-generic element-wise equality comparer implementation for array using <see cref="HashCode"/>
+    /// and <see cref="Enumerable.SequenceEqual{T}(IEnumerable{T}, IEnumerable{T})"/>
     /// </summary>
-    class TROfficeArrayEqualityComparer : IEqualityComparer<TROfficeRecordEntry[]>
+    class ArrayEqualityComparer<T> : IEqualityComparer<T[]>
     {
-        public bool Equals([AllowNull] TROfficeRecordEntry[] x, [AllowNull] TROfficeRecordEntry[] y)
+        public bool Equals([AllowNull] T[] x, [AllowNull] T[] y)
         {
             return x?.SequenceEqual(y) ?? y == null;
         }
 
-        public int GetHashCode([DisallowNull] TROfficeRecordEntry[] obj)
+        public int GetHashCode([DisallowNull] T[] obj)
         {
             HashCode hashCode = new HashCode();
             foreach (var x in obj)

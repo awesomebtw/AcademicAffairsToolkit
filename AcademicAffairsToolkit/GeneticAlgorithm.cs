@@ -390,7 +390,7 @@ namespace AcademicAffairsToolkit
             }
 
             var maxFitness = fitness.Max();
-            var result = population.Where((_, i) => fitness[i] == maxFitness).Distinct(new TROfficeArrayEqualityComparer()).Take(resultSize);
+            var result = population.Where((_, i) => fitness[i] == maxFitness).Distinct(new ArrayEqualityComparer<TROfficeRecordEntry>()).Take(resultSize);
 
             ArrangementTerminated?.Invoke(this,
                 new ArrangementTerminatedEventArgs(cancellationToken.IsCancellationRequested,
