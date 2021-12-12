@@ -49,8 +49,8 @@ namespace AcademicAffairsToolkit
         /// <summary>
         /// construct a new object for invigilate arrangement using genetic algorithm
         /// </summary>
-        /// <param name="invigilateRecords">invigilate tasks to be assigned</param>
-        /// <param name="trOfficeRecords">teaching and researching offices to be assigned to invigilation tasks</param>
+        /// <param name="invigilateRecords">invigilate tasks to be assigned to offices</param>
+        /// <param name="trOfficeRecords">teaching and researching offices to participate in invigilation tasks</param>
         /// <param name="constraints">time constraints to be applied when evaluating arrangement</param>
         /// <param name="iterations">maximum iteration for arrangement</param>
         /// <param name="populationSize">population size for each generation</param>
@@ -75,8 +75,8 @@ namespace AcademicAffairsToolkit
         /// <summary>
         /// construct a new object for invigilate arrangement using genetic algorithm
         /// </summary>
-        /// <param name="invigilateRecords">invigilate tasks to be assigned</param>
-        /// <param name="trOfficeRecords">teaching and researching offices which will be </param>
+        /// <param name="invigilateRecords">invigilate tasks to be assigned to offices</param>
+        /// <param name="trOfficeRecords">teaching and researching offices to participate in invigilation tasks</param>
         /// <param name="constraints">time constraints to be applied when evaluating arrangement</param>
         /// <param name="iterations">maximum iteration for arrangement</param>
         /// <param name="populationSize">population size for each generation</param>
@@ -117,22 +117,22 @@ namespace AcademicAffairsToolkit
         }
 
         /// <summary>
-        /// get how many peopple needed for invigilating an exam according to requirement
+        /// get how many people needed for invigilating an exam according to count of examinees 
         /// </summary>
-        /// <param name="students">examinee count of an exam</param>
+        /// <param name="examinees">examinee count of an exam</param>
         /// <returns>count of people needed for the invigilation</returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        private static int GetInvigilatePersonCount(int students)
+        private static int GetInvigilatePersonCount(int examinees)
         {
-            if (students < 0)
-                throw new ArgumentOutOfRangeException(nameof(students));
-            else if (students < 70)
+            if (examinees < 0)
+                throw new ArgumentOutOfRangeException(nameof(examinees));
+            else if (examinees < 70)
                 return 2;
-            else if (students < 100)
+            else if (examinees < 100)
                 return 3;
-            else if (students < 150)
+            else if (examinees < 150)
                 return 4;
-            else if (students < 180)
+            else if (examinees < 180)
                 return 5;
             else
                 return 6;
